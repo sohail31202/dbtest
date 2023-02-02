@@ -1,0 +1,90 @@
+<!-- Active user details view page. -->
+<% var userDetails= "" 
+
+switch(title){
+  case 'User Detail':
+  userDetails = "active"
+
+break;
+
+default: 
+userDetails = ""
+
+}
+%> 
+
+<!-- partial:partials/_sidebar.html -->
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard">
+        <i class="icon-grid menu-icon"></i>
+        <span class="menu-title">Dashboard </span>
+      </a>
+    </li>
+
+    <!-- <li class="nav-item <%= userDetails%>">
+      <a class="nav-link" href="/users">
+        <i class="icon-layout menu-icon"></i>
+        <span class="menu-title">Users</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="/intentions">
+        <i class="icon-layout menu-icon"></i>
+        <span class="menu-title">Commodity</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="/reported-users">
+        <i class="icon-layout menu-icon"></i>
+        <span class="menu-title">Currency</span>
+      </a>
+    </li> -->
+   
+    <li class="nav-item">
+      <a class="nav-link" href="/edit-privacy-policy">
+        <i class="icon-layout menu-icon"></i>
+        <span class="menu-title">Privacy Policy</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="/edit-terms-and-conditions">
+        <i class="icon-layout menu-icon"></i>
+        <span class="menu-title">Terms & Conditions</span>
+      </a>
+    </li>
+   
+   <!-- <li class="nav-item">
+      <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+        <i class="icon-layout menu-icon"></i>
+        <span class="menu-title">Meta Manager</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="ui-basic">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="/intent">Intent</a></li>
+         <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/dropdowns.html">Dropdowns</a></li>
+          <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/typography.html">Typography</a></li>
+        </ul>
+      </div>
+    </li> -->
+
+
+  </ul>
+</nav>
+
+<!-- partial -->
+<script>
+// function toggleFunc() {
+//   var x = document.getElementById("toggleCls");
+//   if (x.style.display === "none") {
+//     x.style.display = "block";
+//   } else {
+//     x.style.display = "none";
+//   }
+// }
+</script>

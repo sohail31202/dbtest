@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1,
+      shrink-to-fit=no">
+  <title>Login</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="vendors/feather/feather.css">
+  <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="css/vertical-layout-light/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="images/favicon_ico.png">
+  <link rel="stylesheet" href="vendors/toastr.css">
+  <link rel="stylesheet" href="../vendors/font-awesome/css/font-awesome.min.css">
+  <style>
+    input.form-control, input.form-control:focus{
+      color: #484848;
+    }
+    
+    label.error {
+      text-align: left;
+      display: block;
+      width: 100%;
+      margin: 0;
+      color: #b10000;
+  }
+
+    .input-group-append .input-group-text, .input-group-prepend .input-group-text {
+      border-color: #ffffff;
+      background-color: #ffffff;
+      color: #2bb06b;
+    }
+    #formData .form-control{
+      border: 1px solid #ededed;
+      background: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-center auth px-0">
+        <div class="row w-100 mx-0">
+          <div class="col-lg-4 mx-auto">
+            <div class="card auth-form-light text-center py-5 px-4 px-sm-5" style="box-shadow: 0px 7px 14px 0px #b9b9b9 !important;">
+              <div class="brand-logo">
+                <img src="images/saferr_logo.png" alt="logo">
+              </div>
+
+              <form class="pt-3" id="formData">
+                <input type="hidden" name="_csrf" id="csrf" value="<%=
+                    csrfToken %>">
+
+                <div class="form-group">
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                      </div>
+                      <input type="email" class="form-control " id="email" name="email" placeholder="Email">
+                  </div>
+                </div>
+
+
+
+                <div class="form-group mb-1">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-key"></i></span>
+                    </div>
+                    <input type="password" class="form-control" id="password" name="password"
+                    placeholder="Password">
+                  </div>
+                </div>
+
+
+                <!-- <div class="form-group">
+
+                  <i class="fa fa-solid fa-at menu-icon text-white lock-icon"></i>
+                  <input type="email" class="form-control " id="email" name="email"
+                  placeholder="Email">
+                  <hr class="line">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-solid fa-lock menu-icon text-white lock-icon"></i>
+                  <input type="password" class="form-control form-control-lg" id="password" name="password"
+                    placeholder="Password">
+                    <hr class="line">
+                </div> -->
+                <div class="my-2 d-flex justify-content-between
+                  align-items-end">
+                  <a href="#" class="auth-link text-white">Forgot password?</a>
+                </div>
+                <div class="mt-3">
+                  <a class="btn btn-block btn-primary btn-lg
+                      font-weight-medium auth-form-btn" type="button" id="login"><b>Sign In</b></a>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <!-- <script src="/vendors/js/vendor.bundle.base.js"></script> -->
+  <script src="vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="js/off-canvas.js"></script>
+  <script src="js/hoverable-collapse.js"></script>
+  <script src="js/template.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/todolist.js"></script>
+  <!-- endinject -->
+
+  <script src="vendors/js/bootstrap.min.js.map"></script>
+
+  <script src="vendors/toastr.min.js"></script>
+  <!-- load jquery validate -->
+
+  <script src="vendors/jquery.validate.min.js"></script>
+  <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script> -->
+  <script>
+            $('#login').click(function (event) {
+            event.preventDefault();
+
+            $("#formData").validate({
+                    rules: {
+                        "email": {
+                            required: true,
+                            minlength: 4,
+                            maxlength: 50
+                        },
+                        "password": {
+                            required: true,
+                            minlength: 5,
+                            maxlength: 10
+                        }
+                    },
+                    messages: {
+                        "email": {
+                            required: "Email field is required.",
+                        },
+                        "password": {
+                          required: "Password field is required.",
+                        }
+                    },
+                });
+
+
+                if ($('#formData').valid() === false) {
+                    return false;
+                }
+
+            var _csrf = $('#csrf').val();
+            var email = $('#email').val();
+            var password = $('#password').val();
+
+            $.ajax({
+                type: "POST",
+                url: "/verify-login",
+                data: { _csrf: _csrf, email: email, password: password },
+                dataType: 'JSON',
+                success: function (response) {
+                    if (response.status == 'success') {
+                        toastr.remove();
+                        toastr.success(response.message);
+                        window.setTimeout(function () {
+                            window.location.href = '/dashboard';
+                        }, 1000);
+                    } else {
+                        toastr.remove();
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (response) {
+                    let errorResponse = JSON.parse(response.responseText)
+                    toastr.remove();
+                    toastr.error(errorResponse.message);
+                }
+            });
+        });
+  </script>
+</body>
+
+</html>

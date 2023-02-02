@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1,
+      shrink-to-fit=no">
+  <link rel="shortcut icon" href="../images/favicon_ico.png">
+  <title>
+    <%=title %>
+  </title>
+</head>
+  <body>
+<div style="width: 80%; margin: auto; margin-top: 40px;">
+
+  <% if(fetchData !== undefined && fetchData.page_content !== '' && fetchData.page_content !== null ){ %>
+    <p class="form-control" rows="4"><%-fetchData.page_content %></p>
+  <% }else { %>
+    <p class="form-control" rows="4">Oops, Content not available!!!</p>
+  <% } %>
+
+</div>
+
+</body>
+</html>
