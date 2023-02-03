@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1,
+      shrink-to-fit=no">
+  <title>
+    <%= title %>
+  </title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../vendors/feather/feather.css">
+  <link rel="stylesheet" href="../vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="../vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="../vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+
+  <link rel="stylesheet" href="../vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" type="text/css" href="../css/select.dataTables.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../css/vertical-layout-light/style.css">
+  <link rel="stylesheet" href="../css/custom.css">
+  <!-- endinject -->
+
+  <!-- croppie link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
+
+  <link rel="shortcut icon" href="../images/favicon_ico.png">
+  <link rel="stylesheet" href="../vendors/font-awesome/css/font-awesome.min.css">
+  <script src="../vendors/toastr.min.js"></script>
+
+  <link rel="stylesheet" href="../css/dataTables.bootstrap.css">
+  <link rel="stylesheet" href="../css/dataTables.responsive.css">
+
+  <!-- croppie link -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css"> -->
+  <!-- <link rel="stylesheet" href="../css/cropper.css">
+  <link rel="stylesheet" href="../css/main.css"> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet">
+
+  <!-- For shown multiple image with zoom css cdn. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
+  <style>
+    .navbar .navbar-menu-wrapper {
+    
+  
+    padding-left: 0rem !important;
+    }
+    .navbar .navbar-brand-wrapper .navbar-brand img {
+     width: 50px;
+     }
+
+  </style>
+  
+</head>
+<div class="container-scroller">
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center
+        justify-content-center">
+      <a class="navbar-brand brand-logo  w-100" href="/dashboard"><img src="../images/Gold_small_logo.png"
+          class="mr-2" alt="logo" /></a>
+      <a class="navbar-brand brand-logo-mini" href="/dashboard"><img src="../images/Gold_small_logo.png"
+          alt="logo" /></a>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-center
+        justify-content-end">
+      <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize"
+        onclick="toggleFunc()">
+        <span class="icon-menu"></span>
+      </button>
+      <ul class="navbar-nav navbar-nav-right">
+
+        <li class="nav-item nav-profile dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+            <img src="../images/face28.jpg" alt="profile" />
+          </a>
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+            <!-- <a class="dropdown-item">
+              <i class="ti-settings text-primary"></i>
+              Settings
+            </a> -->
+            <a class="dropdown-item" href="/logout">
+              <i class="ti-power-off text-primary"></i>
+              Logout
+            </a>
+          </div>
+        </li>
+      </ul>
+      <button class="navbar-toggler navbar-toggler-right d-lg-none
+          align-self-center" type="button" data-toggle="offcanvas">
+        <span class="icon-menu"></span>
+      </button>
+    </div>
+  </nav>
+</div>
+<!-- partial -->
+<div class="container-fluid page-body-wrapper">
+  <%- include('sidebar') %>
+
+    <body>
