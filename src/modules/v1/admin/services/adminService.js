@@ -38,20 +38,20 @@ export class adminService {
                 data_ref_key: "profile_intention"
             }
             // Get contact table length.
-            const intentLength = await AdminModelObj.fetchObj(IntentWhere, tableConstants.METADATA);
+            // const intentLength = await AdminModelObj.fetchObj(IntentWhere, tableConstants.METADATA);
 
             const where = {
-                "user_type": 2
+                "is_deleted": 0
             }
             const userLength = await AdminModelObj.fetchObj(where, tableConstants.USERS);
 
-            const reportedUserLength = await AdminModelObj.fetchAll(tableConstants.REPORTED_USERS);
+            // const reportedUserLength = await AdminModelObj.fetchAll(tableConstants.REPORTED_USERS);
 
             // Return response.
             let returnData = {
-                "intentLength": intentLength.length,
+                // "intentLength": intentLength.length,
                 "userLength": userLength.length,
-                "reportedUserLength": reportedUserLength.length
+                // "reportedUserLength": reportedUserLength.length
             }
 
             // Return true response.

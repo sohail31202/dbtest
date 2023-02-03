@@ -11,12 +11,38 @@ default:
 userDetails = ""
 
 }
-%> 
+%> <style>
+  .sidebar .nav .nav-item.active > .nav-link {
+    background: #e1bb03 !important;
+    position: relative;
+}
+.sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link, .sidebar .nav:not(.sub-menu) > .nav-item:hover[aria-expanded="true"] {
+     background: none; 
+    color: #000;
+}
+.sidebar .nav .nav-item:hover > .nav-link i, .sidebar .nav .nav-item:hover > .nav-link .menu-title, .sidebar .nav .nav-item:hover > .nav-link .menu-arrow {
+    color: #666;
+}
+.hover-open{
+  background-color: #e1bb03 !important;
+}
+.hover-open a span {
+  background-color: #e1bb03 !important;
+  color:#fff !important;
+  }
+  .hover-open a  i {
+  
+  color:#fff !important;
+  }
+  .sidebar .nav:not(.sub-menu) > .nav-item.active {
+    background: none !important;
+}
+</style>
 
 <!-- partial:partials/_sidebar.html -->
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
-    <li class="nav-item">
+    <li class="nav-item customhove">
       <a class="nav-link" href="/dashboard">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">Dashboard </span>

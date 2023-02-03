@@ -38,12 +38,47 @@
     .input-group-append .input-group-text, .input-group-prepend .input-group-text {
       border-color: #ffffff;
       background-color: #ffffff;
-      color: #2bb06b;
+      color: #121211;
     }
     #formData .form-control{
       border: 1px solid #ededed;
       background: #ffffff;
     }
+    .loginBg{
+      background: #ffffff !important;
+    }
+    .loginBtn{
+      background-color: #121211;
+      color: #fff;
+    }
+    .loginBtn:hover, .loginBtn:focus{
+      background-color: #121211;
+      color: #fff;
+    }
+    .loginBtn:focus{
+      background-color: #121211 !important;
+      color: #fff !important;
+    }
+    .loginBtn:active{
+      background-color: #121211 !important;
+      color: #fff !important;
+    }
+    .loginBg .input-group, .asColorPicker-wrap {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    border: 1px solid #ededed;
+}
+.loginBg .form-control{
+  box-shadow: unset;
+    border: unset !important ;
+}
+.loginBg .input-group-text, .input-group-prepend {
+    border-right: 1px solid #ededed !important;
+}
+   
   </style>
 </head>
 
@@ -53,16 +88,16 @@
       <div class="content-wrapper d-flex align-items-center auth px-0">
         <div class="row w-100 mx-0">
           <div class="col-lg-4 mx-auto">
-            <div class="card auth-form-light text-center py-5 px-4 px-sm-5" style="box-shadow: 0px 7px 14px 0px #b9b9b9 !important;">
+            <div class="card auth-form-light text-center py-5 px-4 px-sm-5 loginBg" style="box-shadow: 0px 7px 14px 0px #b9b9b9 !important;">
               <div class="brand-logo">
-                <img src="images/saferr_logo.png" alt="logo">
+                <img src="images/Gold_icon.png" alt="logo">
               </div>
 
               <form class="pt-3" id="formData">
                 <input type="hidden" name="_csrf" id="csrf" value="<%=
                     csrfToken %>">
 
-                <div class="form-group">
+                <div class="form-group" id="mailErr">
                   <div class="input-group">
                       <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fa fa-envelope"></i></span>
@@ -73,7 +108,7 @@
 
 
 
-                <div class="form-group mb-1">
+                <div class="form-group mb-1" id="passErr">
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fa fa-key"></i></span>
@@ -103,7 +138,7 @@
                 </div>
                 <div class="mt-3">
                   <a class="btn btn-block btn-primary btn-lg
-                      font-weight-medium auth-form-btn" type="button" id="login"><b>Sign In</b></a>
+                      font-weight-medium auth-form-btn loginBtn" type="button" id="login"><b>Sign In</b></a>
                 </div>
 
               </form>
@@ -163,6 +198,16 @@
                           required: "Password field is required.",
                         }
                     },
+                    errorPlacement: function(error, element) {
+                      console.log("element", element[0]);
+                        if (element[0].type == 'email') {
+                            error.appendTo($("#mailErr"));
+                        }
+                        else {
+                          error.appendTo($("#passErr"));
+                            // error.insertAfter(element);
+                        }
+                    }
                 });
 
 

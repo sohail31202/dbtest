@@ -1,4 +1,5 @@
 import knexJs from "knex";
+import { log } from "winston";
 import knexConfig from "~/config/knexfile";
 import tableConstants from "~/constants/tableConstants";
 
