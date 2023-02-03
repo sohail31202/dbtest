@@ -74,37 +74,46 @@ export class settingService {
     * @returns 
     */
     async updateContentPage(req) {
-
+        const res = {
+            "status": true,
+            "status_code": StatusCodes.OK,
+            "response": 'success'
+        };
+        console.log("commonHelpers.unEscape(req.body.content)", commonHelpers.unEscape(req.body.content));
         try {
             // Set current time.
-            var currentTime = DateTimeUtil.getCurrentTimeObjForDB();
+            const currentTime = DateTimeUtil.getCurrentTimeObjForDB(),
+                pageType = req.body.pageType,
+                adminId = req.session.adminId,
+                where = {
+                    "page_type": pageType
+                },
+                updateContent = {
+                    "page_content": commonHelpers.unEscape(req.body.content),
+                    "updated_at": currentTime
+                };
 
-            // Set where page_type.
-            const where = {
-                "page_type": req.body.pageType
+            // Fetch page content.
+            const fetchData = await SettingModelObj.fetchObj(where, tableConstants.APP_STATIC_PAGE_CONTENT);
+
+            if( fetchData.length > 0 ) {
+                updateContent.updated_by = adminId;
+                // Updated into table.
+                await SettingModelObj.updateObj(updateContent, where, tableConstants.APP_STATIC_PAGE_CONTENT);
+            
+                return res;
+            }else {
+                updateContent.page_type = pageType;
+                updateContent.created_at = currentTime;
+                updateContent.created_by = adminId;
+                // Insert into table.
+                await SettingModelObj.createObj(updateContent, tableConstants.APP_STATIC_PAGE_CONTENT);
+                
+                return res;
             }
-
-            // Set updated data into table.
-            const updateContent = {
-                "page_content": commonHelpers.unEscape(req.body.content),
-                "updated_by": req.session.adminId,
-                "updated_at": currentTime
-            }
-
-            // Updated into table.
-            await SettingModelObj.updateObj(updateContent, where, tableConstants.APP_STATIC_PAGE_CONTENT);
-
-            let res = {
-                "status": true,
-                "status_code": StatusCodes.OK,
-                "response": 'success'
-            }
-
-            return res;
 
         } catch (error) {
             return error;
-
         }
     }
 }
