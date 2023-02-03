@@ -114,5 +114,5 @@ package-lock.json
 #editor files
 .vscode/
 #package.json file
-package.json
+# package.json
 
