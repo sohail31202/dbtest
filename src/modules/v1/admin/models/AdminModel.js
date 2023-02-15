@@ -96,9 +96,8 @@ export default class AdminModel extends BaseModel {
             } else {
                 result.orderBy(column_name, sorting)
             }
-        //    console.log("result", result.toString());
             return result.then(function (rows) {
-                console.log()
+               
                 return rows;
             });
         }

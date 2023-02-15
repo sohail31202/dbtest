@@ -1,0 +1,129 @@
+<%- include ( "header" ) %>
+  </style>
+  <div class="contentright" id="conRight">
+    <div class="container-fluid">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row mt-3 pt-2">
+            <div class="col-sm-6">
+              <h4 class="page-title">
+                User List
+              </h4>
+            </div>
+          </div>
+          <hr>
+        </div>
+      
+        <div class="container-fluid categoryFiltrr">
+          <div class="table-responsive">
+            <table class="table dataTablecustomCls">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">S_no</th>
+                  <!-- <th scope="col">Image</th> -->
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Contact_Number</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+      </div>
+      </div>
+
+      <%- include('footer') %>
+<!-- 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script> -->
+
+    <script>
+
+      // Here we are changing the active and inactive status.
+      const changeStatus = (id, status) => {
+            let text = `Do you want to ${status == 1 ? 'Inactive' : 'Active'} this user?`;
+            if (confirm(text) == true) {
+              $.ajax({
+                type: "post",
+                url: `/change-user-status`,
+                data: { id },
+                dataType: 'JSON',
+                success: function (response) {
+                  if (response.status == 'success') {
+                    toastr.remove();
+                    toastr.success(response.message);
+                    window.setTimeout(function () {
+                      window.location.reload();
+                    }, 1000);
+                  }
+                },
+                error: function (response) {
+                  let errorResponse = JSON.parse(response.responseText)
+                  toastr.remove();
+                  toastr.error(errorResponse.message);
+                }
+              });
+            }
+          }
+  // Here we are deleting user.
+  const deleteuser = (id) => {
+
+let text = "Are you sure you want to delete?";
+if (confirm(text) == true) {
+  $.ajax({
+    type: "get",
+    url: `/delete-user/${id}`,
+    dataType: 'JSON',
+    success: function (response) {
+      if (response.status == 'success') {
+        toastr.remove();
+        toastr.success(response.message);
+        window.setTimeout(function () {
+          window.location.reload();
+        }, 1000);
+      }
+    },
+    error: function (response) {
+      let errorResponse = JSON.parse(response.responseText)
+      toastr.remove();
+      toastr.error(errorResponse.message);
+    }
+  });
+}
+}
+
+      // user list
+      $(document).ready(function () {
+        var oTable = $('table').DataTable({
+          'paging': true,
+          'searching': true,
+          'processing': true,
+          'serverSide': true,
+          'serverMethod': 'post',
+          'ajax': {
+            'url': '/user-list',
+            'data': function (data) {
+            }
+          },
+          'serverSide': true,
+          'aaSorting': [],
+          'columns': [
+            { data: 's_no', "sortable": false },
+            { data: 'fullname', "sortable": true },
+            { data: 'email', "sortable": true },
+            { data: 'contact', "sortable": true },
+            { data: 'statusName', "sortable": true },
+            { data: 'action', "sortable": false }
+          ]
+
+        });
+      });
+    </script>

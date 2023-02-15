@@ -30,11 +30,12 @@
 	"FILE_SIZE_ERROR": "File max size limit exceeded.",
 	"INTENT_ADDED": "Intent added successfully.",
 	"INTENT_UPDATED": "Intent updated successfully.",
-    "NOT_EXIST": "This intent is already exist.",
+	"NOT_EXIST": "This intent is already exist.",
 	"INTENT_DELETED": "Intent deleted successfully.",
 	"INTENT_STATUS": "Intent status change successfully.",
 	"ACCONUT_INACTIVE": "Account is inactive, Please try later.",
 	"USER_DELETED": "User deleted successfully.",
 	"STATUS_CHANGE_SUCCESS": "User status changed successfully.",
-	"CONTENT_UPDATED": "Content page updated successfully."
+	"CONTENT_UPDATED": "Content page updated successfully.",
+	"USER_STATUS_CHANGED": "USER_STATUS_CHANGED"
 }
