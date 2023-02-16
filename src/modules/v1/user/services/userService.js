@@ -77,39 +77,33 @@ export class userService {
 
             userData.forEach((element, index) => {
                 userData[index].s_no = index + 1 + Number(start)
+                const statusIs = element.status == 1 ? 'inactive' : 'active';
+
+                const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
+
+                const statusIsIcon = element.status == 1 ? '<i class="fa fa-ban mx-2" aria-hidden="true"></i>'
+                    : '<i class="fa fa-check-circle mx-2" aria-hidden="true"></i>';
 
                 let Action, status;
-                if(element.is_deleted == 1){
+                if (element.is_deleted == 1) {
                     Action = "";
-                    status = "Deleted";
-                }else {
-                    Action = `<div class="dropdown-menu user-listDropdown">
-                    
-                    <a class="dropdown-item" id="deleteButton"
-                onclick="deleteuser('${element.id}')">Delete</a>
-                        <a href="javascript:void(0)" class="dropdown-item" onclick="changeStatus('${element.id}', '${element.status}')"  class="btn btn-danger">
-                        <input type="hidden" name="userId" value="${element.id}">
-                        <input type="hidden" name="status" value="${element.status}">
-                        ${element.status == 1 ? 'Inactive' : 'Active'}
-                        </a>
+                    status = '<span class="badge badge-danger" aria-hidden="true">Deleted</span>'
+                } else {
+
+                    Action = ` <a href="#" data-toggle="modal" data-target="#deleteModal" title="Delete" class="btn btn-danger btn-rounded btn-icon" onclick="deleteuser('${element.id}')"><i class="ti-trash" aria-hidden="true"></i></a>
+
+                        <a href="#" data-toggle="modal" data-target="#changeStatusModal" title="${statusIconText}" class='btn btn-info btn-rounded btn-icon' onclick="changeStatus('${element.id}','${statusIs}')">${statusIsIcon}</a>
+
                     </div>`;
 
-                    status = element.status == 0 ? "Inactive" : "Active";
+                    status = element.status == 1 ? '<span class="badge badge-success" aria-hidden="true">Active</span>'
+                        : '<span class="badge badge-warning" aria-hidden="true">Inactive</span>'
                 }
-                
-
                 element.statusName = status;
 
                 element.action = `<form action="/status-changed" method="post">
-    
                     <td class="change-cls">
-                    <div class="dropdown togglemenu text-center";>
-                   
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                        </a>
                         ${Action}
-                    </div>
                     </td>
                 </form>`
             });
@@ -138,17 +132,17 @@ export class userService {
                 currentTime = DateTimeUtil.getCurrentTimeObjForDB(),
 
                 column = ['fullname', 'email', 'phone_dial_code', 'phone_number'],
-            getValue = await userModelObj.fetchObjWithSingleRecord(whereId, column, tableConstants.USERS),
+                getValue = await userModelObj.fetchObjWithSingleRecord(whereId, column, tableConstants.USERS),
                 updateData = {
                     "deleted_data_json": getValue,
                     "is_deleted": 1,
-                    "deleted_at":currentTime,
+                    "deleted_at": currentTime,
                     "fullname": "Deleted",
-                    "email":"",
-                    "phone_dial_code":"",
-                    "phone_number":""
+                    "email": "",
+                    "phone_dial_code": "",
+                    "phone_number": ""
                 },
-            updateValue = await userModelObj.updateObj(updateData,whereId, tableConstants.USERS);
+                updateValue = await userModelObj.updateObj(updateData, whereId, tableConstants.USERS);
             console.log("whereId", whereId);
             console.log("currentTime", currentTime);
             console.log("column", column);

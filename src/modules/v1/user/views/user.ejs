@@ -1,21 +1,22 @@
 <%- include ( "header" ) %>
   </style>
-  <div class="contentright" id="conRight">
-    <div class="container-fluid">
-      <div class="content">
-        <div class="container-fluid">
-          <div class="row mt-3 pt-2">
-            <div class="col-sm-6">
-              <h4 class="page-title">
-                User List
-              </h4>
-            </div>
-          </div>
-          <hr>
-        </div>
-      
-        <div class="container-fluid categoryFiltrr">
+      <!-- <div class="content"> -->
+
+
           <div class="table-responsive">
+            <div class="row m-4">
+              <div class="col-md-6">
+                <h3 class="page-title">
+                  User List
+                </h3>
+              </div>
+              <div class="col-md-6">
+                <input type="text" name="search" class="float-right p-2 rounded">
+              </div>
+            </div>
+            <hr>
+      
+          
             <table class="table dataTablecustomCls">
               <thead class="thead-dark">
                 <tr>
@@ -34,67 +35,65 @@
 
             </table>
           </div>
-        </div>
-      </div>
-      </div>
-      </div>
 
-      <%- include('footer') %>
+  <!-- </div> -->
+
+  <%- include('footer') %>
 
     <script>
 
       // Here we are changing the active and inactive status.
       const changeStatus = (id, status) => {
-            let text = `Do you want to ${status == 1 ? 'Inactive' : 'Activate'} this user?`;
-            if (confirm(text) == true) {
-              $.ajax({
-                type: "post",
-                url: `/change-user-status`,
-                data: { id },
-                dataType: 'JSON',
-                success: function (response) {
-                  if (response.status == 'success') {
-                    toastr.remove();
-                    toastr.success(response.message);
-                    window.setTimeout(function () {
-                      window.location.reload();
-                    }, 1000);
-                  }
-                },
-                error: function (response) {
-                  let errorResponse = JSON.parse(response.responseText)
-                  toastr.remove();
-                  toastr.error(errorResponse.message);
-                }
-              });
+        let text = `Do you want to ${status == 1 ? 'Inactivate' : 'Activate'} this user?`;
+        if (confirm(text) == true) {
+          $.ajax({
+            type: "post",
+            url: `/change-user-status`,
+            data: { id },
+            dataType: 'JSON',
+            success: function (response) {
+              if (response.status == 'success') {
+                toastr.remove();
+                toastr.success(response.message);
+                window.setTimeout(function () {
+                  window.location.reload();
+                }, 1000);
+              }
+            },
+            error: function (response) {
+              let errorResponse = JSON.parse(response.responseText)
+              toastr.remove();
+              toastr.error(errorResponse.message);
             }
-          }
-  // Here we are deleting user.
-  const deleteuser = (id) => {
-
-let text = "Are you sure you want to delete?";
-if (confirm(text) == true) {
-  $.ajax({
-    type: "get",
-    url: `/delete-user/${id}`,
-    dataType: 'JSON',
-    success: function (response) {
-      if (response.status == 'success') {
-        toastr.remove();
-        toastr.success(response.message);
-        window.setTimeout(function () {
-          window.location.reload();
-        }, 1000);
+          });
+        }
       }
-    },
-    error: function (response) {
-      let errorResponse = JSON.parse(response.responseText)
-      toastr.remove();
-      toastr.error(errorResponse.message);
-    }
-  });
-}
-}
+      // Here we are deleting user.
+      const deleteuser = (id) => {
+
+        let text = "Are you sure you want to delete?";
+        if (confirm(text) == true) {
+          $.ajax({
+            type: "get",
+            url: `/delete-user/${id}`,
+            dataType: 'JSON',
+            success: function (response) {
+              if (response.status == 'success') {
+                toastr.remove();
+                toastr.success(response.message);
+                window.setTimeout(function () {
+                  window.location.reload();
+                }, 1000);
+              }
+            },
+            error: function (response) {
+              let errorResponse = JSON.parse(response.responseText)
+              toastr.remove();
+              toastr.error(errorResponse.message);
+            }
+          });
+        }
+      }
 
       // user list
       $(document).ready(function () {
