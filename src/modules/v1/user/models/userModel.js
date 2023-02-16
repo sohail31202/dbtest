@@ -65,6 +65,7 @@ export default class userModel extends BaseModel {
             "fullname", 
             "email",  
             "status",
+            "is_deleted",
             "CONCAT( phone_dial_code, phone_number) as contact"
         ];
 

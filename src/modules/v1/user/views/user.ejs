@@ -40,16 +40,12 @@
       </div>
 
       <%- include('footer') %>
-<!-- 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script> -->
 
     <script>
 
       // Here we are changing the active and inactive status.
       const changeStatus = (id, status) => {
-            let text = `Do you want to ${status == 1 ? 'Inactive' : 'Active'} this user?`;
+            let text = `Do you want to ${status == 1 ? 'Inactive' : 'Activate'} this user?`;
             if (confirm(text) == true) {
               $.ajax({
                 type: "post",

@@ -75,49 +75,40 @@ export class userService {
             var total_records_with_filter = records.length;
             const userData = await userModelObj.getuserData(search_query, start, length, order_data, order);
 
-            // for (let element = 0; element < userData.length; element++) {
-            //     if(userData[element].status == 0 && userData[element].is_deleted == 0){
-            //         userData[element].statusName = "Inactive"
-            //     }else if(userData[element].status == 1 && userData[element].is_deleted == 0){
-            //         userData[element].statusName = "Active"
-            //     }else if(userData[element].is_deleted == 1){
-            //         userData[element].statusName = "..."
-            //     }
-                
-            // }
             userData.forEach((element, index) => {
                 userData[index].s_no = index + 1 + Number(start)
 
-                // if(element.status == 0 && element.is_deleted == 0){
-                //     element.statusName = "Inactive"
-                // }else if(element.status == 1 && element.is_deleted == 0){
-                //     element.statusName = "Active"
-                // }else if(element.is_deleted == 1){
-                //     element.statusName = "..."
-                // }
-                // if(element.is_deleted == 1){
-                //     `<i class= "fa fa class"></i>
-                //     <p></p>`
-                // }else
+                let Action, status;
+                if(element.is_deleted == 1){
+                    Action = "";
+                    status = "Deleted";
+                }else {
+                    Action = `<div class="dropdown-menu user-listDropdown">
+                    
+                    <a class="dropdown-item" id="deleteButton"
+                onclick="deleteuser('${element.id}')">Delete</a>
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="changeStatus('${element.id}', '${element.status}')"  class="btn btn-danger">
+                        <input type="hidden" name="userId" value="${element.id}">
+                        <input type="hidden" name="status" value="${element.status}">
+                        ${element.status == 1 ? 'Inactive' : 'Active'}
+                        </a>
+                    </div>`;
 
-                element.statusName = element.status == 0 ? "Inactive" : "Active";
+                    status = element.status == 0 ? "Inactive" : "Active";
+                }
+                
+
+                element.statusName = status;
+
                 element.action = `<form action="/status-changed" method="post">
     
                     <td class="change-cls">
                     <div class="dropdown togglemenu text-center";>
+                   
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                         </a>
-                        <div class="dropdown-menu user-listDropdown">
-                        <a class="dropdown-item" id="details" href="/admin/user-details/${element.id}">Detail</a>
-                        <a class="dropdown-item" id="deleteButton"
-                    onclick="deleteuser('${element.id}')">Delete</a>
-                            <a href="javascript:void(0)" class="dropdown-item" onclick="changeStatus('${element.id}', '${element.status}')"  class="btn btn-danger">
-                            <input type="hidden" name="userId" value="${element.id}">
-                            <input type="hidden" name="status" value="${element.status}">
-                            ${element.status == 1 ? 'Inactive' : 'Active'}
-                            </a>
-                        </div>
+                        ${Action}
                     </div>
                     </td>
                 </form>`
@@ -152,7 +143,7 @@ export class userService {
                     "deleted_data_json": getValue,
                     "is_deleted": 1,
                     "deleted_at":currentTime,
-                    "fullname": "deleted",
+                    "fullname": "Deleted",
                     "email":"",
                     "phone_dial_code":"",
                     "phone_number":""
