@@ -1,124 +1,131 @@
 <%- include ( "header" ) %>
   </style>
-      <!-- <div class="content"> -->
-
-
-          <div class="table-responsive">
-            <div class="row m-4">
-              <div class="col-md-6">
-                <h3 class="page-title">
-                  User List
-                </h3>
+  <!-- <div class="content"> -->
+  <div class="main-panel">
+    <div class="contentright w-auto">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card position-relative">
+          <div class="card-body">
+            <div class="table-responsive">
+              <div class="row m-4">
+                <div class="col-md-6">
+                  <h3 class="page-title">
+                    User List
+                  </h3>
+                </div>
+                <div class="col-md-6">
+                  <input type="text" name="search" class="float-right p-2 rounded">
+                </div>
               </div>
-              <div class="col-md-6">
-                <input type="text" name="search" class="float-right p-2 rounded">
-              </div>
+              <hr>
+              <table class="table dataTablecustomCls">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">S_no</th>
+                    <!-- <th scope="col">Image</th> -->
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Contact_Number</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+
+              </table>
             </div>
-            <hr>
-      
-          
-            <table class="table dataTablecustomCls">
-              <thead class="thead-dark">
-                <tr>
-                  <th scope="col">S_no</th>
-                  <!-- <th scope="col">Image</th> -->
-                  <th scope="col">Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Contact_Number</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-
-              </tbody>
-
-            </table>
           </div>
+        </div>
+      </div>
+    </div>
+    <%- include('footer') %>
 
-  <!-- </div> -->
+      <!-- summernote js -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script>
 
-  <%- include('footer') %>
+      <script>
 
-    <script>
-
-      // Here we are changing the active and inactive status.
-      const changeStatus = (id, status) => {
-        let text = `Do you want to ${status == 1 ? 'Inactivate' : 'Activate'} this user?`;
-        if (confirm(text) == true) {
-          $.ajax({
-            type: "post",
-            url: `/change-user-status`,
-            data: { id },
-            dataType: 'JSON',
-            success: function (response) {
-              if (response.status == 'success') {
+        // Here we are changing the active and inactive status.
+        const changeStatus = (id, status) => {
+          let text = `Do you want to ${status == 1 ? 'Inactivate' : 'Activate'} this user?`;
+          if (confirm(text) == true) {
+            $.ajax({
+              type: "post",
+              url: `/change-user-status`,
+              data: { id },
+              dataType: 'JSON',
+              success: function (response) {
+                if (response.status == 'success') {
+                  toastr.remove();
+                  toastr.success(response.message);
+                  window.setTimeout(function () {
+                    window.location.reload();
+                  }, 1000);
+                }
+              },
+              error: function (response) {
+                let errorResponse = JSON.parse(response.responseText)
                 toastr.remove();
-                toastr.success(response.message);
-                window.setTimeout(function () {
-                  window.location.reload();
-                }, 1000);
+                toastr.error(errorResponse.message);
+              }
+            });
+          }
+        }
+        // Here we are deleting user.
+        const deleteuser = (id) => {
+
+          let text = "Are you sure you want to delete?";
+          if (confirm(text) == true) {
+            $.ajax({
+              type: "get",
+              url: `/delete-user/${id}`,
+              dataType: 'JSON',
+              success: function (response) {
+                if (response.status == 'success') {
+                  toastr.remove();
+                  toastr.success(response.message);
+                  window.setTimeout(function () {
+                    window.location.reload();
+                  }, 1000);
+                }
+              },
+              error: function (response) {
+                let errorResponse = JSON.parse(response.responseText)
+                toastr.remove();
+                toastr.error(errorResponse.message);
+              }
+            });
+          }
+        }
+
+        // user list
+        $(document).ready(function () {
+          var oTable = $('table').DataTable({
+            'paging': true,
+            'searching': true,
+            'processing': true,
+            'serverSide': true,
+            'serverMethod': 'post',
+            'ajax': {
+              'url': '/user-list',
+              'data': function (data) {
               }
             },
-            error: function (response) {
-              let errorResponse = JSON.parse(response.responseText)
-              toastr.remove();
-              toastr.error(errorResponse.message);
-            }
+            'serverSide': true,
+            'aaSorting': [],
+            'columns': [
+              { data: 's_no', "sortable": false },
+              { data: 'fullname', "sortable": true },
+              { data: 'email', "sortable": true },
+              { data: 'contact', "sortable": true },
+              { data: 'statusName', "sortable": true },
+              { data: 'action', "sortable": false }
+            ]
+
           });
-        }
-      }
-      // Here we are deleting user.
-      const deleteuser = (id) => {
-
-        let text = "Are you sure you want to delete?";
-        if (confirm(text) == true) {
-          $.ajax({
-            type: "get",
-            url: `/delete-user/${id}`,
-            dataType: 'JSON',
-            success: function (response) {
-              if (response.status == 'success') {
-                toastr.remove();
-                toastr.success(response.message);
-                window.setTimeout(function () {
-                  window.location.reload();
-                }, 1000);
-              }
-            },
-            error: function (response) {
-              let errorResponse = JSON.parse(response.responseText)
-              toastr.remove();
-              toastr.error(errorResponse.message);
-            }
-          });
-        }
-      }
-
-      // user list
-      $(document).ready(function () {
-        var oTable = $('table').DataTable({
-          'paging': true,
-          'searching': true,
-          'processing': true,
-          'serverSide': true,
-          'serverMethod': 'post',
-          'ajax': {
-            'url': '/user-list',
-            'data': function (data) {
-            }
-          },
-          'serverSide': true,
-          'aaSorting': [],
-          'columns': [
-            { data: 's_no', "sortable": false },
-            { data: 'fullname', "sortable": true },
-            { data: 'email', "sortable": true },
-            { data: 'contact', "sortable": true },
-            { data: 'statusName', "sortable": true },
-            { data: 'action', "sortable": false }
-          ]
-
         });
-      });
-    </script>
+      </script>
