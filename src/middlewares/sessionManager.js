@@ -4,7 +4,7 @@ import BaseModel from "~/models/BaseModel";
 const BaseModelObj = new BaseModel();
 
 const sessionServices = async (req, res, next) => {
-console.log("req.session.adminId---", req.session.adminId);
+
     if( !req.session.adminId || req.session.adminId == '') {
         req.session.destroy();
         res.redirect('/');
