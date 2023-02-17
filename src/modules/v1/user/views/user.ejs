@@ -51,7 +51,7 @@
 
         // Here we are changing the active and inactive status.
         const changeStatus = (id, status) => {
-          let text = `Do you want to ${status == 1 ? 'Inactivate' : 'Activate'} this user?`;
+          let text = `Do you want to ${status} this user?`;
           if (confirm(text) == true) {
             $.ajax({
               type: "post",

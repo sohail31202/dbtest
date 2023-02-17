@@ -37,7 +37,8 @@ export class userService {
 
             return true
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            logger.error(error);
             return error;
 
         }
@@ -77,12 +78,11 @@ export class userService {
 
             userData.forEach((element, index) => {
                 userData[index].s_no = index + 1 + Number(start)
-                const statusIs = element.status == 1 ? 'inactive' : 'active';
+                const statusIs = element.status == 1 ? 'Inactivate' : 'Activate';
 
-                const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
+                // const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
 
-                const statusIsIcon = element.status == 1 ? '<i class="fa fa-ban mx-2" aria-hidden="true"></i>'
-                    : '<i class="fa fa-check-circle mx-2" aria-hidden="true"></i>';
+                const statusIsIcon = element.status == 1 ? '<i class="fa fa-ban mx-2" aria-hidden="true"></i>': '<i class="fa fa-check-circle mx-2" aria-hidden="true"></i>';
 
                 let Action, status;
                 if (element.is_deleted == 1) {
@@ -92,7 +92,7 @@ export class userService {
 
                     Action = ` <a href="#" data-toggle="modal" data-target="#deleteModal" title="Delete" class="btn btn-danger btn-rounded btn-icon" onclick="deleteuser('${element.id}')"><i class="ti-trash" aria-hidden="true"></i></a>
 
-                        <a href="#" data-toggle="modal" data-target="#changeStatusModal" title="${statusIconText}" class='btn btn-info btn-rounded btn-icon' onclick="changeStatus('${element.id}','${statusIs}')">${statusIsIcon}</a>
+                        <a href="#" data-toggle="modal" data-target="#changeStatusModal" title="${statusIs}" class='btn btn-info btn-rounded btn-icon' onclick="changeStatus('${element.id}','${statusIs}')">${statusIsIcon}</a>
 
                     </div>`;
 
@@ -116,8 +116,8 @@ export class userService {
             };
             res.json(output);
         } catch (error) {
-            console.log(error);
-            // logger.error(error);
+            // console.log(error);
+            logger.error(error);
             return error;
         }
     }
@@ -134,7 +134,7 @@ export class userService {
                 column = ['fullname', 'email', 'phone_dial_code', 'phone_number'],
                 getValue = await userModelObj.fetchObjWithSingleRecord(whereId, column, tableConstants.USERS),
                 updateData = {
-                    "deleted_data_json": getValue,
+                    "deleted_data_json": JSON.stringify(getValue),
                     "is_deleted": 1,
                     "deleted_at": currentTime,
                     "fullname": "Deleted",
@@ -143,14 +143,7 @@ export class userService {
                     "phone_number": ""
                 },
                 updateValue = await userModelObj.updateObj(updateData, whereId, tableConstants.USERS);
-            console.log("whereId", whereId);
-            console.log("currentTime", currentTime);
-            console.log("column", column);
-            console.log("getValue", getValue);
-            console.log("updateData", updateData);
-            console.log("updateValue", updateValue);
-            // For updating status
-            // const deleteduser = await userModelObj.deleteObj(whereId, tableConstants.USERS)
+       
             // Set success response
             let response = {
                 status: true,
@@ -159,8 +152,8 @@ export class userService {
             };
             return response;
         } catch (error) {
-            console.log(error);
-            // logger.log(error)
+            // console.log(error);
+            logger.log(error)
             return error
         }
     }
