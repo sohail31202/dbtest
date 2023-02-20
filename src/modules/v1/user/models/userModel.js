@@ -27,12 +27,11 @@ export default class userModel extends BaseModel {
         });
     }
     async getUserTotalCount(search = "", start = 0, limit = '', where = "", filter = '') {
-        // const cont =  `CONCAT( phone_number, phone_dial_code) as contact` ;
         const sel = [
             "id"
         ];
         var result = knex('users')
-            // .select('id', 'fullname', 'email', 'status', `(CONCAT (phone_number, phone_dial_code)as Contact_number)`)
+           
             .select(sel)
             .groupBy('id')
             .orderBy('id', 'desc')
@@ -59,7 +58,6 @@ export default class userModel extends BaseModel {
     }
 
     async getuserData(search = "", start = 0, limit = 10, order_data, order, where = "", filter = '') {
-    //    var cont =  `CONCAT( 'phone_number', 'phone_dial_code') as contact` 
     const sel = [
             "id",
             "fullname", 
@@ -70,9 +68,8 @@ export default class userModel extends BaseModel {
         ];
 
         var result = knex('users')
-            // .select('id', 'fullname', 'email', 'status',`CONCAT( phone_number, phone_dial_code) as contact`)
+           
             .select(knex.raw(sel))
-            // .select(sel)
             .limit(limit)
             .offset(start)
             .groupBy('id')
