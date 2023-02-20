@@ -251,7 +251,7 @@ i.note-icon-menu-check::before {
   line-height: 40px !important;
 }
 .fCustom{
-  background-color: #fff;
+  /* background-color: #fff; */
  
   width: 100%;
   position: fixed;

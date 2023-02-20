@@ -1,0 +1,63 @@
+<!-- change active/inactive status -->
+<div class="modal" id="changeStatusModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal body -->
+            <div class="modal-body">
+                Do you want to <span id="statusName"></span> this user?
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <input type="hidden" id="statusBtn">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">NO</button>
+                <button type="button" class="btn btn-success changeStatusBtn" id="">YES</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    // Change active/inactive status by ajax.
+    const changeStatus = (id, statusIs) => {
+        $("#statusBtn").val(id);
+        $('#statusName').html(statusIs);
+
+    }
+    $(document).ready(function () {
+        $(document).on("click", ".changeStatusBtn", function(event) {
+        var statusBtn = $("#statusBtn").val();
+    
+        $.ajax({
+            type: "post",
+            url: `/change-user-status`,
+            data: { 'id': statusBtn },
+            dataType: 'JSON',
+            beforeSend: function () {
+                $("#processImg").show();
+                $(".loaderShow").show();
+
+            },
+            complete: function () {
+                $("#processImg").hide();
+                $(".loaderShow").hide();
+
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    toastr.remove();
+                    toastr.success(response.message);
+                    window.setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                }
+            },
+            error: function (response) {
+                let errorResponse = JSON.parse(response.responseText)
+                toastr.remove();
+                toastr.error(errorResponse.message);
+            }
+        });
+    });
+});
+</script>

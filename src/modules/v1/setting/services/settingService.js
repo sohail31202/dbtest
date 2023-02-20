@@ -79,7 +79,6 @@ export class settingService {
             "status_code": StatusCodes.OK,
             "response": 'success'
         };
-        console.log("commonHelpers.unEscape(req.body.content)", commonHelpers.unEscape(req.body.content));
         try {
             // Set current time.
             const currentTime = DateTimeUtil.getCurrentTimeObjForDB(),

@@ -39,7 +39,6 @@ export class authService {
             }
             // get detail from admin table using email id
             const getAdmin = await AuthModelObj.fetchObj(where, tableConstants.ADMIN);
-            console.log("getAdmin---", getAdmin);
             // Check email is valid.
             if(getAdmin.length > 0){
 
