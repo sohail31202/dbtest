@@ -55,13 +55,14 @@ export class userService {
             var order = req.body['order[0][dir]']
 
             // search data
-            var search = req.body['search[value]'];
+            var search = req.body.search;
 
             if (search != '' && search != undefined) {
 
-                var search_value = search.trim();
+                var search_value = search.value.trim();
 
                 var search_query = `
+                    ( fullname LIKE '%${search_value}%' OR 
                     email LIKE '%${search_value}%' OR
                     phone_number LIKE '%${search_value}%' )
                     `;
@@ -80,7 +81,7 @@ export class userService {
                 userData[index].s_no = index + 1 + Number(start)
                 const statusIs = element.status == 1 ? 'Inactivate' : 'Activate';
 
-                // const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
+                const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
 
                 const statusIsIcon = element.status == 1 ? '<i class="fa fa-ban mx-2" aria-hidden="true"></i>': '<i class="fa fa-check-circle mx-2" aria-hidden="true"></i>';
 
@@ -90,9 +91,10 @@ export class userService {
                     status = '<span class="badge badge-danger" aria-hidden="true">Deleted</span>'
                 } else {
 
-                    Action = ` <a href="#" data-toggle="modal" data-target="#deleteModal" title="Delete" class="btn btn-danger btn-rounded btn-icon" onclick="deleteuser('${element.id}')"><i class="ti-trash" aria-hidden="true"></i></a>
+                    Action = ` <a href="#" data-toggle="modal" data-target="#deleteModal" title="Delete" class="btn btn-danger btn-rounded btn-icon" onclick="deleteId('${element.id}')"><i
+                    class="ti-trash" aria-hidden="true"></i></a>
 
-                        <a href="#" data-toggle="modal" data-target="#changeStatusModal" title="${statusIs}" class='btn btn-info btn-rounded btn-icon' onclick="changeStatus('${element.id}','${statusIs}')">${statusIsIcon}</a>
+                        <a href="#" data-toggle="modal" data-target="#changeStatusModal" title="${statusIconText}" class='btn btn-info btn-rounded btn-icon' onclick="changeStatus('${element.id}','${statusIs}')">${statusIsIcon}</a>
 
                     </div>`;
 
@@ -127,21 +129,22 @@ export class userService {
         try {
             // Set a where condition
             const whereId = {
-                'id': request.params.id
+                'id': request.body.id
             },
                 currentTime = DateTimeUtil.getCurrentTimeObjForDB(),
 
                 column = ['fullname', 'email', 'phone_dial_code', 'phone_number'],
-                getValue = await userModelObj.fetchObjWithSingleRecord(whereId, column, tableConstants.USERS),
-                updateData = {
+                getValue = await userModelObj.fetchObjWithSingleRecord(whereId, column, tableConstants.USERS);
+
+                getValue.deleted_by="admin";
+                const updateData = {
                     "deleted_data_json": JSON.stringify(getValue),
                     "is_deleted": 1,
                     "deleted_at": currentTime,
-                    "fullname": "Deleted",
+                    "fullname": "Deleted User",
                     "email": "",
                     "phone_dial_code": "",
-                    "phone_number": "",
-                    "deleted_by":"admin"
+                    "phone_number": ""
                 },
                 updateValue = await userModelObj.updateObj(updateData, whereId, tableConstants.USERS);
        

@@ -36,7 +36,7 @@ const getUser = async (req, res, next) => {
     userServiceObj.getUser(req).then(async (returnData) => {
         //For getting user page
         let data = {
-            'title': 'Edit Terms & Conditions',
+            'title': 'Users',
             'currentYear': currentYear,
             "fetchData": returnData
         };
