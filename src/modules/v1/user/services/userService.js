@@ -144,7 +144,7 @@ export class userService {
                     "fullname": "Deleted User",
                     "email": "",
                     "phone_dial_code": "",
-                    "phone_number": ""
+                    "phone_number": "",
                 },
                 updateValue = await userModelObj.updateObj(updateData, whereId, tableConstants.USERS);
        
