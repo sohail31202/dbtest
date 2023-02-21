@@ -75,17 +75,39 @@
         <div class="modal" id="deletedUserInfoModal">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="form-inline-custom" >
-                        <div class="form-group col-md-12 col-xs-12" id="showInfoId">
-                            <div class="my-3">
-                            <h5>Deleted information</h5>
-                          </div>
-                            <p class="deleted-info" id="deletedData">
-                            </p>
-                        </div>
-
+                    <div class="modal-header" style="margin-left: 0px;">
+                        <h4 class="modal-title">Deleted User Information</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="form-inline-custom">
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">User Name : </label>
+                                <label class="col-md-8 detail_value" id="userName"></label>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">Contact Number : </label>
+                                <label class="col-md-8 detail_value" id="userContactNumber"></label>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">Email : </label>
+                                <label class="col-md-8 detail_value" id="userEmail"></label>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">Deleted At : </label>
+                                <label class="col-md-8 detail_value" id="userDeletedAt"></label>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">Deleted By : </label>
+                                <label class="col-md-8 detail_value" id="userDeletedBy"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -132,9 +154,13 @@
                     });
 
                     // Get deleted info id.
-                    const showInfo = (data) => {
+                    const showInfo = (data, deleted_at) => {
                         console.log("data",data);
-                        $('#deletedData').html(JSON.stringify(data));
+                        $('#userName').html(data.fullname);
+                        $('#userContactNumber').html(data.phone_dial_code+' '+data.phone_number);
+                        $('#userEmail').html(data.email);
+                        $('#userDeletedAt').html(data.deleted_at);
+                        $('#userDeletedBy').html(data.deleted_by);
                     }
                     // Get deleted intent id.
                     const deleteId = (id) => {
