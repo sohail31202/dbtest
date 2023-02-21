@@ -81,8 +81,28 @@
                     </div>
                     <!-- Modal body -->
                     <div class="modal-body">
-                        <p class="deleted-info" id="deletedData">
-                        </p>
+                        <div class="form-inline-custom">
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">User Name : </label>
+                                <label class="col-md-8 detail_value" id="userName"></label>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">Contact Number : </label>
+                                <label class="col-md-8 detail_value" id="userContactNumber"></label>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">Email : </label>
+                                <label class="col-md-8 detail_value" id="userEmail"></label>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">Deleted At : </label>
+                                <label class="col-md-8 detail_value" id="userDeletedAt"></label>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12">
+                                <label class="col-md-4 detail_label">Deleted By : </label>
+                                <label class="col-md-8 detail_value" id="userDeletedBy"></label>
+                            </div>
+                        </div>
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer">
@@ -134,9 +154,12 @@
                     });
 
                     // Get deleted info id.
-                    const showInfo = (data) => {
-                        console.log("data",data);
-                        $('#deletedData').html(JSON.stringify(data));
+                    const showInfo = (data, deleted_at) => {
+                        $('#userName').html(data.fullname);
+                        $('#userContactNumber').html(data.phone_dial_code+' '+data.phone_number);
+                        $('#userEmail').html(data.email);
+                        $('#userDeletedAt').html(data.deleted_at);
+                        $('#userDeletedBy').html(data.deleted_by);
                     }
                     // Get deleted intent id.
                     const deleteId = (id) => {
