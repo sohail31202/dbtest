@@ -491,3 +491,8 @@ span.badge.badge-danger:hover {
 #statusName, .statusName{
   font-weight: 600;
 }
+
+.deleted-info{
+  word-break: break-all;
+    line-height: 26px;
+}

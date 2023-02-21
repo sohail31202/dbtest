@@ -72,40 +72,55 @@
             </div>
         </div>
 
+        <div class="modal" id="deletedUserInfoModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="form-inline-custom" >
+                        <div class="form-group col-md-12 col-xs-12" id="showInfoId">
+                            <div class="my-3">
+                            <h5>Deleted information</h5>
+                          </div>
+                            <p class="deleted-info" id="deletedData">
+                            </p>
+                        </div>
 
-        <!-- status change model -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
 
         <!-- footer section start -->
         <%- include('footer') %>
 
-        <%- include('userModels') %>
+            <%- include('userModels') %>
 
                 <script>
-                  $(document).ready(function () {
-                      var oTable = $('table').DataTable({
-                                    'paging': true,
-                                    'searching': true,
-                                    'processing': true,
-                                    'serverSide': true,
-                                    'serverMethod': 'post',
-                                    'ajax': {
-                                      'url': '/user-list',
-                                      'data': function (data) {
-                                      }
-                                    },
-                                    'serverSide': true,
-                                    'aaSorting': [],
-                                    'columns': [
-                                      { data: 's_no', "sortable": false },
-                                      { data: 'fullname', "sortable": false },
-                                      { data: 'email', "sortable": false },
-                                      { data: 'contact', "sortable": false },
-                                      { data: 'statusName', "sortable": false },
-                                      { data: 'action', "sortable": false }
-                                    ]
+                    $(document).ready(function () {
+                        var oTable = $('table').DataTable({
+                            'paging': true,
+                            'searching': true,
+                            'processing': true,
+                            'serverSide': true,
+                            'serverMethod': 'post',
+                            'ajax': {
+                                'url': '/user-list',
+                                'data': function (data) {
+                                }
+                            },
+                            'serverSide': true,
+                            'aaSorting': [],
+                            'columns': [
+                                { data: 's_no', "sortable": false },
+                                { data: 'fullname', "sortable": false },
+                                { data: 'email', "sortable": false },
+                                { data: 'contact', "sortable": false },
+                                { data: 'statusName', "sortable": false },
+                                { data: 'action', "sortable": false }
+                            ]
 
-                                  });
+                        });
 
                         $('#CustomSearchTextField').keyup(function () {
                             oTable.search($(this).val()).draw();
@@ -116,7 +131,11 @@
 
                     });
 
-
+                    // Get deleted info id.
+                    const showInfo = (data) => {
+                        console.log("data",data);
+                        $('#deletedData').html(JSON.stringify(data));
+                    }
                     // Get deleted intent id.
                     const deleteId = (id) => {
                         $('#deleteBtnId').val(id);
@@ -125,7 +144,7 @@
                     // Delete intent by ajax. 
                     $('#deleteBtn').click(function () {
                         var deletedId = $('#deleteBtnId').val();
-                   
+
                         $.ajax({
                             type: "post",
                             url: `/delete-user`,

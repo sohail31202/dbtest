@@ -82,12 +82,12 @@ export class userService {
                 const statusIs = element.status == 1 ? 'Inactivate' : 'Activate';
 
                 const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
-
+                
                 const statusIsIcon = element.status == 1 ? '<i class="fa fa-ban mx-2" aria-hidden="true"></i>': '<i class="fa fa-check-circle mx-2" aria-hidden="true"></i>';
-
+                const deletedData = element.deleted_data_json;
                 let Action, status;
                 if (element.is_deleted == 1) {
-                    Action = "";
+                    Action = `<a href="#" data-toggle="modal" data-target="#deletedUserInfoModal" class="badge badge-info text-dark" aria-hidden="true" onclick='showInfo(${deletedData})'>Info</a>`;
                     status = '<span class="badge badge-danger" aria-hidden="true">Deleted</span>'
                 } else {
 
