@@ -43,6 +43,13 @@ export class userService {
 
         }
     }
+    
+    /**
+     * Get users list
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
     async userlist(req, res) {
         try {
             var draw = req.body.draw;
@@ -77,12 +84,11 @@ export class userService {
             var total_records_with_filter = records.length;
             const userData = await userModelObj.getuserData(search_query, start, length, order_data, order);
 
-            userData.forEach((element, index) => {
+            userData.forEach(async(element, index) => {
                 userData[index].s_no = index + 1 + Number(start)
                 const statusIs = element.status == 1 ? 'Inactivate' : 'Activate';
 
                 const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
-                
                 const statusIsIcon = element.status == 1 ? '<i class="fa fa-ban mx-2" aria-hidden="true"></i>': '<i class="fa fa-check-circle mx-2" aria-hidden="true"></i>';
                 var deletedData = element.deleted_data_json;
                 let Action, status;
@@ -100,6 +106,8 @@ export class userService {
 
                         <a href="#" data-toggle="modal" data-target="#changeStatusModal" title="${statusIconText}" class='btn btn-info btn-rounded btn-icon' onclick="changeStatus('${element.id}','${statusIs}')">${statusIsIcon}</a>
 
+                        <!-- User Details button. -->
+                        <a href="user-detail/${element.id}"  class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>
                     </div>`;
 
                     status = element.status == 1 ? '<span class="badge badge-success" aria-hidden="true">Active</span>'
@@ -128,7 +136,11 @@ export class userService {
         }
     }
 
-
+    /**
+     * Delete user
+     * @param {*} request 
+     * @returns 
+     */
     async deleteUser(request) {
         try {
             // Set a where condition
@@ -166,7 +178,11 @@ export class userService {
         }
     }
 
-
+    /**
+     * Change user status
+     * @param {*} request 
+     * @returns 
+     */
     async statusChanged(request) {
         try {
             const requestBody = request.body,
@@ -207,6 +223,93 @@ export class userService {
         } catch (error) {
             logger.error(error)
             return error
+        }
+    }
+
+    /**
+     * Get user detail
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
+    async getUserDetail(req, res) {
+        try {
+                const where = req.params.userId;
+                const userData = await userModelObj.fetchUserDetail(where, tableConstants.USERS)
+               
+                console.log("userData",userData);
+                // return false;
+                const bornYear = userData[0].dob.getYear(),
+                currentYear = new Date().getYear(),
+                age = currentYear - bornYear;
+                userData[0].age = age;
+                if(userData[0].signup_type == 1){
+                    userData[0].signup_type = "Normal"
+                }else{
+                    userData[0].signup_type = "Social"
+                }
+
+                if(userData[0].social_type == 1){
+                    userData[0].social_type = "Google";
+                }else if(userData[0].social_type == 2){
+                    userData[0].social_type = "Facebook";
+                }else if(userData[0].social_type == 3){
+                    userData[0].social_type = "Apple";
+                }
+            const changeFormat = DateTimeUtil.changeFormat(userData[0].dob, "DD/MM/YYYY"),
+            join = DateTimeUtil.changeFormat(userData[0].joined_at, "DD/MM/YYYY");
+            userData[0].dob = changeFormat
+            userData[0].joined_at =join
+
+            return userData;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
+    async userTransection(req, res) {
+        try{
+            return true
+
+        }catch(error){
+            console.log(error);
+            return error;
+        }
+    }
+
+    async userTransectionlist(req, res){
+        try{
+            const where = req.body.user_id;
+            console.log("where.....>>>>",where);
+            var draw = req.body.draw;
+
+            var start = req.body.start;
+
+            var length = req.body.length;
+            console.log("length.....>>>>",length);
+
+            var order_data = req.body['order[0][column]'];
+            var order = req.body['order[0][dir]']
+            var total_records = await userModelObj.getTotalTransactionCount(where);
+            console.log("total_records",total_records);
+            var total_records_with_filter = total_records.length;
+            const userData = await userModelObj.getuserTransactionData( start, length, order_data, order);
+
+            userData.forEach(async(element, index) => {
+                userData[index].s_no = index + 1 + Number(start)
+            });
+
+            var output = {
+                'draw': draw,
+                'iTotalRecords': total_records,
+                'iTotalDisplayRecords': total_records_with_filter,
+                'aaData': userData,
+            };
+            res.json(output);
+        }catch(error){
+            console.log(error);
+            return error;
         }
     }
 }

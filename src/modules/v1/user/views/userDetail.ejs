@@ -1,0 +1,300 @@
+<%- include('header') %>
+
+    <style>
+        .proImgList img {
+            height: 122px;
+            object-fit: cover;
+        }
+    </style>
+
+    <!-- mid-part start -->
+    <div class="main-panel">
+        <div class="contentright w-auto">
+            <div class="container-fluid mt-3">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="d-flex">
+                            <div class="tableheading ">
+                                <h3>User Detail</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="searchbox float-right">
+                            <div class="form-group has-search">
+                                <a href="/users" class="btn btn-dark mt-2">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12 grid-margin">
+                        <div class="card position-relative">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 col-xs-12">
+                                        <div class="col-md-12 user_detail_profile_image text-center">
+                                            <img src="<%= userData[0].profile_img %>" data-fancybox alt="user">
+                                        </div>
+                                        <div class="col-md-12 detail_user_name text-center">
+                                            <%= userData[0].fullname %>
+                                        </div>
+                                        <div class="col-md-12 detail_user_email text-center">
+                                            <%= userData[0].email %>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 col-xs-12">
+                                        <div class="form-inline-custom">
+                                            <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-4 detail_label">Contact</label>
+                                                <label class="col-md-8 detail_value intent_overflow"
+                                                    title="<%= userData[0].contact%>">
+                                                    <%= userData[0].contact %>
+                                                </label>
+                                            </div>
+
+                                            <!-- <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-4 detail_label">Email</label>
+                                                <label class="col-md-8 detail_value"><%= userData[0].email %>
+                                                </label>
+                                            </div>
+
+                                            <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-4 detail_label">Name</label>
+                                                <label class="col-md-8 detail_value"><%= userData[0].fullname %></label>
+                                            </div> -->
+
+                                            <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-4 detail_label">DOB</label>
+                                                <label class="col-md-8 detail_value">
+                                                    <%= userData[0].dob %>
+                                                </label>
+                                            </div>
+
+                                            <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-4 detail_label">Age</label>
+                                                <label class="col-md-8 detail_value">
+                                                    <%= userData[0].age %> Yr
+                                                </label>
+                                            </div>
+
+                                            <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-4 detail_label">Signup type</label>
+                                                <label class="col-md-8 detail_value">
+                                                    <%= userData[0].signup_type %>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-4 detail_label">Joined At</label>
+                                                <label class="col-md-8 detail_value">
+                                                    <%= userData[0].joined_at %>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-4 detail_label">Social Profile</label>
+                                                <label class="col-md-8 detail_value">
+                                                    <% if(!userData[0].social_type){ %> N/A <% } else{ %>
+                                                            <%= userData[0].social_type %>
+                                                                <% }%>
+                                                </label>
+                                            </div>
+                                            <% for(let i=0; i<userData.length; i++){ %>
+                                                <div class="form-group col-md-4 col-xs-12">
+                                                    <label class="col-md-4 detail_label">
+                                                        <% if(userData[i].address_type==1){ %> Address<% } %>
+                                                    </label>
+                                                    <label class="col-md-8 detail_value">
+                                                        <% if(userData[i].address_type==1) { %>
+                                                            <%= userData[i].uaddress %>
+                                                                <% } %>
+                                                    </label>
+                                                </div>
+                                                <div class="form-group col-md-4 col-xs-12">
+                                                    <label class="col-md-4 detail_label">
+                                                        <% if(userData[i].address_type==2) { %> Shipping Address<% } %>
+                                                    </label>
+                                                    <label class="col-md-8 detail_value">
+                                                        <% if(userData[i].address_type==2) { %>
+                                                            <%= userData[i].uaddress %>
+                                                                <% } %>
+                                                    </label>
+                                                </div>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="nav nav-tabs">
+                                            <li><a class="nav-link" data-toggle="tab" href="#menu1">Transaction <span
+                                                        class="tab_counter like_request_count">0</span></a></li>
+                                            <li><a class="nav-link" data-toggle="tab" href="#menu2">Commodity <span
+                                                        class="tab_counter friends_count">0</span></a></li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div id="media" class="tab-pane fade in active show">
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-2 proImgList">
+                                                            <img src="#" data-fancybox="true" width="100%"
+                                                                height="173px" alt="user">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="menu1" class="tab-pane fade">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered"
+                                                                id="user_transaction_table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col" style="width: 100px;">S.NO.</th>
+                                                                        <th scope="col">Transaction Type</th>
+                                                                        <th scope="col">Commodity Amount</th>
+                                                                        <th scope="col" style="width: 100px;">Commodity Name </th>
+                                                                        <th scope="col">Send By</th>
+                                                                        <th scope="col">Received By</th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="menu2" class="tab-pane fade">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered"
+                                                                id="like_request_table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col" style="width: 100px;">S.NO.</th>
+                                                                        <th scope="col">User Name</th>
+                                                                        <th scope="col">Commodity Name</th>
+                                                                        <th scope="col" style="width: 100px;">Quantity </th>
+                                                                        <th scope="col">Unit</th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- footer section start -->
+        <%- include('footer') %>
+
+            <script>
+
+                $(document).ready(function () {
+                    var oTable = $('#user_transaction_table').DataTable({
+                        order: [[4, 'desc']],
+                        'paging': true,
+                        'searching': true,
+                        'processing': true,
+                        'serverSide': true,
+                        "autoWidth": false,
+                        'serverMethod': 'post',
+                        'ajax': {
+                            'url': '/user-transection-list',
+                            'data': {user_id :'<%= userData[0].id %>'},                           
+                            complete: function (data) {
+                                $('.like_request_count').text(data.responseJSON.iTotalRecords)
+                            },
+                        },
+                        'columns': [
+                            { data: 's_no' },
+                            { data: 'transaction_type' },
+                            { data: 'commodity_amount' },
+                            { data: 'commodity_name' },
+                            { data: 'sender_name' },
+                            { data: 'receiver_name' }
+                        ]
+                    });
+
+
+                    // var oTable1 = $('#like_tousers_table').DataTable({
+                    //     /*"columnDefs": [
+                    //         { orderable: false, targets: [4] }
+                    //     ],*/
+                    //     order: [[4, 'desc']],
+                    //     'paging': true,
+                    //     'searching': true,
+                    //     'processing': true,
+                    //     'serverSide': true,
+                    //     "autoWidth": false,
+                    //     'serverMethod': 'post',
+                    //     'ajax': {
+                    //         'url': '/load-likedto-user',
+                    //         'data': function (data) {
+                    //             data.userId = '<%- userData.id %>';
+                    //         },
+                    //         complete: function (data) {
+                    //             $('.like_to_count').text(data.responseJSON.iTotalRecords)
+                    //         },
+                    //     },
+                    //     'columns': [
+                    //         { data: 's_no' },
+                    //         { data: 'fullname' },
+                    //         { data: 'email' },
+                    //         { data: 'intent' },
+                    //         { data: 'liked_at' }
+                    //     ]
+                    // });
+
+
+                    // var oTable2 = $('#user_friends_table').DataTable({
+                    //     /*"columnDefs": [
+                    //         { orderable: false, targets: [4] }
+                    //     ],*/
+                    //     order: [[4, 'desc']],
+                    //     'paging': true,
+                    //     'searching': true,
+                    //     'processing': true,
+                    //     'serverSide': true,
+                    //     "autoWidth": false,
+                    //     'serverMethod': 'post',
+                    //     'ajax': {
+                    //         'url': '/load-user-friends',
+                    //         'data': function (data) {
+                    //             data.userId = '<%- userData.id %>';
+                    //         },
+                    //         complete: function (data) {
+                    //             $('.friends_count').text(data.responseJSON.iTotalRecords)
+                    //         },
+                    //     },
+                    //     'columns': [
+                    //         { data: 's_no' },
+                    //         { data: 'fullname' },
+                    //         { data: 'email' },
+                    //         { data: 'intent' },
+                    //         { data: 'frienship_start_at' }
+                    //     ]
+                    // });
+
+
+                });
+
+
+
+
+            </script>
