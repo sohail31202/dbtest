@@ -149,15 +149,16 @@ export default class userModel extends BaseModel {
         });
     }
 
-    async getuserTransactionData( start = 0, limit = 10, order_data, order,) {
+    async getuserTransactionData( start = 0, limit = 10, order_data, order,where) {
         const sel = [
             "users_transactions.id",
             "transaction_type",
-            "commodity_amount",
+            "CONCAT( commodity_amount, commodity_amount_unit) as transaction_ammount",
             "commodity_id",
             "sender.fullname as sender_name",
             "receiver.fullname as receiver_name",
-            "commodities.name as commodity_name"
+            "commodities.name as commodity_name",
+            "transaction_date"
         ];
 
         var result = knex('users_transactions')
@@ -170,6 +171,7 @@ export default class userModel extends BaseModel {
             .leftJoin('users as receiver', `receiver.id`, `users_transactions.receiver_id`)
             .groupBy('id')
             .orderBy('id', 'desc')
+            .where('users_transactions.user_id',where)
         
         return result.then(function (rows) {
             return rows;

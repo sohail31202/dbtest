@@ -43,7 +43,7 @@ export class userService {
 
         }
     }
-    
+
     /**
      * Get users list
      * @param {*} req 
@@ -84,19 +84,19 @@ export class userService {
             var total_records_with_filter = records.length;
             const userData = await userModelObj.getuserData(search_query, start, length, order_data, order);
 
-            userData.forEach(async(element, index) => {
+            userData.forEach(async (element, index) => {
                 userData[index].s_no = index + 1 + Number(start)
                 const statusIs = element.status == 1 ? 'Inactivate' : 'Activate';
 
                 const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
-                const statusIsIcon = element.status == 1 ? '<i class="fa fa-ban mx-2" aria-hidden="true"></i>': '<i class="fa fa-check-circle mx-2" aria-hidden="true"></i>';
+                const statusIsIcon = element.status == 1 ? '<i class="fa fa-ban mx-2" aria-hidden="true"></i>' : '<i class="fa fa-check-circle mx-2" aria-hidden="true"></i>';
                 var deletedData = element.deleted_data_json;
                 let Action, status;
                 if (element.is_deleted == 1) {
-                    deletedData=JSON.parse(deletedData);
-                    
-                    deletedData.deleted_at=DateTimeUtil.changeFormat(element.deleted_at, "DD/MM/YYYY hh:mm A");
-                    deletedData=JSON.stringify(deletedData);
+                    deletedData = JSON.parse(deletedData);
+
+                    deletedData.deleted_at = DateTimeUtil.changeFormat(element.deleted_at, "DD/MM/YYYY hh:mm A");
+                    deletedData = JSON.stringify(deletedData);
                     Action = `<a href="#" data-toggle="modal" data-target="#deletedUserInfoModal" class="btn btn-warning btn-rounded btn-icon" onclick='showInfo(${deletedData})'><i class="fa fa-info mx-2" aria-hidden="true"></i></a>`;
                     status = '<span class="badge badge-danger" aria-hidden="true">Deleted</span>'
                 } else {
@@ -152,18 +152,18 @@ export class userService {
                 column = ['fullname', 'email', 'phone_dial_code', 'phone_number'],
                 getValue = await userModelObj.fetchObjWithSingleRecord(whereId, column, tableConstants.USERS);
 
-                getValue.deleted_by="admin";
-                const updateData = {
-                    "deleted_data_json": JSON.stringify(getValue),
-                    "is_deleted": 1,
-                    "deleted_at": currentTime,
-                    "fullname": "Deleted User",
-                    "email": "",
-                    "phone_dial_code": "",
-                    "phone_number": "",
-                },
+            getValue.deleted_by = "admin";
+            const updateData = {
+                "deleted_data_json": JSON.stringify(getValue),
+                "is_deleted": 1,
+                "deleted_at": currentTime,
+                "fullname": "Deleted User",
+                "email": "",
+                "phone_dial_code": "",
+                "phone_number": "",
+            },
                 updateValue = await userModelObj.updateObj(updateData, whereId, tableConstants.USERS);
-       
+
             // Set success response
             let response = {
                 status: true,
@@ -234,32 +234,31 @@ export class userService {
      */
     async getUserDetail(req, res) {
         try {
-                const where = req.params.userId;
-                const userData = await userModelObj.fetchUserDetail(where, tableConstants.USERS)
-               
-                console.log("userData",userData);
-                // return false;
-                const bornYear = userData[0].dob.getYear(),
+            const where = req.params.userId;
+            const userData = await userModelObj.fetchUserDetail(where, tableConstants.USERS)
+
+            // return false;
+            const bornYear = userData[0].dob.getYear(),
                 currentYear = new Date().getYear(),
                 age = currentYear - bornYear;
-                userData[0].age = age;
-                if(userData[0].signup_type == 1){
-                    userData[0].signup_type = "Normal"
-                }else{
-                    userData[0].signup_type = "Social"
-                }
+            userData[0].age = age;
+            if (userData[0].signup_type == 1) {
+                userData[0].signup_type = "Normal"
+            } else {
+                userData[0].signup_type = "Social"
+            }
 
-                if(userData[0].social_type == 1){
-                    userData[0].social_type = "Google";
-                }else if(userData[0].social_type == 2){
-                    userData[0].social_type = "Facebook";
-                }else if(userData[0].social_type == 3){
-                    userData[0].social_type = "Apple";
-                }
+            if (userData[0].social_type == 1) {
+                userData[0].social_type = "Google";
+            } else if (userData[0].social_type == 2) {
+                userData[0].social_type = "Facebook";
+            } else if (userData[0].social_type == 3) {
+                userData[0].social_type = "Apple";
+            }
             const changeFormat = DateTimeUtil.changeFormat(userData[0].dob, "DD/MM/YYYY"),
-            join = DateTimeUtil.changeFormat(userData[0].joined_at, "DD/MM/YYYY");
+                join = DateTimeUtil.changeFormat(userData[0].joined_at, "DD/MM/YYYY");
             userData[0].dob = changeFormat
-            userData[0].joined_at =join
+            userData[0].joined_at = join
 
             return userData;
         } catch (error) {
@@ -269,37 +268,56 @@ export class userService {
     }
 
     async userTransection(req, res) {
-        try{
+        try {
             return true
 
-        }catch(error){
+        } catch (error) {
             console.log(error);
             return error;
         }
     }
 
-    async userTransectionlist(req, res){
-        try{
+    async userTransectionlist(req, res) {
+        try {
             const where = req.body.user_id;
-            console.log("where.....>>>>",where);
             var draw = req.body.draw;
 
             var start = req.body.start;
 
             var length = req.body.length;
-            console.log("length.....>>>>",length);
 
             var order_data = req.body['order[0][column]'];
             var order = req.body['order[0][dir]']
             var total_records = await userModelObj.getTotalTransactionCount(where);
-            console.log("total_records",total_records);
             var total_records_with_filter = total_records.length;
-            const userData = await userModelObj.getuserTransactionData( start, length, order_data, order);
+            const userData = await userModelObj.getuserTransactionData(start, length, order_data, order, where);
 
-            userData.forEach(async(element, index) => {
+
+            userData.forEach(async (element, index) => {
                 userData[index].s_no = index + 1 + Number(start)
+                if (userData[index].transaction_type == 1) {
+                    userData[index].transaction_type = "Add Commodity"
+                    userData[index].transaction_desc = "commodity has been added";
+                } else if (userData[index].transaction_type == 2) {
+                    userData[index].transaction_type = "Send Commodity"
+                    userData[index].transaction_desc = `commodity has been sent to ${userData[index].receiver_name}`;
+                } else if (userData[index].transaction_type == 3) {
+                    userData[index].transaction_type = "Received Commodity"
+                    userData[index].transaction_desc = `you have received commodity from ${userData[index].sender_name}`;
+                } else if (userData[index].transaction_type == 4) {
+                    userData[index].transaction_type = "Withdraw Commodity"
+                    userData[index].transaction_desc = "commodity has has been withdrawn";
+                } else if (userData[index].transaction_type == 5) {
+                    userData[index].transaction_type = "Add Cash"
+                    userData[index].transaction_desc = "cash has been added";
+                } else if (userData[index].transaction_type == 6) {
+                    userData[index].transaction_type = "Withdraw Cash"
+                    userData[index].transaction_desc = "cash has been withdrawn";
+                }
+                const joinedAt = DateTimeUtil.changeFormat(userData[index].transaction_date, "DD/MM/YYYY hh:mm a");
+                userData[index].transaction_date = joinedAt
             });
-
+            console.log("userData", userData);
             var output = {
                 'draw': draw,
                 'iTotalRecords': total_records,
@@ -307,7 +325,7 @@ export class userService {
                 'aaData': userData,
             };
             res.json(output);
-        }catch(error){
+        } catch (error) {
             console.log(error);
             return error;
         }

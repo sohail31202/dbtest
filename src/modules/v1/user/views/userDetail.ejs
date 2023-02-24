@@ -157,12 +157,11 @@
                                                                 id="user_transaction_table">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th scope="col" style="width: 100px;">S.NO.</th>
+                                                                        <th scope="col">S.NO.</th>
                                                                         <th scope="col">Transaction Type</th>
-                                                                        <th scope="col">Commodity Amount</th>
-                                                                        <th scope="col" style="width: 100px;">Commodity Name </th>
-                                                                        <th scope="col">Send By</th>
-                                                                        <th scope="col">Received By</th>
+                                                                        <th scope="col">Transaction Description </th>
+                                                                        <th scope="col">Transaction Amount</th>
+                                                                        <th scope="col">Transaction Date</th>
                                                                     </tr>
                                                                 </thead>
                                                             </table>
@@ -224,10 +223,9 @@
                         'columns': [
                             { data: 's_no' },
                             { data: 'transaction_type' },
-                            { data: 'commodity_amount' },
-                            { data: 'commodity_name' },
-                            { data: 'sender_name' },
-                            { data: 'receiver_name' }
+                            { data: 'transaction_desc' },
+                            { data: 'transaction_ammount' },
+                            { data: 'transaction_date' }
                         ]
                     });
 

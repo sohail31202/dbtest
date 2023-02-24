@@ -134,6 +134,24 @@ function prepUserName(userDetail, picture_key_name = "picture", name_key_name = 
     
 }
 
+// const getTransactionMsg = (val) => {
+   
+//       console.log("val",val); 
+//     if (val.transaction_type == 1) {
+//         return {"title":"commodity has been added","transaction_type_text":"add_commodity"};
+//     } else if (val.transaction_type == 2) {
+//         return {"title":`commodity has been sent to ${val.receiver_name}`,"transaction_type_text":"send_commodity"};
+//     } else if (val.transaction_type == 3) {
+//         return {"title":`you have received commodity from ${val.sender_name}`,"transaction_type_text":"received_commodity"};
+//     } else if (val.transaction_type == 4) {
+//         return {"title":"commodity has has been withdrawn","transaction_type_text":"withdraw_commodity"};
+//     } else if (val.transaction_type == 5) {
+//         return {"title":"cash has been added","transaction_type_text":"add_cash"};
+//     } else if (val.transaction_type == 6) {
+//         return {"title":"cash has been withdrawn","transaction_type_text":"withdraw_cash"};
+//     }
+// }
+
 const commonHelpers = {
     getOtp,
     generateUUID,
@@ -145,7 +163,6 @@ const commonHelpers = {
     base64Decode,
     unEscape,
     prepUserName
-
 }
 
 export default commonHelpers
