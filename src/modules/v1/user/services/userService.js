@@ -312,9 +312,20 @@ export class userService {
                 } else if (userData[index].transaction_type == 6) {
                     userData[index].transaction_type = "Withdraw Cash"
                     userData[index].transaction_desc = "cash has been withdrawn";
+                } else if (userData[index].transaction_type == 7) {
+                    userData[index].transaction_type = "Commodity to cash"
+                    userData[index].transaction_desc = "commodity has been converted to cash";
+                } else if (userData[index].transaction_type == 8) {
+                    userData[index].transaction_type = "Receive physical commodity"
+                    userData[index].transaction_desc = "physical commodity has been received";
+                } else if (userData[index].transaction_type == 9) {
+                    userData[index].transaction_type = "Deliver physical commodity"
+                    userData[index].transaction_desc = "Your physical Gold has been converted to digital commodity";
                 }
+
                 const joinedAt = DateTimeUtil.changeFormat(userData[index].transaction_date, "DD/MM/YYYY hh:mm a");
                 userData[index].transaction_date = joinedAt
+                
             });
             var output = {
                 'draw': draw,
