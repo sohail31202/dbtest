@@ -5,6 +5,10 @@
             height: 122px;
             object-fit: cover;
         }
+
+        /* .nav-tabs .nav-link {
+            height: 40px;
+        } */
     </style>
 
     <!-- mid-part start -->
@@ -94,11 +98,14 @@
                                                 </label>
                                             </div>
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">Social Profile</label>
+                                                <label class="col-md-4 detail_label">
+                                                    <% if(userData[0].signup_type=='Social' ){ %>
+                                                        Social Profile
+                                                        <% } %>
+                                                </label>
                                                 <label class="col-md-8 detail_value">
-                                                    <% if(!userData[0].social_type){ %> N/A <% } else{ %>
-                                                            <%= userData[0].social_type %>
-                                                                <% }%>
+                                                    <%= userData[0].social_type %>
+
                                                 </label>
                                             </div>
                                             <% for(let i=0; i<userData.length; i++){ %>
@@ -131,8 +138,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="nav nav-tabs">
-                                            <li><a class="nav-link" data-toggle="tab" href="#menu1">Transaction <span
-                                                        class="tab_counter like_request_count">0</span></a></li>
+                                            <li><a class="nav-link " data-toggle="tab" href="#menu1">Transaction <span
+                                                        class="tab_counter like_request_count">0</span></a>
+                                                   </li>
                                             <li><a class="nav-link" data-toggle="tab" href="#menu2">Commodity <span
                                                         class="tab_counter friends_count">0</span></a></li>
                                         </ul>
@@ -180,7 +188,8 @@
                                                                         <th scope="col" style="width: 100px;">S.NO.</th>
                                                                         <th scope="col">User Name</th>
                                                                         <th scope="col">Commodity Name</th>
-                                                                        <th scope="col" style="width: 100px;">Quantity </th>
+                                                                        <th scope="col" style="width: 100px;">Quantity
+                                                                        </th>
                                                                         <th scope="col">Unit</th>
                                                                     </tr>
                                                                 </thead>
@@ -215,9 +224,9 @@
                         'serverMethod': 'post',
                         'ajax': {
                             'url': '/user-transection-list',
-                            'data': {user_id :'<%= userData[0].id %>'},                           
+                            'data': { user_id: '<%= userData[0].id %>' },
                             complete: function (data) {
-                                $('.like_request_count').text(data.responseJSON.iTotalRecords)
+                                $('.like_request_count').text(data.responseJSON.iTotalRecords[0].total)
                             },
                         },
                         'columns': [

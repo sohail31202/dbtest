@@ -259,7 +259,6 @@ export class userService {
                 join = DateTimeUtil.changeFormat(userData[0].joined_at, "DD/MM/YYYY");
             userData[0].dob = changeFormat
             userData[0].joined_at = join
-
             return userData;
         } catch (error) {
             console.log(error);
@@ -317,7 +316,6 @@ export class userService {
                 const joinedAt = DateTimeUtil.changeFormat(userData[index].transaction_date, "DD/MM/YYYY hh:mm a");
                 userData[index].transaction_date = joinedAt
             });
-            console.log("userData", userData);
             var output = {
                 'draw': draw,
                 'iTotalRecords': total_records,
