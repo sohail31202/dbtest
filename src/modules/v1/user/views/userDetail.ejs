@@ -50,7 +50,7 @@
                                             <%= userData[0].email %>
                                         </div>
                                     </div>
-                                    <div class="col-md-9 col-xs-12">
+                                    <div class="col-md-9 col-xs-12 p-0">
                                         <div class="form-inline-custom">
                                             <div class="form-group col-md-4 col-xs-12">
                                                 <label class="col-md-4 detail_label">Contact</label>
@@ -81,7 +81,7 @@
                                             <div class="form-group col-md-4 col-xs-12">
                                                 <label class="col-md-4 detail_label">Age</label>
                                                 <label class="col-md-8 detail_value">
-                                                    <%= userData[0].age %> Yr
+                                                    <%= userData[0].age %> yr
                                                 </label>
                                             </div>
 
@@ -97,17 +97,14 @@
                                                     <%= userData[0].joined_at %>
                                                 </label>
                                             </div>
+                                            <% if(userData[0].signup_type=='Social' ){ %>
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">
-                                                    <% if(userData[0].signup_type=='Social' ){ %>
-                                                        Social Profile
-                                                        <% } %>
-                                                </label>
+                                                <label class="col-md-4 detail_label"> Social Profile </label>
                                                 <label class="col-md-8 detail_value">
                                                     <%= userData[0].social_type %>
-
                                                 </label>
                                             </div>
+                                            <% } %>
                                             <% for(let i=0; i<userData.length; i++){ %>
                                                 <div class="form-group col-md-4 col-xs-12">
                                                     <label class="col-md-4 detail_label">
@@ -138,7 +135,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="nav nav-tabs">
-                                            <li><a class="nav-link " data-toggle="tab" href="#menu1">Transaction <span
+                                            <li><a class="nav-link active" data-toggle="tab" href="#menu1">Transaction <span
                                                         class="tab_counter like_request_count">0</span></a>
                                                    </li>
                                             <li><a class="nav-link" data-toggle="tab" href="#menu2">Commodity <span
@@ -146,7 +143,7 @@
                                         </ul>
 
                                         <div class="tab-content">
-                                            <div id="media" class="tab-pane fade in active show">
+                                            <!-- <div id="media" class="tab-pane fade in active show">
 
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -156,8 +153,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div id="menu1" class="tab-pane fade">
+                                            </div> -->
+                                            <div id="menu1" class="tab-pane fade active show">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="table-responsive">
