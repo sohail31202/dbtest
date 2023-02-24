@@ -288,9 +288,11 @@ export class userService {
             var order_data = req.body['order[0][column]'];
             var order = req.body['order[0][dir]']
             var total_records = await userModelObj.getTotalTransactionCount(where);
-            var total_records_with_filter = total_records.length;
-            const userData = await userModelObj.getuserTransactionData(start, length, order_data, order, where);
+            total_records = total_records[0].total
 
+            const userData = await userModelObj.getuserTransactionData(start, length, order_data, order, where);
+            var total_records_with_filter = userData.length;
+            
 
             userData.forEach(async (element, index) => {
                 userData[index].s_no = index + 1 + Number(start)
@@ -333,6 +335,7 @@ export class userService {
                 'iTotalDisplayRecords': total_records_with_filter,
                 'aaData': userData,
             };
+            console.log("output",output)
             res.json(output);
         } catch (error) {
             console.log(error);

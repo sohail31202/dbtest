@@ -143,17 +143,6 @@
                                         </ul>
 
                                         <div class="tab-content">
-                                            <!-- <div id="media" class="tab-pane fade in active show">
-
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="col-md-2 proImgList">
-                                                            <img src="#" data-fancybox="true" width="100%"
-                                                                height="173px" alt="user">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                             <div id="menu1" class="tab-pane fade active show">
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -174,28 +163,29 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div id="menu2" class="tab-pane fade">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-striped table-bordered"
-                                                            id="like_request_table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col" style="width: 100px;">S.NO.</th>
-                                                                    <th scope="col">User Name</th>
-                                                                    <th scope="col">Commodity Name</th>
-                                                                    <th scope="col" style="width: 100px;">Quantity
-                                                                    </th>
-                                                                    <th scope="col">Unit</th>
-                                                                </tr>
-                                                            </thead>
-                                                        </table>
+                                            <div id="menu2" class="tab-pane fade">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered"
+                                                                id="like_request_table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col" style="width: 100px;">S.NO.</th>
+                                                                        <th scope="col">User Name</th>
+                                                                        <th scope="col">Commodity Name</th>
+                                                                        <th scope="col" style="width: 100px;">Quantity
+                                                                        </th>
+                                                                        <th scope="col">Unit</th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -224,7 +214,7 @@
                         'url': '/user-transection-list',
                         'data': { user_id: '<%= userData[0].id %>' },
                         complete: function (data) {
-                            $('.like_request_count').text(data.responseJSON.iTotalRecords[0].total)
+                            $('.like_request_count').text(data.responseJSON.iTotalRecords)
                         },
                     },
                     'columns': [
