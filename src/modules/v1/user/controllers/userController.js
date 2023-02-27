@@ -121,13 +121,16 @@ const statusChanged = async (req, res, next) => {
 
 
 const userDetail = async (req, res, next) => {
-    userServiceObj.getUserDetail(req).then((returnData) => {
-        let data = {
-            'title': 'Users',
-            'currentYear': currentYear,
-            "userData": returnData
-        };
-        res.render('userDetail.ejs', data);
+    userServiceObj.getUserDetail(req).then((userData) => {
+        userServiceObj.commoditylist(req).then((commodityData) => {
+            let data = {
+                'title': 'Users',
+                'currentYear': currentYear,
+                "userData": userData,
+                "commodityData": commodityData
+            };
+            res.render('userDetail.ejs', data);
+        })
     })
 
 }
@@ -151,15 +154,7 @@ const userTransectionlist  = (req, res, next) => {
     })
 }
 
-const commoditylist  = (req, res, next) => {
-    return paymentServiceObj
-    .vaultDetails( req, res, next )
-    .then( ( data ) => sendResponse( req, res, StatusCodes.OK, data ) )
-    .catch( ( error ) => { 
-        
-        errorResponce(req, res, error.status_code, error.message );
-    } );
-}
+
 // export all functions
 const userController = {
     getUser,
@@ -168,8 +163,7 @@ const userController = {
     statusChanged,
     userDetail,
     userTransection,
-    userTransectionlist,
-    commoditylist
+    userTransectionlist
 }
 
 export default userController

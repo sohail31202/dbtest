@@ -25,7 +25,8 @@ user.get("/user-detail/:userId", sessionServices, userController.userDetail);
 user.post('/user-transection-list', sessionServices, userController.userTransectionlist);
 
 
-user.post('/user-commodity-list', sessionServices, userController.commoditylist);
+// user.post('/commodity-list', sessionServices, userController.commoditylist);
+
 
 
 export {

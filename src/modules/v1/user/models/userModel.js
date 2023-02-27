@@ -177,4 +177,21 @@ export default class userModel extends BaseModel {
             return rows;
         });
     }
+
+    getUserVault(cols, userId) {
+        let prepareQuery = knex(tableConstants.COMMODITIES)
+            .select(knex.raw(cols))
+            .leftJoin(tableConstants.USER_COMMODITIES, function () {
+                this
+                  .on('users_commodities.commodity_id', 'commodities.id')
+                  .on('users_commodities.user_id', userId);
+              })
+              .orderBy("commodities.id", "ASC");
+console.log("lq prepareQuery-------", prepareQuery.toString());
+        prepareQuery = prepareQuery.then((res) => {
+            return res;
+        });
+
+        return prepareQuery;
+    }
 }

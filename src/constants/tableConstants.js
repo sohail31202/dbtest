@@ -14,6 +14,9 @@ const tableConstants = {
 "USER_FRIEND_LIST": "user_friend_list",
 "APP_STATIC_PAGE_CONTENT": "app_static_page_content",
 "REPORTED_USERS": "reported_users",
+"USERS_CASH":"users_cash",
+"USER_COMMODITIES":"users_commodities",
+"COMMODITIES":"commodities",
 "ADMIN": "admin"
 };
 export default tableConstants;

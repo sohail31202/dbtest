@@ -150,14 +150,15 @@
                                                 <div class="form-group col-md-4 col-xs-12">
                                                     <label class="col-md-4 detail_label">Total Cash</label>
                                                     <label class="col-md-8 detail_value" style="font-weight: 600;">
-                                                        $580.00
+                                                        <%= commodityData.total_amount %>
                                                     </label>
                                                 </div>
 
                                                 <div class="form-group col-md-4 col-xs-12">
                                                     <label class="col-md-4 detail_label">Commodity Value</label>
                                                     <label class="col-md-8 detail_value" style="font-weight: 600;">
-                                                        $500.00
+                                                        <%= commodityData.commodity_value %>
+
                                                     </label>
                                                 </div>
                                         </div>
@@ -171,8 +172,7 @@
                                             <li><a class="nav-link active" data-toggle="tab" href="#menu1">Transaction <span
                                                         class="tab_counter like_request_count">0</span></a>
                                             </li>
-                                            <li><a class="nav-link" data-toggle="tab" href="#menu2">Commodity <span
-                                                        class="tab_counter friends_count">0</span></a></li>
+                                            <li><a class="nav-link" data-toggle="tab" href="#menu2">Commodity </a></li>
                                         </ul>
 
                                         <div class="tab-content">
@@ -199,14 +199,16 @@
                                             <div id="menu2" class="tab-pane fade">
                                                 <div class="row">
                                                     <div class="col-md-12">
+                                                        <% for(let index = 0;index<commodityData.commodities.length; index++) { %>
                                                         <div class="col-md-3 col-sm-3 col-xs-12 commodity_div">
-                                                            <div class="image_div"><img src="http://goldapp.s3.us-east-1.amazonaws.com/img/gold_img.png" alt=""></div>
+                                                            <div class="image_div"><img src="<%= commodityData.commodities[index].icon_image %>" alt=""></div>
 
                                                             <div class="col-md-12">
-                                                                <p class="commodity_name">Gold</p>
-                                                                <p class="commodity_price_div"><span class="commodity_quantity">10G</span> | Price $623.00</p>
+                                                                <p class="commodity_name"> <%= commodityData.commodities[index].name %> </p>
+                                                                <p class="commodity_price_div"><%= commodityData.commodities[index].price %>|<span class="commodity_quantity"><%= commodityData.commodities[index].total_quantity %></span></p>
                                                             </div>
                                                         </div>
+                                                        <% } %>
                                                     </div>
                                                 </div>
                                             </div>
