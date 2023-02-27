@@ -150,6 +150,16 @@ const userTransectionlist  = (req, res, next) => {
     userServiceObj.userTransectionlist(req, res).then((returnData) => {
     })
 }
+
+const commoditylist  = (req, res, next) => {
+    return paymentServiceObj
+    .vaultDetails( req, res, next )
+    .then( ( data ) => sendResponse( req, res, StatusCodes.OK, data ) )
+    .catch( ( error ) => { 
+        
+        errorResponce(req, res, error.status_code, error.message );
+    } );
+}
 // export all functions
 const userController = {
     getUser,
@@ -158,7 +168,8 @@ const userController = {
     statusChanged,
     userDetail,
     userTransection,
-    userTransectionlist
+    userTransectionlist,
+    commoditylist
 }
 
 export default userController

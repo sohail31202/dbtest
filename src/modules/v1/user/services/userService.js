@@ -335,11 +335,75 @@ export class userService {
                 'iTotalDisplayRecords': total_records_with_filter,
                 'aaData': userData,
             };
-            console.log("output",output)
             res.json(output);
         } catch (error) {
             console.log(error);
             return error;
         }
     }
+
+    async commoditylist(req, res, next) {
+        // const where = req.body.user_id;
+        var draw = req.body.draw;
+
+        var start = req.body.start;
+
+        var length = req.body.length;
+
+        var order_data = req.body['order[0][column]'];
+        var order = req.body['order[0][dir]']
+       
+        const id = req.user.id,
+            where = {
+                "user_id": id
+            },
+            columns = [
+                "commodities.id",
+                "commodities.name",
+                "commodities.rate_per_gram",
+                "(CASE WHEN(users_commodities.total_quantity != '') THEN users_commodities.total_quantity ELSE 0 END ) AS total_quantity"
+            ],
+            query = `${columns}, (CASE WHEN( commodities.icon_image != "") THEN CONCAT('${s3CommoityImgPath}', commodities.icon_image)  ELSE '${avatar_placeholder}' END ) AS icon_image`,
+            response = { "status": true, "status_code": StatusCodes.OK, "message": localeService.translate("VAULT_DETAILS"), "data": {} };
+        let commodityValue = 0;
+
+        return PaymentModelObj.fetchFirstObj(where, tableConstants.USERS_CASH).then((cashData) => {
+            return PaymentModelObj.getUserVault(query, id).then(async(vaultData) => {
+                
+                for (let i = 0; i < vaultData.length; i++) {
+                    const element = vaultData[i];
+                    
+                    element.price = await commonHelpers.roundNumber(element.total_quantity * element.rate_per_gram, 2 );
+                    commodityValue = commodityValue + element.price;
+                    element.total_quantity = `${element.total_quantity}G`;
+                    element.price = `$${element.price}`;
+                }
+                
+                const userCash = cashData ? await commonHelpers.roundNumber(cashData.total_cash, 2 ) : 0;
+                commodityValue = await commonHelpers.roundNumber(commodityValue, 2 );
+                const totalAmount = userCash + commodityValue;
+
+                // Set response
+                response.data.user_cash =  `$${userCash}`;
+                response.data.commodity_value =  `$${commodityValue}`;
+                response.data.total_amount = `$${totalAmount}`;
+                response.data.commodities = vaultData;
+
+
+                var total_records = await userModelObj.getTotalTransactionCount(where);
+                total_records = total_records[0].total
+        
+                const userData = await userModelObj.getuserTransactionData(start, length, order_data, order, where);
+                var total_records_with_filter = userData.length;
+                
+                return response;
+            }).catch((error) => {
+                logger.error(error);
+                throw errorObj;
+            });
+        }).catch((error) => {
+            logger.error(error);
+            throw errorObj;
+        });
+    };
 }

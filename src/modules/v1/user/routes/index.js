@@ -20,9 +20,12 @@ user.post('/change-user-status', sessionServices, userController.statusChanged);
 user.get("/user-detail/:userId", sessionServices, userController.userDetail);
 
 // Get user transection list
-user.get('/user-transection', sessionServices, userController.userTransection );
+// user.get('/user-transection', sessionServices, userController.userTransection );
 
 user.post('/user-transection-list', sessionServices, userController.userTransectionlist);
+
+
+user.post('/user-commodity-list', sessionServices, userController.commoditylist);
 
 
 export {
