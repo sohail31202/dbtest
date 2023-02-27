@@ -384,7 +384,7 @@ export class userService {
             var output = {
                 'draw': draw,
                 'iTotalRecords': total_records,
-                'iTotalDisplayRecords': total_records_with_filter,
+                'iTotalDisplayRecords': total_records,
                 'aaData': userData,
             };
             res.json(output);
