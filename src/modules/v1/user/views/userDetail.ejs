@@ -150,7 +150,7 @@
                                                 <div class="form-group col-md-4 col-xs-12">
                                                     <label class="col-md-4 detail_label">Total Cash</label>
                                                     <label class="col-md-8 detail_value" style="font-weight: 600;">
-                                                        <%= commodityData.total_amount %>
+                                                        <%= commodityData.user_cash %>
                                                     </label>
                                                 </div>
 
@@ -169,14 +169,32 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="nav nav-tabs">
-                                            <li><a class="nav-link active" data-toggle="tab" href="#menu1">Transaction <span
+                                            <li><a class="nav-link active" data-toggle="tab" href="#menu1">Commodity </a></li>
+                                            <li><a class="nav-link" data-toggle="tab" href="#menu2">Transaction <span
                                                         class="tab_counter like_request_count">0</span></a>
                                             </li>
-                                            <li><a class="nav-link" data-toggle="tab" href="#menu2">Commodity </a></li>
                                         </ul>
 
                                         <div class="tab-content">
                                             <div id="menu1" class="tab-pane fade active show">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <% for(let index = 0;index<commodityData.commodities.length; index++) { %>
+                                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                                            <div class="col-md-12 p-0 commodity_div">
+                                                            <div class="image_div"><img src="<%= commodityData.commodities[index].icon_image %>" alt=""></div>
+
+                                                            <div class="col-md-12">
+                                                                <p class="commodity_name"> <%= commodityData.commodities[index].name %> </p>
+                                                                <p class="commodity_price_div"><span class="commodity_quantity"><%= commodityData.commodities[index].total_quantity %></span> | <span>Price <%= commodityData.commodities[index].price %></span></p>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="menu2" class="tab-pane fade">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="table-responsive">
@@ -196,22 +214,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="menu2" class="tab-pane fade">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <% for(let index = 0;index<commodityData.commodities.length; index++) { %>
-                                                        <div class="col-md-3 col-sm-3 col-xs-12 commodity_div">
-                                                            <div class="image_div"><img src="<%= commodityData.commodities[index].icon_image %>" alt=""></div>
-
-                                                            <div class="col-md-12">
-                                                                <p class="commodity_name"> <%= commodityData.commodities[index].name %> </p>
-                                                                <p class="commodity_price_div"><%= commodityData.commodities[index].price %>|<span class="commodity_quantity"><%= commodityData.commodities[index].total_quantity %></span></p>
-                                                            </div>
-                                                        </div>
-                                                        <% } %>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                         
                                     </div>
@@ -222,7 +225,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
     <!-- footer section start -->
     <%- include('footer') %>
@@ -231,6 +233,9 @@
 
             $(document).ready(function () {
                 var oTable = $('#user_transaction_table').DataTable({
+                    "columnDefs": [
+                            { orderable: false, targets: [2] }
+                    ],
                     order: [[4, 'desc']],
                     'paging': true,
                     'searching': true,
@@ -253,67 +258,6 @@
                         { data: 'transaction_date' }
                     ]
                 });
-
-
-                // var oTable1 = $('#like_tousers_table').DataTable({
-                //     /*"columnDefs": [
-                //         { orderable: false, targets: [4] }
-                //     ],*/
-                //     order: [[4, 'desc']],
-                //     'paging': true,
-                //     'searching': true,
-                //     'processing': true,
-                //     'serverSide': true,
-                //     "autoWidth": false,
-                //     'serverMethod': 'post',
-                //     'ajax': {
-                //         'url': '/load-likedto-user',
-                //         'data': function (data) {
-                //             data.userId = '<%- userData.id %>';
-                //         },
-                //         complete: function (data) {
-                //             $('.like_to_count').text(data.responseJSON.iTotalRecords)
-                //         },
-                //     },
-                //     'columns': [
-                //         { data: 's_no' },
-                //         { data: 'fullname' },
-                //         { data: 'email' },
-                //         { data: 'intent' },
-                //         { data: 'liked_at' }
-                //     ]
-                // });
-
-
-                // var oTable2 = $('#user_friends_table').DataTable({
-                //     /*"columnDefs": [
-                //         { orderable: false, targets: [4] }
-                //     ],*/
-                //     order: [[4, 'desc']],
-                //     'paging': true,
-                //     'searching': true,
-                //     'processing': true,
-                //     'serverSide': true,
-                //     "autoWidth": false,
-                //     'serverMethod': 'post',
-                //     'ajax': {
-                //         'url': '/load-user-friends',
-                //         'data': function (data) {
-                //             data.userId = '<%- userData.id %>';
-                //         },
-                //         complete: function (data) {
-                //             $('.friends_count').text(data.responseJSON.iTotalRecords)
-                //         },
-                //     },
-                //     'columns': [
-                //         { data: 's_no' },
-                //         { data: 'fullname' },
-                //         { data: 'email' },
-                //         { data: 'intent' },
-                //         { data: 'frienship_start_at' }
-                //     ]
-                // });
-
 
             });
 
