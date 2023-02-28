@@ -123,7 +123,7 @@ export default class userModel extends BaseModel {
      */
     async fetchUserDetail(whereId, tableName = '') {
 
-        var columns = ["profile_img", "CONCAT( phone_dial_code, phone_number) as contact", "users.id", "fullname", "email", "dob", "signup_type", "user_address.address as uaddress", "address_type", "users.created_at as joined_at", "social_type"],
+        var columns = ["profile_img", "CONCAT( phone_dial_code, ' ', phone_number) as contact", "users.id", "fullname", "email", "dob", "signup_type", "user_address.address as uaddress", "address_type", "users.created_at as joined_at", "social_type"],
             qwery = `${columns}, (CASE WHEN( profile_img != "" && is_img_url != 1) THEN CONCAT('${s3ProfilePath}', profile_img) WHEN( profile_img != "" && is_img_url = 1) THEN profile_img ELSE '${avatar_placeholder}' END ) AS profile_img`;
 
         let prepareQuery = await knex(tableName)
