@@ -377,7 +377,7 @@ export class userService {
                     userData[index].transaction_desc = "Your physical Gold has been converted to digital commodity";
                 }
 
-                const joinedAt = DateTimeUtil.changeFormat(userData[index].transaction_date, "DD/MM/YYYY hh:mm a");
+                const joinedAt = DateTimeUtil.changeFormat(userData[index].transaction_date, "DD/MM/YYYY hh:mm A");
                 userData[index].transaction_date = joinedAt
 
             });

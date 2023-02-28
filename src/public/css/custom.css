@@ -408,9 +408,12 @@ table .nav-user img {
 }
 
 .user_detail_profile_image img{
-  width: 55px;
-  height: 55px;
+  width: 80px;
+  height: 80px;
   border-radius: 100%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0px 4px 11px 2px #d3d3d3;
 }
 
 .detail_label {
