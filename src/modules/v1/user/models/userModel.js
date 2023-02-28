@@ -29,6 +29,7 @@ export default class userModel extends BaseModel {
             return rows[0].total;
         });
     }
+
     async getUserTotalCount(search = "", start = 0, limit = '', where = "", filter = '') {
         const sel = [
             "id"

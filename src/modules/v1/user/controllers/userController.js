@@ -1,7 +1,3 @@
-import JwtAuthSecurity from '~/libraries/JwtAuthSecurity';
-import {
-    commonHelpers
-} from '~/helpers/commonHelpers'
 import {
     userService
 } from '../services/userService';
@@ -15,7 +11,6 @@ import {
 import {
     StatusCodes
 } from "http-status-codes";
-import customResponseCode from "~/constants/customResponseCode"
 import i18n from "~/config/i18n.config";
 import {
     LocaleService
@@ -44,12 +39,24 @@ const getUser = async (req, res, next) => {
     })
 }
 
+/**
+ * Get users
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const userlist  = (req, res, next) => {
 
     userServiceObj.userlist(req, res).then((returnData) => {
     })
 }
 
+/**
+ * Delete user
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const deleteUser = async (req, res, next) => {
     var response = {}
     userServiceObj.deleteUser(req).then((returnData) => {
@@ -84,6 +91,12 @@ const deleteUser = async (req, res, next) => {
     })
 }
 
+/**
+ * Change user status
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const statusChanged = async (req, res, next) => {
     var response = {}
     userServiceObj.statusChanged(req).then((returnData) => {
@@ -119,7 +132,12 @@ const statusChanged = async (req, res, next) => {
     })
 }
 
-
+/**
+ * Get user details
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const userDetail = async (req, res, next) => {
     userServiceObj.getUserDetail(req).then((userData) => {
         userServiceObj.commoditylist(req).then((commodityData) => {
@@ -135,19 +153,12 @@ const userDetail = async (req, res, next) => {
 
 }
 
-const userTransection = async(req, res, next) => {
-    userServiceObj.userTransection(req).then(async (returnData) => {
-        //For getting user page
-        let data = {
-            'title': 'Users',
-            'currentYear': currentYear,
-            "fetchData": returnData
-        };
-        // console.log("transection data>>>>>>>>>>>>>>>",data);
-        res.render('user.ejs', data);
-    })
-}
-
+/**
+ * User transaction list
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const userTransectionlist  = (req, res, next) => {
 
     userServiceObj.userTransectionlist(req, res).then((returnData) => {
@@ -162,7 +173,6 @@ const userController = {
     deleteUser,
     statusChanged,
     userDetail,
-    userTransection,
     userTransectionlist
 }
 

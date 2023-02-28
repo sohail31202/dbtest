@@ -1,27 +1,17 @@
 import userModel from "../models/userModel";
 import tableConstants from '~/constants/tableConstants';
 import commonConstants from '~/constants/commonConstants';
-import envConstants from "~/constants/envConstants";
-import folderConstants from "~/constants/folderConstants";
-import customResponseCode from '~/constants/customResponseCode';
+import logger from "~/utils/logger";
 import {
     StatusCodes
 } from "http-status-codes";
 import commonHelpers from '~/helpers/commonHelpers'
 import DateTimeUtil from "~/utils/DateTimeUtil";
-import passwordHash from "~/utils/passwordHash";
-import Email from "~/libraries/Email";
-import JwtAuthSecurity from "~/libraries/JwtAuthSecurity";
-
-
 
 const userModelObj = new userModel(),
     S3BasePath = process.env.S3_BASE_PATH,
     imgDirectory = commonConstants.IMAGE_FOLDER,
     s3CommoityImgPath = `${S3BasePath}${imgDirectory}/`;
-
-
-
 
 /**
  * creating userModel object for access the database 
@@ -36,13 +26,10 @@ export class userService {
     async getUser(req, res) {
 
         try {
-
             return true
         } catch (error) {
-            // console.log(error);
             logger.error(error);
             return error;
-
         }
     }
 
@@ -132,7 +119,6 @@ export class userService {
             };
             res.json(output);
         } catch (error) {
-            // console.log(error);
             logger.error(error);
             return error;
         }
@@ -174,7 +160,6 @@ export class userService {
             };
             return response;
         } catch (error) {
-            // console.log(error);
             logger.log(error)
             return error
         }
@@ -223,7 +208,7 @@ export class userService {
                 return res;
             }
         } catch (error) {
-            logger.error(error)
+            logger.error(error);
             return error
         }
     }
@@ -264,13 +249,20 @@ export class userService {
             userData[0].joined_at = join
 
             return userData;
-        
+
         } catch (error) {
-            console.log(error);
+            logger.error(error)
             return error;
         }
     }
 
+    /**
+     * Get commodity
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     * @returns 
+     */
     async commoditylist(req, res, next) {
         const id = Number(req.params.userId);
         const where = {
@@ -318,16 +310,12 @@ export class userService {
         });
     };
 
-    async userTransection(req, res) {
-        try {
-            return true
-
-        } catch (error) {
-            console.log(error);
-            return error;
-        }
-    }
-
+    /**
+     * Get user transaction list
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
     async userTransectionlist(req, res) {
         try {
             const where = req.body.user_id;
@@ -389,7 +377,7 @@ export class userService {
             };
             res.json(output);
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             return error;
         }
     }
