@@ -69,7 +69,7 @@
                         <div class="card position-relative">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-3 col-xs-12">
+                                    <div class="col-md-3 col-xs-12" style="margin: 0 auto; margin-top: -63px;">
                                         <div class="col-md-12 user_detail_profile_image text-center">
                                             <img src="<%= userData[0].profile_img %>" data-fancybox alt="user">
                                         </div>
@@ -80,87 +80,89 @@
                                             <%= userData[0].email %>
                                         </div>
                                     </div>
-                                    <div class="col-md-9 col-xs-12 p-0">
+                                    <hr style="width: 100%;">
+                                    <div class="col-md-12 col-xs-12 p-0">
                                         <div class="form-inline-custom">
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">Contact</label>
-                                                <label class="col-md-8 detail_value"
-                                                    title="<%= userData[0].contact%>">
+                                                <label class="col-md-5 detail_label">Contact</label>
+                                                <label class="col-md-7 detail_value">
                                                     <%= userData[0].contact %>
                                                 </label>
                                             </div>
 
                                             <!-- <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">Email</label>
-                                                <label class="col-md-8 detail_value"><%= userData[0].email %>
+                                                <label class="col-md-5 detail_label">Email</label>
+                                                <label class="col-md-7 detail_value"><%= userData[0].email %>
                                                 </label>
                                             </div>
 
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">Name</label>
-                                                <label class="col-md-8 detail_value"><%= userData[0].fullname %></label>
+                                                <label class="col-md-5 detail_label">Name</label>
+                                                <label class="col-md-7 detail_value"><%= userData[0].fullname %></label>
                                             </div> -->
 
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">DOB</label>
-                                                <label class="col-md-8 detail_value">
+                                                <label class="col-md-5 detail_label">DOB</label>
+                                                <label class="col-md-7 detail_value">
                                                     <%= userData[0].dob %>
                                                 </label>
                                             </div>
 
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">Age</label>
-                                                <label class="col-md-8 detail_value">
+                                                <label class="col-md-5 detail_label">Age</label>
+                                                <label class="col-md-7 detail_value">
                                                     <%= userData[0].age %> yr
                                                 </label>
                                             </div>
 
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">Signup type</label>
-                                                <label class="col-md-8 detail_value">
+                                                <label class="col-md-5 detail_label">Signup type</label>
+                                                <label class="col-md-7 detail_value">
                                                     <%= userData[0].signup_type %>
                                                 </label>
                                             </div>
+                                            <% if(userData[0].signup_type=='Social' ){ %>
+                                                <div class="form-group col-md-4 col-xs-12">
+                                                    <label class="col-md-5 detail_label"> Social Profile </label>
+                                                    <label class="col-md-7 detail_value">
+                                                        <%= userData[0].social_type %>
+                                                    </label>
+                                                </div>
+                                            <% } %>
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label">Joined At</label>
-                                                <label class="col-md-8 detail_value">
+                                                <label class="col-md-5 detail_label">Joined At</label>
+                                                <label class="col-md-7 detail_value">
                                                     <%= userData[0].joined_at %>
                                                 </label>
                                             </div>
-                                            <% if(userData[0].signup_type=='Social' ){ %>
+                                            
                                             <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-4 detail_label"> Social Profile </label>
-                                                <label class="col-md-8 detail_value">
-                                                    <%= userData[0].social_type %>
+                                                <label class="col-md-5 detail_label">Total Cash</label>
+                                                <label class="col-md-7 detail_value" style="font-weight: 600;">
+                                                    <%= commodityData.user_cash %>
                                                 </label>
                                             </div>
-                                            <% } %>
+
+                                            <div class="form-group col-md-4 col-xs-12">
+                                                <label class="col-md-5 detail_label">Commodity Value</label>
+                                                <label class="col-md-7 detail_value" style="font-weight: 600;">
+                                                    <%= commodityData.commodity_value %>
+
+                                                </label>
+                                            </div>
                                             <% for(let i=0; i<userData.length; i++){ %>
                                                 <div class="form-group col-md-4 col-xs-12">
-                                                    <label class="col-md-4 detail_label">
+                                                    <label class="col-md-5 detail_label">
                                                         <% if(userData[i].address_type==1){ %> Address<% } %>
                                                         <% if(userData[i].address_type==2) { %> Shipping Address<% } %>
                                                     </label>
-                                                    <label class="col-md-8 detail_value intent_overflow" title="<%= userData[i].uaddress %>">
+                                                    <label class="col-md-7 detail_value" title="<%= userData[i].uaddress %>">
                                                         <%= userData[i].uaddress %>
                                                     </label>
                                                 </div>
                                                 <% } %>
 
-                                                <div class="form-group col-md-4 col-xs-12">
-                                                    <label class="col-md-4 detail_label">Total Cash</label>
-                                                    <label class="col-md-8 detail_value" style="font-weight: 600;">
-                                                        <%= commodityData.user_cash %>
-                                                    </label>
-                                                </div>
-
-                                                <div class="form-group col-md-4 col-xs-12">
-                                                    <label class="col-md-4 detail_label">Commodity Value</label>
-                                                    <label class="col-md-8 detail_value" style="font-weight: 600;">
-                                                        <%= commodityData.commodity_value %>
-
-                                                    </label>
-                                                </div>
+                                                
                                         </div>
                                     </div>
                                 </div>
@@ -204,9 +206,9 @@
                                                                     <tr>
                                                                         <th scope="col">S.NO.</th>
                                                                         <th scope="col">Transaction Type</th>
-                                                                        <th scope="col">Transaction Description </th>
-                                                                        <th scope="col">Transaction Amount</th>
-                                                                        <th scope="col">Transaction Date</th>
+                                                                        <th scope="col">Description </th>
+                                                                        <th scope="col">Amount</th>
+                                                                        <th scope="col">Date</th>
                                                                     </tr>
                                                                 </thead>
                                                             </table>
@@ -233,9 +235,17 @@
 
             $(document).ready(function () {
                 var oTable = $('#user_transaction_table').DataTable({
-                    "columnDefs": [
-                            { orderable: false, targets: [2] }
-                    ],
+                    columnDefs: [
+                    {
+                        targets: 2,
+                        orderable: false,
+                        render: function(data, type, row) {
+                        if ( type === 'display') {
+                            return $.fn.dataTable.render.ellipsis(50)(data, type, row);          
+                        }
+                        return data;
+                        }
+                    }],
                     order: [[4, 'desc']],
                     'paging': true,
                     'searching': true,
