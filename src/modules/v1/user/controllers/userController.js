@@ -36,7 +36,7 @@ const getUser = async (req, res, next) => {
     userServiceObj.getUser(req).then(async (returnData) => {
         //For getting user page
         let data = {
-            'title': 'Edit Terms & Conditions',
+            'title': 'Users',
             'currentYear': currentYear,
             "fetchData": returnData
         };
@@ -118,12 +118,52 @@ const statusChanged = async (req, res, next) => {
         errorResponce(req, res, StatusCodes.INTERNAL_SERVER_ERROR);
     })
 }
+
+
+const userDetail = async (req, res, next) => {
+    userServiceObj.getUserDetail(req).then((userData) => {
+        userServiceObj.commoditylist(req).then((commodityData) => {
+            let data = {
+                'title': 'Users',
+                'currentYear': currentYear,
+                "userData": userData,
+                "commodityData": commodityData
+            };
+            res.render('userDetail.ejs', data);
+        })
+    })
+
+}
+
+const userTransection = async(req, res, next) => {
+    userServiceObj.userTransection(req).then(async (returnData) => {
+        //For getting user page
+        let data = {
+            'title': 'Users',
+            'currentYear': currentYear,
+            "fetchData": returnData
+        };
+        // console.log("transection data>>>>>>>>>>>>>>>",data);
+        res.render('user.ejs', data);
+    })
+}
+
+const userTransectionlist  = (req, res, next) => {
+
+    userServiceObj.userTransectionlist(req, res).then((returnData) => {
+    })
+}
+
+
 // export all functions
 const userController = {
     getUser,
     userlist,
     deleteUser,
-    statusChanged
+    statusChanged,
+    userDetail,
+    userTransection,
+    userTransectionlist
 }
 
 export default userController

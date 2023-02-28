@@ -251,7 +251,7 @@ i.note-icon-menu-check::before {
   line-height: 40px !important;
 }
 .fCustom{
-  background-color: #fff;
+  /* background-color: #fff; */
  
   width: 100%;
   position: fixed;
@@ -490,4 +490,9 @@ span.badge.badge-danger:hover {
 
 #statusName, .statusName{
   font-weight: 600;
+}
+
+.deleted-info{
+  word-break: break-all;
+    line-height: 26px;
 }

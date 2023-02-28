@@ -6,15 +6,29 @@ import sessionServices from "~/middlewares/sessionManager";
 const user = new Router();
 
 // Create route for get dashboard page in userControllers.
-user.get('/user', sessionServices, userController.getUser );
+user.get('/users', sessionServices, userController.getUser );
 
 user.post('/user-list', sessionServices, userController.userlist);
 
 // Delete user
-user.get('/delete-user/:id', sessionServices, userController.deleteUser);
+user.post('/delete-user', sessionServices, userController.deleteUser);
 
 // change-user-status
 user.post('/change-user-status', sessionServices, userController.statusChanged);
+
+// Get user details
+user.get("/user-detail/:userId", sessionServices, userController.userDetail);
+
+// Get user transection list
+// user.get('/user-transection', sessionServices, userController.userTransection );
+
+user.post('/user-transection-list', sessionServices, userController.userTransectionlist);
+
+
+// user.post('/commodity-list', sessionServices, userController.commoditylist);
+
+
+
 export {
     user
 };
