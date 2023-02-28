@@ -134,6 +134,25 @@ function prepUserName(userDetail, picture_key_name = "picture", name_key_name = 
     
 }
 
+const roundNumber = function (value, roundDecimal) {
+    var result = 0;
+    switch (roundDecimal) {
+        case 2:
+            result = Math.round(value * 100) / 100;
+            break;
+
+        case 3:
+            result = Math.round(value * 1000) / 1000;
+            break;
+
+        case 4:
+            result = Math.round(value * 10000) / 10000;
+            break;
+    }
+    return result;
+
+}
+
 const commonHelpers = {
     getOtp,
     generateUUID,
@@ -144,8 +163,8 @@ const commonHelpers = {
     base64Encode,
     base64Decode,
     unEscape,
-    prepUserName
-
+    prepUserName,
+    roundNumber
 }
 
 export default commonHelpers
