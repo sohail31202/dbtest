@@ -25,6 +25,7 @@ app.set("host", APP_HOST);
 
 app.use(fileUpload());
 
+global.avatar_placeholder = process.env.AVATAR_PLACEHOLDER;
 app.use( morgan( "tiny", { "stream": logStream } ) );
 
 // parse cookies

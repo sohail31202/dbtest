@@ -28,6 +28,7 @@ const commonConstants = {
     "DIVICE_TYPE_ANDROID": 1,
     "DIVICE_TYPE_IOS": 2,
     "DIVICE_TYPE_WEBSITE": 3,
+    "IMAGE_FOLDER":"img",
     "BUCKET_BASE_URL": "https://crave.sgp1.digitaloceanspaces.com", //used in email config file
     "BUCKET_IMAGE_FOLDER": "images", //used in email config file
     "UPLOAD_MAX_FILE_SIZE":10485760, //set 10MB (in bytes)

@@ -15,6 +15,20 @@ user.post('/delete-user', sessionServices, userController.deleteUser);
 
 // change-user-status
 user.post('/change-user-status', sessionServices, userController.statusChanged);
+
+// Get user details
+user.get("/user-detail/:userId", sessionServices, userController.userDetail);
+
+// Get user transection list
+// user.get('/user-transection', sessionServices, userController.userTransection );
+
+user.post('/user-transection-list', sessionServices, userController.userTransectionlist);
+
+
+// user.post('/commodity-list', sessionServices, userController.commoditylist);
+
+
+
 export {
     user
 };
