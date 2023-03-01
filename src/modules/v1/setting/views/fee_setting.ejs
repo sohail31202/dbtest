@@ -1,0 +1,304 @@
+<%- include('header') %>
+
+<!-- mid-part start -->
+<div class="main-panel">
+    <div class="contentright w-auto">
+        <div class="container-fluid mt-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex">
+                        <div class="tableheading ">
+                            <h3>Fee Setting</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
+                    <div class="card position-relative">
+                        <div class="card-body">
+                            <div class="FeeHead">
+                                <h5>Stripe Fee</h5>
+                            </div>
+
+                            <form id="stripeFeeForm" name="stripeFeeForm" novalidate="novalidate">
+                                <!-- For USD -->
+                                <div class="form-group col-sm-6">
+                                    <label for="stripeFeeUsd" class="col-form-label">Fee USD(Percentage):</label>
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeUsd" name="stripeFeeUsd" type="text" placeholder="Enter Fee" value="<%= fee.usd.fee_percent %>">
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="stripeFeeUsdFlat" class="col-form-label">Fee USD(flat):</label>
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeUsdFlat" name="stripeFeeUsdFlat" type="text" placeholder="Enter Fee" value="<%= fee.usd.fee_flat %>">
+                                </div>
+
+                                <!-- For EURO -->
+                                <div class="form-group col-sm-6">
+                                    <label for="stripeFeeEur" class="col-form-label">Fee EURO(Percentage):</label>
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeEur" name="stripeFeeEur" type="text" placeholder="Enter Fee" value="<%= fee.eur.fee_percent %>">
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="stripeFeeEurFlat" class="col-form-label">Fee EURO(flat):</label>
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeEurFlat" name="stripeFeeEurFlat" type="text" placeholder="Enter Fee" value="<%= fee.eur.fee_flat %>">
+                                </div>
+
+                                <!-- For CAD -->
+                                <div class="form-group col-sm-6">
+                                    <label for="stripeFeeCad" class="col-form-label">Fee CAD(Percentage):</label>
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeCad" name="stripeFeeCad" type="text" placeholder="Enter Fee" value="<%= fee.cad.fee_percent %>">
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="stripeFeeCadFlat" class="col-form-label">Fee CAD(flat):</label>
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeCadFlat" name="stripeFeeCadFlat" type="text" placeholder="Enter Fee" value="<%= fee.cad.fee_flat %>">
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="hidden" id="_csrf" value="<%= csrfToken %>">
+                                    <button type="submit" id="gatewayFeeSettingButton" class="btn btn-success btn-sm">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- footer section start -->
+    <%- include('footer') %>
+
+    <script>
+        $(document).ready( function() {
+            jQuery.validator.addMethod("checkFlat", function(value, element) {
+    
+                if(value.indexOf('.') == '-1' && value.toString().length > 3){
+                    return false ;
+                }
+                
+                //alert(value.indexOf('.'))
+                if(value.indexOf('.') > -1){
+                    const myArr = value.split(".");
+                    
+                    if(myArr[0].toString().length > 3){
+                        return false;
+                    }
+                }
+
+                return true ;
+            }, "Flat can't enter more than three digit");
+
+            jQuery.validator.addMethod("checkFlatDecimal", function(value, element) {
+                
+                if(value.indexOf('.') == '-1' && value.toString().length > 3){
+                    return false ;
+                }
+                //alert(value.indexOf('.'))
+                if(value.indexOf('.') > -1){
+                    const myArr = value.split(".");
+                    
+                    
+                    if(myArr[1].toString().length > 2){
+                        return false ;
+            
+                    }
+
+                }
+                return true ;
+
+            }, "Flat can't more than two digit after decimal");
+
+            jQuery.validator.addMethod("checkFee", function(value, element) {
+                if((value.indexOf('.') == '-1' && value.toString().length > 2)){
+                    return false ;
+                }
+
+                if(value.indexOf('.') > -1){
+                    const myArr = value.split(".");
+
+                    if(myArr[0].toString().length > 2){
+                        return false ;
+                    }
+                }
+                return true ;
+            }, "Fee can't enter more than two digit");
+
+            jQuery.validator.addMethod("checkFeeDecimal", function(value, element) {
+    
+                if(value.indexOf('.') == '-1' && value.toString().length > 3){
+                    return false ;
+                }
+                
+                if(value.indexOf('.') > -1){
+                    const myArr = value.split(".");
+                    
+                    if(myArr[1].toString().length > 2){
+                        return false ;
+            
+                    }
+                }
+                return true ;
+            }, "Fee can't more than two digit after decimal");
+
+        });
+
+    /**
+     * Accept numeric value only.
+     * On key press.
+     * 
+     * @param {*} event 
+     * @param {*} element 
+     */
+    function acceptNumericOnly( event, element ) {
+        if  ( ( event.which != 46 || $( element ).val().indexOf( '.' ) != -1 ) && ( event.which < 48 || event.which > 57 ) ) {
+            event.preventDefault();
+            
+        }
+        if( ( $( element ).val().indexOf('.') != -1 ) && $( element ).val().indexOf( '.' ) < element.selectionStart && ( $( element ).val().substring( $( element ).val().indexOf( '.' ),Number ( $( element ).val().length ) - 1 ).length >= 2 ) ) {
+            event.preventDefault();
+        }
+    }
+
+    //Update stripe fee and tax 
+$("form[name='stripeFeeForm']").validate({
+
+rules: {
+    stripeFeeUsd: {
+        required: true,
+      
+        // digits: true
+        number: true,
+        checkFee: true,
+        checkFeeDecimal: true,
+        max: 100
+    },
+    stripeFeeUsdFlat: {
+        required: true,
+        // digits: true
+        number: true,          
+        checkFlat: true,
+        checkFlatDecimal :true
+    },
+    stripeFeeEur: {
+        required: true,
+        // digits: true
+        number: true,
+        checkFee: true,
+        checkFeeDecimal: true,
+        max: 100
+    },
+    stripeFeeEurFlat: {
+        required: true,
+        // digits: true
+        number: true,          
+        checkFlat: true,
+        checkFlatDecimal :true
+    },
+    stripeFeeCad: {
+        required: true,
+        // digits: true
+        number: true,
+        checkFee: true,
+        checkFeeDecimal: true,
+        max: 100
+    },
+    stripeFeeCadFlat: {
+        required: true,
+        // digits: true
+        number: true,          
+        checkFlat: true,
+        checkFlatDecimal :true
+    }
+    
+},
+messages: {
+   
+    stripeFeeUsd: {
+        required: "Required usd fee in percent.",
+        max: "Invalid usd fee in percent.",
+        number: "Invalid usd fee in percent."
+    },
+    stripeFeeUsdFlat: {
+        required: "Required usd fee in flat.",
+        number: "Invalid usd fee in flat."
+    },
+    stripeFeeEur: {
+        required: "Required euro fee in percent.",
+        max: "Invalid euro fee in percent.",
+        number: "Invalid euro fee in percent."
+    },
+    stripeFeeEurFlat: {
+        required: "Required euro fee in flat.",
+        number: "Invalid euro fee in flat."
+    },
+    stripeFeeCad: {
+        required: "Required cad fee in percent.",
+        max: "Invalid cad fee in percent.",
+        number: "Invalid cad fee in percent."
+    },
+    stripeFeeCadFlat: {
+        required: "Required cad fee in flat.",
+        number: "Invalid cad fee in flat."
+    }
+   
+},
+submitHandler: function (form) {
+    $('#gatewayFeeSettingButton').text(`Please wait....`);
+    $('#gatewayFeeSettingButton').prop("disabled", true);
+    
+    const url = window.location.origin + "/update-gateway-fee",
+        stripeFeeUsd = $('#stripeFeeUsd').val(),
+        flatUsd = $('#stripeFeeUsdFlat').val(),
+        stripeFeeEuro = $('#stripeFeeEur').val(),
+        flatEuro = $('#stripeFeeEurFlat').val(),
+        stripeFeeCad = $('#stripeFeeCad').val(),
+        flatCad = $('#stripeFeeCadFlat').val(),
+        _csrf = $('#_csrf').val();
+
+    // $('#overlay').addClass('active');
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        headers: {
+            'Accept': 'application/json',
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        },
+        data: { "flatUsd": flatUsd, "feeUsd": stripeFeeUsd, "feeEuro": stripeFeeEuro, "flatEuro": flatEuro, "feeCad": stripeFeeCad, "flatCad": flatCad, "_csrf":_csrf },
+        cache: false,
+        success: function (response) {
+            console.log("response---", response);
+            toastr.remove();
+            if (response.status_code == 200) {
+                toastr.success(response.message);
+                setTimeout(function(){
+                    location.reload();
+                }, 1000)
+            } else {
+                toastr.remove();
+                toastr.error("something went wrong");
+                return false;
+            }
+        }, error: function (textStatus, errorThrown) {
+            console.log("textStatus---", textStatus);
+            $('#gatewayFeeSettingButton').text(`Update`);
+            $('#gatewayFeeSettingButton').prop("disabled", false)
+            toastr.remove();
+           if( textStatus.status == 401 ) {
+                toastr.error("Session expired");
+                setTimeout(function(){ 
+                    document.location = "/logout";
+              
+                  }, 500) ;
+            } else {
+                toastr.error(textStatus.responseJSON.message);
+            }
+            
+        }
+    });
+}
+});
+    </script>

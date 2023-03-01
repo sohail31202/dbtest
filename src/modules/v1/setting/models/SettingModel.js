@@ -8,6 +8,9 @@ const baseModelObj = new BaseModel();
 
 
 export default class SettingModel extends BaseModel {
-
+    constructor() {
+        super();
+        this.table = "admin_fee_setting"
+    }
 
 }

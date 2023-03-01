@@ -2,8 +2,10 @@ import { Router } from "express";
 import settingController from "!/setting/controllers/settingController";
 import sessionServices from "~/middlewares/sessionManager";
 import { updateContentValidator } from "../validators/updateContentValidator";
+import { updateGatewayFeeValidator } from "../validators/updateGatewayFeeValidator";
+import csrf from "csurf";
 
-
+const csrfProtect = csrf({ cookie: true });
 // create object for meta controller routes
 const setting = new Router();
 
@@ -21,6 +23,10 @@ setting.get("/terms-and-conditions", settingController.termsAndConditions);
 
 // Create route for about us in settingControllers.
 setting.get("/privacy-policy", settingController.privacyPolicy);
+
+setting.get('/fee-setting', sessionServices, csrfProtect, settingController.feeSetting );
+
+setting.post("/update-gateway-fee", updateGatewayFeeValidator, csrfProtect, settingController.updateGatewayFee);
 
 export {
     setting
