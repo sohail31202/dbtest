@@ -124,7 +124,7 @@ const userDetail = async (req, res, next) => {
     userServiceObj.getUserDetail(req).then((userData) => {
         userServiceObj.commoditylist(req).then((commodityData) => {
             let data = {
-                'title': 'Users',
+                'title': 'User Detail',
                 'currentYear': currentYear,
                 "userData": userData,
                 "commodityData": commodityData
