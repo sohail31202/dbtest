@@ -11,7 +11,12 @@ import passwordHash from "~/utils/passwordHash";
 import Email from "~/libraries/Email";
 import JwtAuthSecurity from "~/libraries/JwtAuthSecurity";
 import htmlspecialchars from 'htmlspecialchars';
+import i18n from "~/config/i18n.config";
+import {
+    LocaleService
+} from "~/utils/localeService";
 
+var localeService = new LocaleService(i18n);
 const email = new Email();
 const JwtAuthSecurityObj = new JwtAuthSecurity();
 const SettingModelObj = new SettingModel();
@@ -115,4 +120,96 @@ export class settingService {
             return error;
         }
     }
+
+    async feeSetting(req, res, next) {
+        const whereUsd = {
+                "currency": "USD"
+            },
+            whereEur = {
+                "currency": "EUR"
+            },
+            whereCad = {
+                "currency": "CAD"
+            },
+            columns = [
+                "fee_flat",
+                "fee_percent"
+            ];
+
+        return SettingModelObj.fetchObjWithSingleRecord(whereUsd, columns).then((usdData) => {
+            return SettingModelObj.fetchObjWithSingleRecord(whereEur, columns).then(async (eurData) => {
+                return SettingModelObj.fetchObjWithSingleRecord(whereCad, columns).then(async (cadData) => {
+                
+                    // Set response
+                    return {
+                        "usd": usdData,
+                        "cad": cadData,
+                        "eur": eurData 
+                    };
+                }).catch((error) => {
+                    return error;
+                });
+            }).catch((error) => {
+                return error;
+            });
+        }).catch((error) => {
+            return error;
+        });
+    };
+
+    /**
+    * Update payment gateway fees.
+    * @param {*} req 
+    * @returns 
+    */
+    async updateGatewayFee(req) {
+        const currentTime = DateTimeUtil.getCurrentTimeObjForDB(),
+            adminId = req.session.adminId,
+            requestData = req.body,
+            whereUsd = {
+                "currency": "USD"
+            },
+            whereEur = {
+                "currency": "EUR"
+            },
+            whereCad = {
+                "currency": "CAD"
+            },
+            updateFeeUSD = {
+                "fee_percent": requestData.feeUsd,
+                "fee_flat": requestData.flatUsd,
+                "updated_at": currentTime
+            },
+            updateFeeEUR = {
+                "fee_percent": requestData.feeEuro,
+                "fee_flat": requestData.flatEuro,
+                "updated_at": currentTime
+            },
+            updateFeeCAD = {
+                "fee_percent": requestData.feeCad,
+                "fee_flat": requestData.flatCad,
+                "updated_at": currentTime
+            },
+            response = {
+                "status_code": StatusCodes.OK,
+                "message": localeService.translate('FEE_UPDATED'),
+                "data": ""
+            };
+            
+        return SettingModelObj.updateObj(updateFeeUSD, whereUsd).then( (updateUsd) => {
+            return SettingModelObj.updateObj(updateFeeEUR, whereEur).then( (updateEur) => {
+                return SettingModelObj.updateObj(updateFeeCAD, whereCad).then( (updateCad) => {
+            
+                    return response;
+                }).catch((error) => {
+                    throw error
+                });
+            }).catch((error) => {
+                throw error
+            });
+        }).catch((error) => {
+            throw error
+        });
+    }
+
 }
