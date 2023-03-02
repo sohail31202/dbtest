@@ -8,6 +8,7 @@ const user = new Router();
 // Create route for get dashboard page in userControllers.
 user.get('/users', sessionServices, userController.getUser );
 
+// Get users
 user.post('/user-list', sessionServices, userController.userlist);
 
 // Delete user
@@ -19,15 +20,8 @@ user.post('/change-user-status', sessionServices, userController.statusChanged);
 // Get user details
 user.get("/user-detail/:userId", sessionServices, userController.userDetail);
 
-// Get user transection list
-// user.get('/user-transection', sessionServices, userController.userTransection );
-
+// Get user transaction list
 user.post('/user-transection-list', sessionServices, userController.userTransectionlist);
-
-
-// user.post('/commodity-list', sessionServices, userController.commoditylist);
-
-
 
 export {
     user
