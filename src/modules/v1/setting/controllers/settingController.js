@@ -138,15 +138,51 @@ const privacyPolicy = async (req, res, next) => {
     })
 }
 
+/**
+ * Get fee Setting page function. 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const feeSetting = async (req, res, next) => {
+    settingServiceObj.feeSetting(req).then( (returnData) => {
+        console.log("returnData---", returnData);
+        let data = {
+            'title': 'Fee Setting',
+            'currentYear': currentYear,
+            "fee": returnData,
+            "csrfToken": req.csrfToken()
+        };
+
+        res.render('fee_setting.ejs', data);
+    })
+}
+
+/**
+ * Create function for update payment gateway fees.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const updateGatewayFee = (req, res, next) => {
+    settingServiceObj.updateGatewayFee(req).then((returnData) => {
+        
+        sendResponse(req, res, StatusCodes.OK, returnData);
+    }).catch((error) => {
+        // Set error response.
+        sendErrorResponse(req, res, StatusCodes.INTERNAL_SERVER_ERROR);
+    });
+}
+
 // export all functions
 const settingController = {
-
     editTermsAndConditions,
     editPrivacyPolicy,
     updateContentPage,
     termsAndConditions,
-    privacyPolicy
-
+    privacyPolicy,
+    feeSetting,
+    updateGatewayFee
 }
 
 export default settingController

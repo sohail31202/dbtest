@@ -32,5 +32,6 @@
 	"USER_DELETED": "User deleted successfully.",
 	"STATUS_CHANGE_SUCCESS": "User status changed successfully.",
 	"CONTENT_UPDATED": "Content page updated successfully.",
-	"USER_STATUS_CHANGED": "User status has been updated."
+	"USER_STATUS_CHANGED": "User status has been updated.",
+	"FEE_UPDATED": "Fee has been updated successfully."
 }
