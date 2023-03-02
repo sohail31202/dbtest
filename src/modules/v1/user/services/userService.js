@@ -331,52 +331,40 @@ export class userService {
             total_records = total_records[0].total
 
             const userData = await userModelObj.getuserTransactionData(start, length, order_data, order, where);
+            
             var total_records_with_filter = userData.length;
+            const metaWhere = {
+                "data_ref_key": 'transaction_msg'
+            }
+            const getMessageFromMetadata = await userModelObj.fetchObjWithSelectedFields(metaWhere, ["value_code", "value_desc", "additional_data"], tableConstants.METADATA);
+            
+            let preparedTransMeta = [];
 
+            for (let index = 0; index < getMessageFromMetadata.length; index++) {
+                let value = getMessageFromMetadata[index]
+                preparedTransMeta[value.value_code] = value;
+            }
+            
+            userData.forEach( (element, index) => {
+                element.s_no = index + 1 + Number(start)
+                const transectionMsg = commonHelpers.getTransactionMsg(element, preparedTransMeta),
+                    joinedAt = DateTimeUtil.changeFormat(element.transaction_date, "DD/MM/YYYY hh:mm A");
 
-            userData.forEach(async (element, index) => {
-                userData[index].s_no = index + 1 + Number(start)
-                if (userData[index].transaction_type == 1) {
-                    userData[index].transaction_type = "Add Commodity"
-                    userData[index].transaction_desc = "commodity has been added";
-                } else if (userData[index].transaction_type == 2) {
-                    userData[index].transaction_type = "Send Commodity"
-                    userData[index].transaction_desc = `commodity has been sent to ${userData[index].receiver_name}`;
-                } else if (userData[index].transaction_type == 3) {
-                    userData[index].transaction_type = "Received Commodity"
-                    userData[index].transaction_desc = `you have received commodity from ${userData[index].sender_name}`;
-                } else if (userData[index].transaction_type == 4) {
-                    userData[index].transaction_type = "Withdraw Commodity"
-                    userData[index].transaction_desc = "commodity has has been withdrawn";
-                } else if (userData[index].transaction_type == 5) {
-                    userData[index].transaction_type = "Add Cash"
-                    userData[index].transaction_desc = "cash has been added";
-                } else if (userData[index].transaction_type == 6) {
-                    userData[index].transaction_type = "Withdraw Cash"
-                    userData[index].transaction_desc = "cash has been withdrawn";
-                } else if (userData[index].transaction_type == 7) {
-                    userData[index].transaction_type = "Commodity to cash"
-                    userData[index].transaction_desc = "commodity has been converted to cash";
-                } else if (userData[index].transaction_type == 8) {
-                    userData[index].transaction_type = "Receive physical commodity"
-                    userData[index].transaction_desc = "physical commodity has been received";
-                } else if (userData[index].transaction_type == 9) {
-                    userData[index].transaction_type = "Deliver physical commodity"
-                    userData[index].transaction_desc = "Your physical Gold has been converted to digital commodity";
-                }
-
-                const joinedAt = DateTimeUtil.changeFormat(userData[index].transaction_date, "DD/MM/YYYY hh:mm A");
-                userData[index].transaction_date = joinedAt
-
+                element.title = transectionMsg.title
+                element.transaction_type_text = transectionMsg.transaction_type_text
+                element.transaction_date = joinedAt
             });
+            
             var output = {
                 'draw': draw,
                 'iTotalRecords': total_records,
                 'iTotalDisplayRecords': total_records,
                 'aaData': userData,
             };
+           
             res.json(output);
         } catch (error) {
+            // console.log(error);
             logger.error(error);
             return error;
         }

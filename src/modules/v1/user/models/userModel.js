@@ -159,7 +159,8 @@ export default class userModel extends BaseModel {
             "sender.fullname as sender_name",
             "receiver.fullname as receiver_name",
             "commodities.name as commodity_name",
-            "transaction_date"
+            "transaction_date",
+            "request_id"
         ];
 
         var result = knex('users_transactions')
