@@ -153,6 +153,25 @@ const roundNumber = function (value, roundDecimal) {
 
 }
 
+const getTransactionMsg = (val, preparedTransMeta) => {
+    
+      var metadata = preparedTransMeta[val.transaction_type];
+      const parsedMeta = JSON.parse(metadata.additional_data);
+
+    var trans_msg = eval('`'+metadata.value_desc+'`');
+    var trans_text = parsedMeta.transaction_type_text;
+    // var transaction_icon = parsedMeta.transaction_icon;
+     if (val.transaction_type == 2 && val.request_id) {
+         trans_msg = trans_msg+' '+parsedMeta.additional_msg;
+     }
+
+     if (val.transaction_type == 3 && val.request_id) {
+         trans_msg = trans_msg+' '+parsedMeta.additional_msg;
+     }
+     
+     return {"title":trans_msg, "transaction_type_text":trans_text};
+
+}
 const commonHelpers = {
     getOtp,
     generateUUID,
@@ -164,7 +183,8 @@ const commonHelpers = {
     base64Decode,
     unEscape,
     prepUserName,
-    roundNumber
+    roundNumber,
+    getTransactionMsg
 }
 
 export default commonHelpers

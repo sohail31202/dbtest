@@ -177,7 +177,7 @@ class BaseModel {
         if (orderby !== undefined && order !== undefined) {
             prepareQuery = prepareQuery.orderBy(orderby, order);
         }
-        prepareQuery = prepareQuery.map((res) => {
+        prepareQuery = prepareQuery.then((res) => {
             return res;
         });
 

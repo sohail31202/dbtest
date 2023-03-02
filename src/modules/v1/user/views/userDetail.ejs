@@ -90,17 +90,6 @@
                                                 </label>
                                             </div>
 
-                                            <!-- <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-5 detail_label">Email</label>
-                                                <label class="col-md-7 detail_value"><%= userData[0].email %>
-                                                </label>
-                                            </div>
-
-                                            <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-5 detail_label">Name</label>
-                                                <label class="col-md-7 detail_value"><%= userData[0].fullname %></label>
-                                            </div> -->
-
                                             <div class="form-group col-md-4 col-xs-12">
                                                 <label class="col-md-5 detail_label">DOB</label>
                                                 <label class="col-md-7 detail_value">
@@ -262,16 +251,13 @@
                     },
                     'columns': [
                         { data: 's_no' },
-                        { data: 'transaction_type' },
-                        { data: 'transaction_desc' },
+                        { data: 'transaction_type_text' },
+                        { data: 'title' },
                         { data: 'transaction_ammount' },
                         { data: 'transaction_date' }
                     ]
                 });
 
             });
-
-
-
 
         </script>
