@@ -70,7 +70,8 @@ export default class userModel extends BaseModel {
             "is_deleted",
             "deleted_at",
             "deleted_data_json",
-            "CONCAT( phone_dial_code, phone_number) as contact"
+            "CONCAT( phone_dial_code, phone_number) as contact",
+            `(CASE WHEN( profile_img != "" && is_img_url != 1) THEN CONCAT('${s3ProfilePath}', profile_img) WHEN( profile_img != "" && is_img_url = 1) THEN profile_img ELSE '${avatar_placeholder}' END ) AS profile_img`
         ];
 
         var result = knex('users')

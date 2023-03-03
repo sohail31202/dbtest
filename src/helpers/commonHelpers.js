@@ -101,7 +101,7 @@ function unEscape(htmlStr) {
 }
 
  
-function prepUserName(userDetail, picture_key_name = "picture", name_key_name = "fullname"){
+function prepUserName(userDetail, picture_key_name = "profile_img", name_key_name = "fullname"){
 	return `<img class="py-1" data-fancybox src="${userDetail[picture_key_name]}" alt="picture">` + " " + userDetail[name_key_name]
 
 }

@@ -75,6 +75,8 @@ export class userService {
 
             userData.forEach(async (element, index) => {
                 userData[index].s_no = index + 1 + Number(start)
+                userData[index].fullname=commonHelpers.prepUserName(element)
+
                 const statusIs = element.status == 1 ? 'Inactivate' : 'Activate';
 
                 const statusIconText = element.status == 1 ? 'Inactive' : 'Active';
