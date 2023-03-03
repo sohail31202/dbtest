@@ -154,7 +154,9 @@ export default class userModel extends BaseModel {
         const sel = [
             "users_transactions.id",
             "transaction_type",
-            "CONCAT( commodity_amount, commodity_amount_unit) as transaction_ammount",
+            "CONCAT( commodity_amount, commodity_amount_unit) as transaction_commodity",
+            "CONCAT( quantity, quantity_unit) as transaction_quantity",
+            "CONCAT( cash, cash_unit) as transaction_cash",
             "commodity_id",
             "sender.fullname as sender_name",
             "receiver.fullname as receiver_name",
@@ -189,7 +191,6 @@ export default class userModel extends BaseModel {
                   .on('users_commodities.user_id', userId);
               })
               .orderBy("commodities.id", "ASC");
-console.log("lq prepareQuery-------", prepareQuery.toString());
         prepareQuery = prepareQuery.then((res) => {
             return res;
         });

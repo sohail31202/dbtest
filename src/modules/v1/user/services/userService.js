@@ -230,19 +230,10 @@ export class userService {
                 currentYear = new Date().getYear(),
                 age = currentYear - bornYear;
             userData[0].age = age;
-            if (userData[0].signup_type == 1) {
-                userData[0].signup_type = "Normal"
-            } else {
-                userData[0].signup_type = "Social"
-            }
 
-            if (userData[0].social_type == 1) {
-                userData[0].social_type = "Google";
-            } else if (userData[0].social_type == 2) {
-                userData[0].social_type = "Facebook";
-            } else if (userData[0].social_type == 3) {
-                userData[0].social_type = "Apple";
-            }
+            userData[0].signup_type=commonHelpers.getValueDesc(userData[0].signup_type,'signup_type');
+            userData[0].social_type=commonHelpers.getValueDesc(userData[0].social_type,'social_type');
+            
             const changeFormat = DateTimeUtil.changeFormat(userData[0].dob, "DD/MM/YYYY"),
                 join = DateTimeUtil.changeFormat(userData[0].joined_at, "DD/MM/YYYY");
             userData[0].dob = changeFormat
@@ -349,9 +340,10 @@ export class userService {
                 element.s_no = index + 1 + Number(start)
                 const transectionMsg = commonHelpers.getTransactionMsg(element, preparedTransMeta),
                     joinedAt = DateTimeUtil.changeFormat(element.transaction_date, "DD/MM/YYYY hh:mm A");
-
+                    
                 element.title = transectionMsg.title
                 element.transaction_type_text = transectionMsg.transaction_type_text
+                element.transaction_ammount = transectionMsg.transaction_ammount
                 element.transaction_date = joinedAt
             });
             
@@ -364,7 +356,7 @@ export class userService {
            
             res.json(output);
         } catch (error) {
-            // console.log(error);
+            //console.log(error);
             logger.error(error);
             return error;
         }
