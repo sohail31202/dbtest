@@ -54,38 +54,10 @@ const getRandomString = function(strLength, charSet) {
     return result.join('');
 }
 
-const getUserImgPath = function(file_name,orignal = false){
-    var picture='';
-    var default_img = process.env.ASSETS_URL_BASE + commonConstants.USER_DEFAULT_IMAGE_PATH;
-    if (file_name != '' && file_name != null) {
-       
-        var devEnvPath = '';
-        if(process.env.NODE_ENV=='development'){
-            devEnvPath= 'development/';
-        }
-        
-        if(orignal){
-            picture = process.env.SAFERR_IMG_URL + devEnvPath + commonConstants.SAFERR_USR_IMG_PATH + file_name; 
-        }else{
-            picture = process.env.SAFERR_IMG_URL + devEnvPath + commonConstants.SAFERR_USR_IMG_THUMB_PATH + file_name; 
-        }
-
-    }else{
-        picture= default_img; 
-    }
-    return picture;
-}
-
-const getSaferrFormatDate = function(dateValue, showTime = false){
-    if(dateValue=='' || dateValue==null) return '';
-    if(showTime) return DateTimeUtil.changeFormat(dateValue, "DD/MM/YYYY hh:mm A");
-    else return DateTimeUtil.changeFormat(dateValue, "DD/MM/YYYY");
-}
-
 const getValueDesc = function(value_code, ref_key){
     switch (ref_key) {
         case 'signup_type':
-            if(value_code=='2'){
+            if(value_code==commonConstants.SIGNUP_TYPE_SOCIAL){
                 return "Social";
             }else{
                 return "Normal";
@@ -131,7 +103,7 @@ function unEscape(htmlStr) {
  
 function prepUserName(userDetail, picture_key_name = "picture", name_key_name = "fullname"){
 	return `<img class="py-1" data-fancybox src="${userDetail[picture_key_name]}" alt="picture">` + " " + userDetail[name_key_name]
-    
+
 }
 
 const roundNumber = function (value, roundDecimal) {
@@ -153,31 +125,69 @@ const roundNumber = function (value, roundDecimal) {
 
 }
 
+const ucWords = (string) => {
+    string=string.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+        return letter.toUpperCase();
+    });
+    return string;
+}
+
 const getTransactionMsg = (val, preparedTransMeta) => {
     
       var metadata = preparedTransMeta[val.transaction_type];
       const parsedMeta = JSON.parse(metadata.additional_data);
 
     var trans_msg = eval('`'+metadata.value_desc+'`');
-    var trans_text = parsedMeta.transaction_type_text;
+    var trans_text = parsedMeta.transaction_type_text.replace(/_/g," ");
+    trans_text=ucWords(trans_text);
+    
     // var transaction_icon = parsedMeta.transaction_icon;
-     if (val.transaction_type == 2 && val.request_id) {
+     if (val.transaction_type == commonConstants.TRANSTYPE_SEND_COMMODITY && val.request_id) {
          trans_msg = trans_msg+' '+parsedMeta.additional_msg;
      }
 
-     if (val.transaction_type == 3 && val.request_id) {
+     if (val.transaction_type == commonConstants.TRANSTYPE_RECEIVED_COMMODITY && val.request_id) {
          trans_msg = trans_msg+' '+parsedMeta.additional_msg;
      }
-     
-     return {"title":trans_msg, "transaction_type_text":trans_text};
+
+     var transaction_ammount=0;
+     switch (val.transaction_type) {
+        case commonConstants.TRANSTYPE_ADD_COMMODITY:
+            transaction_ammount = val.transaction_quantity;
+            break;
+        case commonConstants.TRANSTYPE_SEND_COMMODITY:
+            transaction_ammount = val.transaction_quantity;
+            break;
+        case commonConstants.TRANSTYPE_RECEIVED_COMMODITY:
+            transaction_ammount = val.transaction_quantity;
+            break;
+        case commonConstants.TRANSTYPE_WITHDRAW_COMMODITY:
+            transaction_ammount = val.transaction_quantity;
+            break;
+        case commonConstants.TRANSTYPE_ADD_CASH:
+            transaction_ammount = val.transaction_cash;
+            break;
+        case commonConstants.TRANSTYPE_WITHDRAW_CASH:
+            transaction_ammount = val.transaction_cash;
+            break;
+        case commonConstants.TRANSTYPE_COMMODITY_TO_CASH:
+            transaction_ammount = val.transaction_quantity;
+            break;
+        case commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY:
+            transaction_ammount = val.transaction_quantity;
+            break;
+        case commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY:
+            transaction_ammount = val.transaction_quantity;
+            break;
+     }
+
+     return {"title":trans_msg, "transaction_type_text":trans_text, "transaction_ammount": transaction_ammount};
 
 }
 const commonHelpers = {
     getOtp,
     generateUUID,
     getRandomString,
-    getUserImgPath,
-    getSaferrFormatDate,
     getValueDesc,
     base64Encode,
     base64Decode,

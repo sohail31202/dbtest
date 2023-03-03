@@ -29,13 +29,16 @@ const commonConstants = {
     "DIVICE_TYPE_IOS": 2,
     "DIVICE_TYPE_WEBSITE": 3,
     "IMAGE_FOLDER":"img",
-    "BUCKET_BASE_URL": "https://crave.sgp1.digitaloceanspaces.com", //used in email config file
-    "BUCKET_IMAGE_FOLDER": "images", //used in email config file
-    "UPLOAD_MAX_FILE_SIZE":10485760, //set 10MB (in bytes)
-    "META_INTENTION": "profile_intention",
-    "META_GENDER": "gender",
-    "USER_DEFAULT_IMAGE_PATH" : "images/default_user.png",
-    "SAFERR_USR_IMG_THUMB_PATH" : "profile_picture/thumb/",
-    "SAFERR_USR_IMG_PATH" : "profile_picture/"
+    "UPLOAD_MAX_FILE_SIZE":10485760, //set 10MB (in bytes),
+    "TRANSTYPE_ADD_COMMODITY":1,
+    "TRANSTYPE_SEND_COMMODITY":2,
+    "TRANSTYPE_RECEIVED_COMMODITY":3,
+    "TRANSTYPE_WITHDRAW_COMMODITY":4,
+    "TRANSTYPE_ADD_CASH":5,
+    "TRANSTYPE_WITHDRAW_CASH":6,
+    "TRANSTYPE_COMMODITY_TO_CASH":7,
+    "TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY":8,
+    "TRANSTYPE_DELIVER_PHYSICAL_COMMODITY":9
+    
 };
 export default commonConstants;
