@@ -107,17 +107,9 @@
                                             <div class="form-group col-md-4 col-xs-12">
                                                 <label class="col-md-5 detail_label">Signup type</label>
                                                 <label class="col-md-7 detail_value">
-                                                    <%= userData[0].signup_type %>
+                                                    <%= userData[0].signup_type %><% if(userData[0].signup_type=='Social' ){ %> (<%=userData[0].social_type%>) <% } %>
                                                 </label>
                                             </div>
-                                            <% if(userData[0].signup_type=='Social' ){ %>
-                                                <div class="form-group col-md-4 col-xs-12">
-                                                    <label class="col-md-5 detail_label"> Social Profile </label>
-                                                    <label class="col-md-7 detail_value">
-                                                        <%= userData[0].social_type %>
-                                                    </label>
-                                                </div>
-                                            <% } %>
                                             <div class="form-group col-md-4 col-xs-12">
                                                 <label class="col-md-5 detail_label">Joined At</label>
                                                 <label class="col-md-7 detail_value">
