@@ -91,14 +91,15 @@ export class userService {
                     Action = `<a href="#" data-toggle="modal" data-target="#deletedUserInfoModal" class="btn btn-warning btn-rounded btn-icon" onclick='showInfo(${deletedData})'><i class="fa fa-info mx-2" aria-hidden="true"></i></a>`;
                     status = '<span class="badge badge-danger" aria-hidden="true">Deleted</span>'
                 } else {
-
+                    let encId = commonHelpers.base64Encode(element.id);
+                    
                     Action = ` <a href="#" data-toggle="modal" data-target="#deleteModal" title="Delete" class="btn btn-danger btn-rounded btn-icon" onclick="deleteId('${element.id}')"><i
                     class="ti-trash" aria-hidden="true"></i></a>
 
                         <a href="#" data-toggle="modal" data-target="#changeStatusModal" title="${statusIconText}" class='btn btn-info btn-rounded btn-icon' onclick="changeStatus('${element.id}','${statusIs}')">${statusIsIcon}</a>
 
                         <!-- User Details button. -->
-                        <a href="user-detail/${element.id}"  class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>
+                        <a href="user-detail/${encId}"  class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>
                     </div>`;
 
                     status = element.status == 1 ? '<span class="badge badge-success" aria-hidden="true">Active</span>'
@@ -223,6 +224,7 @@ export class userService {
      */
     async getUserDetail(req, res) {
         try {
+            req.params.userId = commonHelpers.base64Decode(req.params.userId);
             const where = req.params.userId;
             const userData = await userModelObj.fetchUserDetail(where, tableConstants.USERS)
             // const commoditylistData = await this.commoditylist(where);
@@ -318,10 +320,17 @@ export class userService {
 
             var length = req.body.length;
 
-            var order_data = req.body['order[0][column]'];
-            var order = req.body['order[0][dir]']
+            var order_data = req.body.order[0].column;
+            var order = req.body.order[0].dir;
             var total_records = await userModelObj.getTotalTransactionCount(where);
             total_records = total_records[0].total
+
+            if(order_data=='0') order_data='users_transactions.id';
+            else if(order_data=='1') order_data='additional_data';
+            else if(order_data=='3') order_data='transaction_commodity_amount';
+            else if(order_data=='4') order_data='transaction_date';
+            else{ order_data='transaction_date'; order='desc' }
+            
 
             const userData = await userModelObj.getuserTransactionData(start, length, order_data, order, where);
             
@@ -358,7 +367,7 @@ export class userService {
            
             res.json(output);
         } catch (error) {
-            //console.log(error);
+            console.log(error);
             logger.error(error);
             return error;
         }
