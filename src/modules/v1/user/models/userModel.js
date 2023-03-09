@@ -70,7 +70,8 @@ export default class userModel extends BaseModel {
             "is_deleted",
             "deleted_at",
             "deleted_data_json",
-            "CONCAT( phone_dial_code, phone_number) as contact"
+            "CONCAT( phone_dial_code, phone_number) as contact",
+            `(CASE WHEN( profile_img != "" && is_img_url != 1) THEN CONCAT('${s3ProfilePath}', profile_img) WHEN( profile_img != "" && is_img_url = 1) THEN profile_img ELSE '${avatar_placeholder}' END ) AS profile_img`
         ];
 
         var result = knex('users')
@@ -154,7 +155,7 @@ export default class userModel extends BaseModel {
         const sel = [
             "users_transactions.id",
             "transaction_type",
-            "CONCAT( commodity_amount, commodity_amount_unit) as transaction_commodity",
+            "CONCAT( commodity_amount, commodity_amount_unit) as transaction_commodity_amount",
             "CONCAT( quantity, quantity_unit) as transaction_quantity",
             "CONCAT( cash, cash_unit) as transaction_cash",
             "commodity_id",
@@ -162,21 +163,35 @@ export default class userModel extends BaseModel {
             "receiver.fullname as receiver_name",
             "commodities.name as commodity_name",
             "transaction_date",
-            "request_id"
+            "request_id",
+            "quantity", 
+            "quantity_unit",
+            "cash_with_fee",
+            "cash_unit"
         ];
 
         var result = knex('users_transactions')
-
+        //left join app_metadata on data_ref_key='transaction_msg' and value_code=transaction_type
             .select(knex.raw(sel))
             .limit(limit)
             .offset(start)
             .leftJoin('commodities', `commodities.id`, `users_transactions.commodity_id`)
             .leftJoin('users as sender', `sender.id`, `users_transactions.sender_id`)
             .leftJoin('users as receiver', `receiver.id`, `users_transactions.receiver_id`)
+            .leftJoin('app_metadata as meta', function () {
+                this.on('data_ref_key', knex.raw('?', ['transaction_msg']))
+                    .andOn('value_code', `transaction_type`)
+            })
             .groupBy('id')
-            .orderBy('id', 'desc')
+            //.orderBy(order_data, order)
             .where('users_transactions.user_id',where)
-        
+            
+            if(order_data=='additional_data'){
+                result.orderBy(knex.raw('JSON_EXTRACT(additional_data,"$.transaction_type_text")'), order);
+            }else{
+                result.orderBy(order_data, order);
+            }
+        console.log(result.toString());
         return result.then(function (rows) {
             return rows;
         });
