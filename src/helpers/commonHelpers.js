@@ -101,7 +101,7 @@ function unEscape(htmlStr) {
 }
 
  
-function prepUserName(userDetail, picture_key_name = "picture", name_key_name = "fullname"){
+function prepUserName(userDetail, picture_key_name = "profile_img", name_key_name = "fullname"){
 	return `<img class="py-1" data-fancybox src="${userDetail[picture_key_name]}" alt="picture">` + " " + userDetail[name_key_name]
 
 }
@@ -143,26 +143,26 @@ const getTransactionMsg = (val, preparedTransMeta) => {
     
     // var transaction_icon = parsedMeta.transaction_icon;
      if (val.transaction_type == commonConstants.TRANSTYPE_SEND_COMMODITY && val.request_id) {
-         trans_msg = trans_msg+' '+parsedMeta.additional_msg;
+        trans_msg = eval('`'+parsedMeta.additional_msg+'`');
      }
 
      if (val.transaction_type == commonConstants.TRANSTYPE_RECEIVED_COMMODITY && val.request_id) {
-         trans_msg = trans_msg+' '+parsedMeta.additional_msg;
+        trans_msg = eval('`'+parsedMeta.additional_msg+'`');
      }
 
      var transaction_ammount=0;
      switch (val.transaction_type) {
         case commonConstants.TRANSTYPE_ADD_COMMODITY:
-            transaction_ammount = val.transaction_quantity;
+            transaction_ammount = val.transaction_commodity_amount;
             break;
         case commonConstants.TRANSTYPE_SEND_COMMODITY:
-            transaction_ammount = val.transaction_quantity;
+            transaction_ammount = val.transaction_commodity_amount;
             break;
         case commonConstants.TRANSTYPE_RECEIVED_COMMODITY:
-            transaction_ammount = val.transaction_quantity;
+            transaction_ammount = val.transaction_commodity_amount;
             break;
         case commonConstants.TRANSTYPE_WITHDRAW_COMMODITY:
-            transaction_ammount = val.transaction_quantity;
+            transaction_ammount = val.transaction_commodity_amount;
             break;
         case commonConstants.TRANSTYPE_ADD_CASH:
             transaction_ammount = val.transaction_cash;
@@ -171,7 +171,7 @@ const getTransactionMsg = (val, preparedTransMeta) => {
             transaction_ammount = val.transaction_cash;
             break;
         case commonConstants.TRANSTYPE_COMMODITY_TO_CASH:
-            transaction_ammount = val.transaction_quantity;
+            transaction_ammount = val.transaction_cash;
             break;
         case commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY:
             transaction_ammount = val.transaction_quantity;
