@@ -16,6 +16,8 @@ import JwtAuthSecurity from "~/libraries/JwtAuthSecurity";
 
 const email = new Email();
 const JwtAuthSecurityObj = new JwtAuthSecurity();
+const s3BasePath = process.env.S3_BASE_PATH,
+    imageFolder = commonConstants.IMAGE_FOLDER;
 const AdminModelObj = new AdminModel();
 
 
@@ -45,7 +47,7 @@ export class adminService {
             },
             cellPurchaseCol = [
                 "commodities.name",
-                "commodities.icon_image",
+                `CONCAT('${s3BasePath}${imageFolder}/', commodities.icon_image ) AS icon_image`,
                 "COALESCE(SUM(sale_trans.commodity_in_gram), 0) as sale_commodity",
                 "COALESCE(SUM(purchase_trans.commodity_in_gram), 0) as purchase_commodity"
             ];
