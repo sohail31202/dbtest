@@ -30,6 +30,23 @@
             </div>
           </div>
         </div>
+
+        <% for( let i = 0; i < cellAndPurchaseCommodities.length; i++ ) { %>
+          <div class="col-md-3 mb-4 stretch-card transparent">
+            <div class="card card-tale">
+              <div class="card-light-blue">
+                <div class="card-body"> <a href="/users">
+                    <p class="mb-4"><%= cellAndPurchaseCommodities[i].name %></p>
+                    <p class="fs-30 mb-2">
+                      Sale:- <%= cellAndPurchaseCommodities[i].sale_commodity %>
+                      Purchase:- <%= cellAndPurchaseCommodities[i].purchase_commodity %>
+                    </p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
      
         <!-- <div class="col-md-3 mb-4 stretch-card transparent">
           <div class="card card-tale">

@@ -42,15 +42,24 @@ export class adminService {
 
             const where = {
                 "is_deleted": 0
-            }
+            },
+            cellPurchaseCol = [
+                "commodities.name",
+                "commodities.icon_image",
+                "COALESCE(SUM(sale_trans.commodity_in_gram), 0) as sale_commodity",
+                "COALESCE(SUM(purchase_trans.commodity_in_gram), 0) as purchase_commodity"
+            ];
+            
             const userLength = await AdminModelObj.fetchObj(where, tableConstants.USERS);
-
+            const cellAndPurchaseCommodityQuantity = await AdminModelObj.getCellAndPurchaseCommodity(cellPurchaseCol);
+            console.log("cellAndPurchaseCommodityQuantity--", cellAndPurchaseCommodityQuantity);
             // const reportedUserLength = await AdminModelObj.fetchAll(tableConstants.REPORTED_USERS);
 
             // Return response.
             let returnData = {
                 // "intentLength": intentLength.length,
                 "userLength": userLength.length,
+                "cellAndPurchaseCommodity": cellAndPurchaseCommodityQuantity
                 // "reportedUserLength": reportedUserLength.length
             }
 

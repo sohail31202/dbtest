@@ -28,6 +28,37 @@ export default class AdminModel extends BaseModel {
         });
     }
 
+   
+    /**
+     * Get Cell And Purchase Commodoty Quantity.
+     *
+     * @param {Object} query The query to match against.
+     * @param {Object} wherein The query to match against.
+     * @param {String} tableName The query to match against.
+     * @returns {Array} An array holding resultant models.
+     */
+    getCellAndPurchaseCommodity(query = {}) {
+        let prepareQuery = knex("commodities")
+            .select(knex.raw( query ))
+            .leftJoin('users_transactions as sale_trans', function() {
+                this.on('sale_trans.commodity_id', '=', 'commodities.id')
+                    .onIn('sale_trans.transaction_type', [1, 8])
+                    .onNotNull('sale_trans.commodity_in_gram')
+            })
+            .leftJoin('users_transactions as purchase_trans', function() {
+                this.on('purchase_trans.commodity_id', '=', 'commodities.id')
+                    .onIn('purchase_trans.transaction_type', [7, 9])
+                    .onNotNull('purchase_trans.commodity_in_gram')
+            })
+            .groupBy("commodities.id");
+
+            console.log("getCellAndPurchaseCommodity last query--", prepareQuery.toString());
+
+        return prepareQuery = prepareQuery.then((res) => {
+            return res;
+        });
+    }
+
     /**
      * Create Query for conatct list.
      * @param {*} search 

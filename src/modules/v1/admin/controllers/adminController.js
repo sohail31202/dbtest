@@ -41,6 +41,7 @@ const getDashboard = async (req, res, next) => {
             'currentYear': currentYear,
             'intentLength': 0,
             "userLength": returnData.response.userLength,
+            "cellAndPurchaseCommodities": returnData.response.cellAndPurchaseCommodity,
             "reportedUserLength": 0
         };
 
