@@ -22114,6 +22114,25 @@ code {
   background: #f59095;
 }
 
+.card.card-light-pink {
+  background: #f379e4;
+  color: #ffffff;
+}
+
+.card.card-light-pink:hover {
+  background: #f592e9;
+}
+
+
+.card.card-light-megenta {
+  background: #c17cf5;
+  color: #ffffff;
+}
+
+.card.card-light-megenta:hover {
+  background: #cb94f5;
+}
+
 .card-inverse-primary {
   background: rgba(75, 73, 172, 0.2);
   border: 1px solid #45439e;
