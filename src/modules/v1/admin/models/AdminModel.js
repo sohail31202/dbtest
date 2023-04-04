@@ -37,18 +37,13 @@ export default class AdminModel extends BaseModel {
      * @param {String} tableName The query to match against.
      * @returns {Array} An array holding resultant models.
      */
-    getSaleAndPurchaseCommodity(query = {}) {
+    getSaleAndPurchaseCommodity(query = [ "COALESCE(SUM(users_transactions.commodity_in_gram), 0) as purchase_commodity" ], transType = [7, 9]) {
         let prepareQuery = knex("commodities")
             .select(knex.raw( query ))
-            .leftJoin('users_transactions as sale_trans', function() {
-                this.on('sale_trans.commodity_id', '=', 'commodities.id')
-                    .onIn('sale_trans.transaction_type', [1, 8])
-                    .onNotNull('sale_trans.commodity_in_gram')
-            })
-            .leftJoin('users_transactions as purchase_trans', function() {
-                this.on('purchase_trans.commodity_id', '=', 'commodities.id')
-                    .onIn('purchase_trans.transaction_type', [7, 9])
-                    .onNotNull('purchase_trans.commodity_in_gram')
+            .leftJoin('users_transactions', function() {
+                this.on('users_transactions.commodity_id', '=', 'commodities.id')
+                    .onIn('users_transactions.transaction_type', transType)
+                    .onNotNull('users_transactions.commodity_in_gram')
             })
             .groupBy("commodities.id");
 
