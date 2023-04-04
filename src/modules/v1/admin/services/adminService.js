@@ -45,7 +45,7 @@ export class adminService {
             const where = {
                 "is_deleted": 0
             },
-            cellPurchaseCol = [
+            salePurchaseCol = [
                 "commodities.name",
                 `CONCAT('${s3BasePath}${imageFolder}/', commodities.icon_image ) AS icon_image`,
                 "COALESCE(SUM(sale_trans.commodity_in_gram), 0) as sale_commodity",
@@ -53,15 +53,15 @@ export class adminService {
             ];
             
             const userLength = await AdminModelObj.fetchObj(where, tableConstants.USERS);
-            const cellAndPurchaseCommodityQuantity = await AdminModelObj.getCellAndPurchaseCommodity(cellPurchaseCol);
-            console.log("cellAndPurchaseCommodityQuantity--", cellAndPurchaseCommodityQuantity);
+            const saleAndPurchaseCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity(salePurchaseCol);
+            console.log("saleAndPurchaseCommodityQuantity--", saleAndPurchaseCommodityQuantity);
             // const reportedUserLength = await AdminModelObj.fetchAll(tableConstants.REPORTED_USERS);
 
             // Return response.
             let returnData = {
                 // "intentLength": intentLength.length,
                 "userLength": userLength.length,
-                "cellAndPurchaseCommodity": cellAndPurchaseCommodityQuantity
+                "saleAndPurchaseCommodity": saleAndPurchaseCommodityQuantity
                 // "reportedUserLength": reportedUserLength.length
             }
 

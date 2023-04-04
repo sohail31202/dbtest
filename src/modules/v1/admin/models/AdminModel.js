@@ -30,14 +30,14 @@ export default class AdminModel extends BaseModel {
 
    
     /**
-     * Get Cell And Purchase Commodoty Quantity.
+     * Get Sale And Purchase Commodoty Quantity.
      *
      * @param {Object} query The query to match against.
      * @param {Object} wherein The query to match against.
      * @param {String} tableName The query to match against.
      * @returns {Array} An array holding resultant models.
      */
-    getCellAndPurchaseCommodity(query = {}) {
+    getSaleAndPurchaseCommodity(query = {}) {
         let prepareQuery = knex("commodities")
             .select(knex.raw( query ))
             .leftJoin('users_transactions as sale_trans', function() {
@@ -52,7 +52,7 @@ export default class AdminModel extends BaseModel {
             })
             .groupBy("commodities.id");
 
-            console.log("getCellAndPurchaseCommodity last query--", prepareQuery.toString());
+            console.log("getSaleAndPurchaseCommodity last query--", prepareQuery.toString());
 
         return prepareQuery = prepareQuery.then((res) => {
             return res;

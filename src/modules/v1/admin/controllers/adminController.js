@@ -34,6 +34,8 @@ var adminServiceObj = new adminService();
  */
 const getDashboard = async (req, res, next) => {
     adminServiceObj.getDashboard(req, res).then((returnData) => {
+
+        const colorArr = ["card-light-megenta", "card-light-danger", "card-light-blue", "card-light-pink", "card-light-megenta", "card-dark-blue"]
         
         // Return data into dashboard page.
         let data = {
@@ -41,8 +43,9 @@ const getDashboard = async (req, res, next) => {
             'currentYear': currentYear,
             'intentLength': 0,
             "userLength": returnData.response.userLength,
-            "cellAndPurchaseCommodities": returnData.response.cellAndPurchaseCommodity,
-            "reportedUserLength": 0
+            "saleAndPurchaseCommodities": returnData.response.saleAndPurchaseCommodity,
+            "reportedUserLength": 0,
+            "colorArr": colorArr,
         };
 
         res.render('dashboard.ejs', data);
