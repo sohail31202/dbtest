@@ -414,6 +414,7 @@ table .nav-user img {
   object-fit: cover;
   border: 2px solid #fff;
   box-shadow: 0px 4px 11px 2px #d3d3d3;
+  padding: 4px;
 }
 
 .detail_label {

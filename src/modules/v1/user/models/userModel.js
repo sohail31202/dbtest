@@ -191,7 +191,7 @@ export default class userModel extends BaseModel {
             }else{
                 result.orderBy(order_data, order);
             }
-        console.log(result.toString());
+        //console.log(result.toString());
         return result.then(function (rows) {
             return rows;
         });

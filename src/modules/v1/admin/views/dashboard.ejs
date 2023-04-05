@@ -3,19 +3,6 @@
   <div class="main-panel">
     <div class="content-wrapper">
       <div class="row">
-        <!-- <div class="col-md-3 mb-4 stretch-card transparent">
-          <div class="card card-tale">
-            <div class="card card-light-danger">
-              <div class="card-body"> <a href="/intentions">
-                  <p class="mb-4">Intentions</p>
-                  <p class="fs-30 mb-2">
-                  <%= intentLength %>
-                  </p>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div> -->
         
         <div class="col-md-3 mb-4 stretch-card transparent">
           <div class="card card-tale">
@@ -30,48 +17,30 @@
             </div>
           </div>
         </div>
+        
+        <% for( let i = 0; i < saleAndPurchaseCommodities.length; i++ ) { %>
+          <div class="col-md-3 mb-4 stretch-card transparent">
+            <div class="card <%= colorArr[i] %>">
+              <div class="">
+                <div class="card-body"> <a href="javascript:void(0)">
+                    <p class="mb-4"><%= saleAndPurchaseCommodities[i].name %></p>
+                    <p class="fs-30 mb-2">
+                      Sale:- <%= saleAndPurchaseCommodities[i].sale_commodity %>
+                    </p>
+                    <p class="fs-30 mb-2">
+                      Purchase:- <%= saleAndPurchaseCommodities[i].purchase_commodity %>
+                    </p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
      
-        <!-- <div class="col-md-3 mb-4 stretch-card transparent">
-          <div class="card card-tale">
-          <div class="card card-dark-blue"> <a href="/reported-users">
-              <div class="card-body">
-                <p class="mb-4">Reported Users</p>
-                <p class="fs-30 mb-2">
-                <%= reportedUserLength%>
-                </p>
-            </a>
-          </div>
-        </div>
-        </div> -->
+        
       </div>
-    
-    
-      <!-- <div class="col-md-3 mb-4 stretch-card transparent">
-        <div class="card card-light-blue">
-          <div class="card-body"> <a href="#">
-              <p class="mb-4">Terms & Conditions</p>
-              <p class="fs-30 mb-2">
-             
-              </p>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-md-3 mb-4 stretch-card transparent">
-        <div class="card card-light-blue">
-          <div class="card-body"> <a href="#">
-              <p class="mb-4">About Us</p>
-              <p class="fs-30 mb-2">
-            
-              </p>
-            </a>
-          </div>
-        </div>
-      </div> -->
       
     </div>
-  <!-- </div> -->
 
   <!-- content-wrapper ends -->
 

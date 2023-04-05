@@ -22114,6 +22114,25 @@ code {
   background: #f59095;
 }
 
+.card.card-light-pink {
+  background: #d962ca;
+  color: #ffffff;
+}
+
+.card.card-light-pink:hover {
+  background: #d97acd;
+}
+
+
+.card.card-light-megenta {
+  background: #c17cf5;
+  color: #ffffff;
+}
+
+.card.card-light-megenta:hover {
+  background: #cb94f5;
+}
+
 .card-inverse-primary {
   background: rgba(75, 73, 172, 0.2);
   border: 1px solid #45439e;
@@ -24631,9 +24650,11 @@ dl li {
 }
 
 .table td img, .jsgrid .jsgrid-table td img {
-  width: 36px;
+  width: 29px;
   /* height: 36px; */
   border-radius: 100%;
+  border: 1px solid #cbcbcb;
+  padding: 4px;
 }
 
 .table td .badge, .jsgrid .jsgrid-table td .badge {
