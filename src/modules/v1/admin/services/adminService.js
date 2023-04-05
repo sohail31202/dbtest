@@ -12,6 +12,7 @@ import DateTimeUtil from "~/utils/DateTimeUtil";
 import passwordHash from "~/utils/passwordHash";
 import Email from "~/libraries/Email";
 import JwtAuthSecurity from "~/libraries/JwtAuthSecurity";
+import { forEach } from "lodash";
 
 
 const email = new Email();
@@ -48,21 +49,23 @@ export class adminService {
             salePurchaseCol = [
                 "commodities.name",
                 `CONCAT('${s3BasePath}${imageFolder}/', commodities.icon_image ) AS icon_image`,
-                "COALESCE(SUM(sale_trans.commodity_in_gram), 0) as sale_commodity",
-                "COALESCE(SUM(purchase_trans.commodity_in_gram), 0) as purchase_commodity"
+                "COALESCE(SUM(users_transactions.commodity_in_gram), 0) as sale_commodity"
             ];
             
             const userLength = await AdminModelObj.fetchObj(where, tableConstants.USERS);
-            const saleAndPurchaseCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity(salePurchaseCol);
-            console.log("saleAndPurchaseCommodityQuantity--", saleAndPurchaseCommodityQuantity);
-            // const reportedUserLength = await AdminModelObj.fetchAll(tableConstants.REPORTED_USERS);
-
+            const saleCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity(salePurchaseCol, [1, 8]);
+            console.log("saleCommodityQuantity--", saleCommodityQuantity);
+            const purchaseCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity();
+            console.log("purchaseCommodityQuantity--", purchaseCommodityQuantity);
+            
+            for (let i = 0; i < saleCommodityQuantity.length; i++) {
+                const element = saleCommodityQuantity[i];
+                element.purchase_commodity = purchaseCommodityQuantity[i].purchase_commodity;
+            }
             // Return response.
             let returnData = {
-                // "intentLength": intentLength.length,
                 "userLength": userLength.length,
-                "saleAndPurchaseCommodity": saleAndPurchaseCommodityQuantity
-                // "reportedUserLength": reportedUserLength.length
+                "saleAndPurchaseCommodity": saleCommodityQuantity
             }
 
             // Return true response.
