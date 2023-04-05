@@ -35,7 +35,7 @@ var adminServiceObj = new adminService();
 const getDashboard = async (req, res, next) => {
     adminServiceObj.getDashboard(req, res).then((returnData) => {
 
-        const colorArr = ["card-light-megenta", "card-light-danger", "card-light-blue", "card-light-pink", "card-light-megenta", "card-dark-blue"]
+        const colorArr = ["card-light-megenta", "card-light-danger", "card-light-blue", "card-light-pink",  "card-dark-blue", "card-light-megenta", "card-light-danger", "card-light-blue", "card-light-pink",  "card-dark-blue"]
         
         // Return data into dashboard page.
         let data = {
