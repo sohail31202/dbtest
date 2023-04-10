@@ -184,6 +184,11 @@ const getTransactionMsg = (val, preparedTransMeta) => {
      return {"title":trans_msg, "transaction_type_text":trans_text, "transaction_ammount": transaction_ammount};
 
 }
+
+const formatAmount = (amount, roundDigit = commonConstants.ROUND_DIGIT_WEIGHT) => {
+    return Number( amount ).toLocaleString("en-US", {minimumFractionDigits: roundDigit })
+}
+
 const commonHelpers = {
     getOtp,
     generateUUID,
@@ -194,7 +199,8 @@ const commonHelpers = {
     unEscape,
     prepUserName,
     roundNumber,
-    getTransactionMsg
+    getTransactionMsg,
+    formatAmount
 }
 
 export default commonHelpers

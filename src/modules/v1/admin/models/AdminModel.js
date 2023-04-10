@@ -46,9 +46,6 @@ export default class AdminModel extends BaseModel {
                     .onNotNull('users_transactions.commodity_in_gram')
             })
             .groupBy("commodities.id");
-
-            console.log("getSaleAndPurchaseCommodity last query--", prepareQuery.toString());
-
         return prepareQuery = prepareQuery.then((res) => {
             return res;
         });
