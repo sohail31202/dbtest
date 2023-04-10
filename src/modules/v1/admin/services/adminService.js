@@ -54,13 +54,15 @@ export class adminService {
             
             const userLength = await AdminModelObj.fetchObj(where, tableConstants.USERS);
             const saleCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity(salePurchaseCol, [1, 8]);
-            console.log("saleCommodityQuantity--", saleCommodityQuantity);
             const purchaseCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity();
-            console.log("purchaseCommodityQuantity--", purchaseCommodityQuantity);
             
             for (let i = 0; i < saleCommodityQuantity.length; i++) {
                 const element = saleCommodityQuantity[i];
-                element.purchase_commodity = purchaseCommodityQuantity[i].purchase_commodity;
+
+
+                saleCommodityQuantity[i].sale_commodity = await commonHelpers.formatAmount(saleCommodityQuantity[i].sale_commodity);
+
+                element.purchase_commodity = await commonHelpers.formatAmount(purchaseCommodityQuantity[i].purchase_commodity);
             }
             // Return response.
             let returnData = {
