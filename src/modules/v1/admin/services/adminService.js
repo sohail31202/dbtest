@@ -12,7 +12,7 @@ import DateTimeUtil from "~/utils/DateTimeUtil";
 import passwordHash from "~/utils/passwordHash";
 import Email from "~/libraries/Email";
 import JwtAuthSecurity from "~/libraries/JwtAuthSecurity";
-import { forEach } from "lodash";
+import { filter, forEach, result } from "lodash";
 
 
 const email = new Email();
@@ -46,28 +46,43 @@ export class adminService {
             const where = {
                 "is_deleted": 0
             },
-            salePurchaseCol = [
-                "commodities.name",
-                `CONCAT('${s3BasePath}${imageFolder}/', commodities.icon_image ) AS icon_image`,
-                "COALESCE(SUM(users_transactions.commodity_in_gram), 0) as sale_commodity"
-            ];
-            
+                salePurchaseCol = [
+                    "commodities.name",
+                    `CONCAT('${s3BasePath}${imageFolder}/', commodities.icon_image ) AS icon_image`,
+                    "COALESCE(SUM(users_transactions.commodity_in_gram), 0) as sale_commodity",
+                    "commodities.id as commodity_id"
+                ];
+
             const userLength = await AdminModelObj.fetchObj(where, tableConstants.USERS);
+            const totalProfit = await AdminModelObj.fetchTotalProfit(tableConstants.USER_TRANSACTIONS);
             const saleCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity(salePurchaseCol, [1, 8]);
             const purchaseCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity();
-            
+            const result = await AdminModelObj.fetchCommodityProfit(tableConstants.USER_TRANSACTIONS);
+
             for (let i = 0; i < saleCommodityQuantity.length; i++) {
                 const element = saleCommodityQuantity[i];
 
+                const commodity_profit = await result.filter(function(result) {
+                    return result.commodity_id == element.commodity_id;
+                })
 
                 saleCommodityQuantity[i].sale_commodity = await commonHelpers.formatAmount(saleCommodityQuantity[i].sale_commodity);
 
                 element.purchase_commodity = await commonHelpers.formatAmount(purchaseCommodityQuantity[i].purchase_commodity);
+                let commodity_profit_amount = 0;
+
+                if(commodity_profit[0]!==undefined){
+                    commodity_profit_amount= commodity_profit[0].profit;
+                }
+                
+                element.commodity_profit = commodity_profit_amount;
+                // element.profit = await commonHelpers.formatAmount(element.total);
             }
             // Return response.
             let returnData = {
                 "userLength": userLength.length,
-                "saleAndPurchaseCommodity": saleCommodityQuantity
+                "saleAndPurchaseCommodity": saleCommodityQuantity,
+                "totalProfit": totalProfit
             }
 
             // Return true response.

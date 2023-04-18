@@ -25,10 +25,13 @@
                 <div class="card-body"> <a href="javascript:void(0)">
                     <p class="mb-4"><%= saleAndPurchaseCommodities[i].name %></p>
                     <p class="fs-20 mb-2">
-                      Sale:- <%= saleAndPurchaseCommodities[i].sale_commodity %> Gram
+                      Sold:- <%= saleAndPurchaseCommodities[i].sale_commodity %> Gram
                     </p>
                     <p class="fs-20 mb-2">
-                      Purchase:- <%= saleAndPurchaseCommodities[i].purchase_commodity %> Gram
+                      Bought:- <%= saleAndPurchaseCommodities[i].purchase_commodity %> Gram
+                    </p>
+                    <p class="fs-20 mb-2">
+                      Profit:- <%= saleAndPurchaseCommodities[i].commodity_profit %> USD
                     </p>
                   </a>
                 </div>
@@ -37,6 +40,19 @@
           </div>
         <% } %>
      
+        <div class="col-md-3 mb-4 stretch-card transparent">
+          <div class="card card-tale">
+            <div class="card-light-blue">
+              <div class="card-body"> <a href="javascript:void(0)">
+                  <p class="mb-4">Total Profit</p>
+                  <p class="fs-30 mb-2">
+                    <%= totalProfit[0].total%> USD
+                  </p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
         
       </div>
       

@@ -333,7 +333,6 @@ export class userService {
             
 
             const userData = await userModelObj.getuserTransactionData(start, length, order_data, order, where);
-            
             var total_records_with_filter = userData.length;
             const metaWhere = {
                 "data_ref_key": 'transaction_msg'
@@ -346,7 +345,6 @@ export class userService {
                 let value = getMessageFromMetadata[index]
                 preparedTransMeta[value.value_code] = value;
             }
-            
             userData.forEach( (element, index) => {
                 element.s_no = index + 1 + Number(start)
                 const transectionMsg = commonHelpers.getTransactionMsg(element, preparedTransMeta),
@@ -367,7 +365,7 @@ export class userService {
            
             res.json(output);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             logger.error(error);
             return error;
         }

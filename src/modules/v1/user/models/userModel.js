@@ -167,7 +167,9 @@ export default class userModel extends BaseModel {
             "quantity", 
             "quantity_unit",
             "cash_with_fee",
-            "cash_unit"
+            "cash_unit",
+            "payment_gateway_fee + commodity_amount_unit as gateway_fee",
+            "admin_brokerage + commodity_amount_unit as brokerage"
         ];
 
         var result = knex('users_transactions')

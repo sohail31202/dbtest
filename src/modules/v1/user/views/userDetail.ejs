@@ -188,6 +188,10 @@
                                                                         <th scope="col">S.NO.</th>
                                                                         <th scope="col">Transaction Type</th>
                                                                         <th scope="col">Description </th>
+                                                                        <th scope="col">Sender Name </th>
+                                                                        <th scope="col">Receiver Name </th>
+                                                                        <th scope="col">Payment Gateway Fee</th>
+                                                                        <th scope="col">Admin Profit</th>
                                                                         <th scope="col">Amount</th>
                                                                         <th scope="col">Date</th>
                                                                     </tr>
@@ -222,7 +226,7 @@
                         orderable: false,
                         render: function(data, type, row) {
                         if ( type === 'display') {
-                            return $.fn.dataTable.render.ellipsis(100)(data, type, row);          
+                            return $.fn.dataTable.render.ellipsis(50)(data, type, row);          
                         }
                         return data;
                         }
@@ -245,6 +249,10 @@
                         { data: 's_no' },
                         { data: 'transaction_type_text' },
                         { data: 'title' },
+                        { data: 'sender_name' },
+                        { data: 'receiver_name' },
+                        { data: 'gateway_fee' },
+                        { data: 'brokerage' },
                         { data: 'transaction_ammount' },
                         { data: 'transaction_date' }
                     ]
