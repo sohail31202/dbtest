@@ -170,8 +170,8 @@ export default class userModel extends BaseModel {
             "quantity_unit",
             "cash_with_fee",
             "cash_unit",
-            "CONCAT(payment_gateway_fee, commodity_amount_unit) as gateway_fee",
-            "CONCAT(admin_brokerage, commodity_amount_unit) as brokerage"
+            "CONCAT(commodity_amount_unit, FORMAT(payment_gateway_fee, " + commonConstants.ROUND_DIGIT + ")) as gateway_fee",
+            "CONCAT(commodity_amount_unit, FORMAT(admin_brokerage, " + commonConstants.ROUND_DIGIT + ")) as brokerage"
         ];
 
         var result = knex('users_transactions')
@@ -195,7 +195,6 @@ export default class userModel extends BaseModel {
         } else {
             result.orderBy(order_data, order);
         }
-        //console.log(result.toString());
         return result.then(function (rows) {
             return rows;
         });

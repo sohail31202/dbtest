@@ -46,7 +46,7 @@
               <div class="card-body"> <a href="javascript:void(0)">
                   <p class="mb-4">Total Profit</p>
                   <p class="fs-30 mb-2">
-                    <%= totalProfit[0].total%> USD
+                    <%= totalProfit[0].total == null ? 0 : totalProfit[0].total %> USD
                   </p>
                 </a>
               </div>

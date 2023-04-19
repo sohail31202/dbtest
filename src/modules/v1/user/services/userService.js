@@ -283,12 +283,12 @@ export class userService {
                 }
 
                 const userCash = cashData ? await commonHelpers.roundNumber(cashData.total_cash, 2) : 0;
-                const formamattedCash = await commonHelpers.formatAmount(userCash);
+                const formamattedCash = await commonHelpers.formatAmount(userCash, commonConstants.ROUND_DIGIT);
                 commodityValue = await commonHelpers.roundNumber(commodityValue, 2);
-                const formamattedCommodityValue = await commonHelpers.formatAmount(commodityValue);
+                const formamattedCommodityValue = await commonHelpers.formatAmount(commodityValue, commonConstants.ROUND_DIGIT);
 
                 const totalAmount = userCash + commodityValue;
-                const formamattedTotalAmount = await commonHelpers.formatAmount(totalAmount);
+                const formamattedTotalAmount = await commonHelpers.formatAmount(totalAmount, commonConstants.ROUND_DIGIT);
 
 
                 // Set response
@@ -352,6 +352,13 @@ export class userService {
             }
             userData.forEach( (element, index) => {
                 element.s_no = index + 1 + Number(start)
+                
+                if(element.gateway_fee != null){
+                    element.gateway_fee = commonHelpers.replace_currency_to_symbol(element.gateway_fee);
+                }
+                if(element.brokerage != null){
+                    element.brokerage = commonHelpers.replace_currency_to_symbol(element.brokerage);
+                }
                 const transectionMsg = commonHelpers.getTransactionMsg(element, preparedTransMeta),
                     joinedAt = DateTimeUtil.changeFormat(element.transaction_date, "DD/MM/YYYY hh:mm A");
                     
@@ -360,12 +367,7 @@ export class userService {
                 element.transaction_ammount = transectionMsg.transaction_ammount
                 element.transaction_date = joinedAt
 
-                if(element.gateway_fee != null){
-                    element.gateway_fee = commonHelpers.replace_currency_to_symbol(element.gateway_fee);
-                }
-                if(element.brokerage != null){
-                    element.brokerage = commonHelpers.replace_currency_to_symbol(element.brokerage);
-                }
+                
             });
             
             var output = {

@@ -48,7 +48,6 @@ const getDashboard = async (req, res, next) => {
             "reportedUserLength": 0,
             "colorArr": colorArr,
         };
-
         res.render('dashboard.ejs', data);
     })
 }
