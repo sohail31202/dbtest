@@ -170,6 +170,7 @@ export default class userModel extends BaseModel {
             "quantity_unit",
             "cash_with_fee",
             "cash_unit",
+            "reference_id",
             "CONCAT(commodity_amount_unit, FORMAT(payment_gateway_fee, " + commonConstants.ROUND_DIGIT + ")) as gateway_fee",
             "CONCAT(commodity_amount_unit, FORMAT(admin_brokerage, " + commonConstants.ROUND_DIGIT + ")) as brokerage"
         ];
