@@ -283,14 +283,19 @@ export class userService {
                 }
 
                 const userCash = cashData ? await commonHelpers.roundNumber(cashData.total_cash, 2) : 0;
+                const formamattedCash = await commonHelpers.formatAmount(userCash);
                 commodityValue = await commonHelpers.roundNumber(commodityValue, 2);
+                const formamattedCommodityValue = await commonHelpers.formatAmount(commodityValue);
+
                 const totalAmount = userCash + commodityValue;
+                const formamattedTotalAmount = await commonHelpers.formatAmount(totalAmount);
+
 
                 // Set response
                 const commoditylistData = {
-                    "user_cash": `$${userCash}`,
-                    "commodity_value": `$${commodityValue}`,
-                    "total_amount": `$${totalAmount}`,
+                    "user_cash": `$${formamattedCash}`,
+                    "commodity_value": `$${formamattedCommodityValue}`,
+                    "total_amount": `$${formamattedTotalAmount}`,
                     "commodities": vaultData
                 };
 
@@ -354,6 +359,13 @@ export class userService {
                 element.transaction_type_text = transectionMsg.transaction_type_text
                 element.transaction_ammount = transectionMsg.transaction_ammount
                 element.transaction_date = joinedAt
+
+                if(element.gateway_fee != null){
+                    element.gateway_fee = commonHelpers.replace_currency_to_symbol(element.gateway_fee);
+                }
+                if(element.brokerage != null){
+                    element.brokerage = commonHelpers.replace_currency_to_symbol(element.brokerage);
+                }
             });
             
             var output = {
