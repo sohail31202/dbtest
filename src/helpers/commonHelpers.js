@@ -188,6 +188,9 @@ const getTransactionMsg = (val, preparedTransMeta) => {
         case commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY:
             transaction_ammount = val.transaction_quantity;
             break;
+        case commonConstants.TRANSTYPE_PAY_FOR_SHIPMENT:
+            transaction_ammount = val.transaction_cash;
+            break;
      }
 
      return {"title":trans_msg, "transaction_type_text":trans_text, "transaction_ammount": transaction_ammount};
