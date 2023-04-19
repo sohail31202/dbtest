@@ -3,6 +3,7 @@ import tableConstants from '~/constants/tableConstants'
 import commonConstants from '~/constants/commonConstants'
 import knexJs from "knex";
 import knexConfig from "~/config/knexfile";
+import { result } from 'lodash';
 const knex = knexJs(knexConfig);
 const baseModelObj = new BaseModel();
 const S3BasePath = process.env.S3_BASE_PATH,
@@ -151,27 +152,30 @@ export default class userModel extends BaseModel {
         });
     }
 
-    async getuserTransactionData( start = 0, limit = 10, order_data, order,where) {
+    async getuserTransactionData(start = 0, limit = 10, order_data, order, where) {
+
         const sel = [
             "users_transactions.id",
             "transaction_type",
-            "CONCAT( commodity_amount, commodity_amount_unit) as transaction_commodity_amount",
-            "CONCAT( quantity, quantity_unit) as transaction_quantity",
-            "CONCAT( cash, cash_unit) as transaction_cash",
+            "CONCAT(commodity_amount_unit, FORMAT(commodity_amount," + commonConstants.ROUND_DIGIT + ")) as transaction_commodity_amount",
+            "CONCAT( quantity, ' ', quantity_unit) as transaction_quantity",
+            "CONCAT(cash_unit, FORMAT(cash, " + commonConstants.ROUND_DIGIT + ")) as transaction_cash",
             "commodity_id",
             "sender.fullname as sender_name",
             "receiver.fullname as receiver_name",
             "commodities.name as commodity_name",
             "transaction_date",
             "request_id",
-            "quantity", 
+            "quantity",
             "quantity_unit",
             "cash_with_fee",
-            "cash_unit"
+            "cash_unit",
+            "CONCAT(commodity_amount_unit, FORMAT(payment_gateway_fee, " + commonConstants.ROUND_DIGIT + ")) as gateway_fee",
+            "CONCAT(commodity_amount_unit, FORMAT(admin_brokerage, " + commonConstants.ROUND_DIGIT + ")) as brokerage"
         ];
 
         var result = knex('users_transactions')
-        //left join app_metadata on data_ref_key='transaction_msg' and value_code=transaction_type
+            //left join app_metadata on data_ref_key='transaction_msg' and value_code=transaction_type
             .select(knex.raw(sel))
             .limit(limit)
             .offset(start)
@@ -184,14 +188,13 @@ export default class userModel extends BaseModel {
             })
             .groupBy('id')
             //.orderBy(order_data, order)
-            .where('users_transactions.user_id',where)
-            
-            if(order_data=='additional_data'){
-                result.orderBy(knex.raw('JSON_EXTRACT(additional_data,"$.transaction_type_text")'), order);
-            }else{
-                result.orderBy(order_data, order);
-            }
-        //console.log(result.toString());
+            .where('users_transactions.user_id', where)
+
+        if (order_data == 'additional_data') {
+            result.orderBy(knex.raw('JSON_EXTRACT(additional_data,"$.transaction_type_text")'), order);
+        } else {
+            result.orderBy(order_data, order);
+        }
         return result.then(function (rows) {
             return rows;
         });
@@ -202,10 +205,10 @@ export default class userModel extends BaseModel {
             .select(knex.raw(cols))
             .leftJoin(tableConstants.USER_COMMODITIES, function () {
                 this
-                  .on('users_commodities.commodity_id', 'commodities.id')
-                  .on('users_commodities.user_id', userId);
-              })
-              .orderBy("commodities.id", "ASC");
+                    .on('users_commodities.commodity_id', 'commodities.id')
+                    .on('users_commodities.user_id', userId);
+            })
+            .orderBy("commodities.id", "ASC");
         prepareQuery = prepareQuery.then((res) => {
             return res;
         });

@@ -283,14 +283,19 @@ export class userService {
                 }
 
                 const userCash = cashData ? await commonHelpers.roundNumber(cashData.total_cash, 2) : 0;
+                const formamattedCash = await commonHelpers.formatAmount(userCash, commonConstants.ROUND_DIGIT);
                 commodityValue = await commonHelpers.roundNumber(commodityValue, 2);
+                const formamattedCommodityValue = await commonHelpers.formatAmount(commodityValue, commonConstants.ROUND_DIGIT);
+
                 const totalAmount = userCash + commodityValue;
+                const formamattedTotalAmount = await commonHelpers.formatAmount(totalAmount, commonConstants.ROUND_DIGIT);
+
 
                 // Set response
                 const commoditylistData = {
-                    "user_cash": `$${userCash}`,
-                    "commodity_value": `$${commodityValue}`,
-                    "total_amount": `$${totalAmount}`,
+                    "user_cash": `$${formamattedCash}`,
+                    "commodity_value": `$${formamattedCommodityValue}`,
+                    "total_amount": `$${formamattedTotalAmount}`,
                     "commodities": vaultData
                 };
 
@@ -333,7 +338,6 @@ export class userService {
             
 
             const userData = await userModelObj.getuserTransactionData(start, length, order_data, order, where);
-            
             var total_records_with_filter = userData.length;
             const metaWhere = {
                 "data_ref_key": 'transaction_msg'
@@ -346,9 +350,15 @@ export class userService {
                 let value = getMessageFromMetadata[index]
                 preparedTransMeta[value.value_code] = value;
             }
-            
             userData.forEach( (element, index) => {
                 element.s_no = index + 1 + Number(start)
+                
+                if(element.gateway_fee != null){
+                    element.gateway_fee = commonHelpers.replace_currency_to_symbol(element.gateway_fee);
+                }
+                if(element.brokerage != null){
+                    element.brokerage = commonHelpers.replace_currency_to_symbol(element.brokerage);
+                }
                 const transectionMsg = commonHelpers.getTransactionMsg(element, preparedTransMeta),
                     joinedAt = DateTimeUtil.changeFormat(element.transaction_date, "DD/MM/YYYY hh:mm A");
                     
@@ -356,6 +366,8 @@ export class userService {
                 element.transaction_type_text = transectionMsg.transaction_type_text
                 element.transaction_ammount = transectionMsg.transaction_ammount
                 element.transaction_date = joinedAt
+
+                
             });
             
             var output = {
@@ -367,7 +379,7 @@ export class userService {
            
             res.json(output);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             logger.error(error);
             return error;
         }

@@ -43,11 +43,11 @@ const getDashboard = async (req, res, next) => {
             'currentYear': currentYear,
             'intentLength': 0,
             "userLength": returnData.response.userLength,
+            "totalProfit": returnData.response.totalProfit,
             "saleAndPurchaseCommodities": returnData.response.saleAndPurchaseCommodity,
             "reportedUserLength": 0,
             "colorArr": colorArr,
         };
-
         res.render('dashboard.ejs', data);
     })
 }

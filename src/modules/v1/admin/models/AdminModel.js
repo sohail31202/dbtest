@@ -28,7 +28,7 @@ export default class AdminModel extends BaseModel {
         });
     }
 
-   
+
     /**
      * Get Sale And Purchase Commodoty Quantity.
      *
@@ -37,10 +37,10 @@ export default class AdminModel extends BaseModel {
      * @param {String} tableName The query to match against.
      * @returns {Array} An array holding resultant models.
      */
-    getSaleAndPurchaseCommodity(query = [ "COALESCE(SUM(users_transactions.commodity_in_gram), 0) as purchase_commodity" ], transType = [7, 9]) {
+    getSaleAndPurchaseCommodity(query = ["COALESCE(SUM(users_transactions.commodity_in_gram), 0) as purchase_commodity", "commodities.id as commodity_id"], transType = [7, 9]) {
         let prepareQuery = knex("commodities")
-            .select(knex.raw( query ))
-            .leftJoin('users_transactions', function() {
+            .select(knex.raw(query))
+            .leftJoin('users_transactions', function () {
                 this.on('users_transactions.commodity_id', '=', 'commodities.id')
                     .onIn('users_transactions.transaction_type', transType)
                     .onNotNull('users_transactions.commodity_in_gram')
@@ -59,17 +59,17 @@ export default class AdminModel extends BaseModel {
      * @param {*} where 
      * @returns 
      */
-    getUserWithLimitOffset(search = "", start = 0, limit = 10, where = "", column_name = "", sorting="", column_index="0") {
+    getUserWithLimitOffset(search = "", start = 0, limit = 10, where = "", column_name = "", sorting = "", column_index = "0") {
         var result = knex('contacts')
             .limit(limit)
             .offset(start)
-            
+
         if (search || where) {
             result.where(knex.raw(search));
         }
         if (column_index == 0) {
             result.orderBy('id', 'desc')
-        } else{
+        } else {
             result.orderBy(column_name, sorting)
         }
 
@@ -79,49 +79,68 @@ export default class AdminModel extends BaseModel {
     }
 
 
-       /**
+    /**
+  * Create Query for jobs list.
+  * @param {*} search 
+  * @param {*} where 
+  * @returns 
+  */
+    getTotalUserCountJobs(search = "", where = "") {
+        var result = knex('jobs')
+            .count('id as total')
+
+        if (search || where) {
+
+            result.where(knex.raw(search));
+        }
+        return result.then(function (rows) {
+            return rows[0].total;
+        });
+    }
+
+    /**
      * Create Query for jobs list.
      * @param {*} search 
+     * @param {*} start 
+     * @param {*} limit 
      * @param {*} where 
      * @returns 
      */
-        getTotalUserCountJobs(search = "", where = "") {
-            var result = knex('jobs')
-                .count('id as total')
-               
-            if (search || where) {
-    
-                result.where(knex.raw(search));
-            }
-            return result.then(function (rows) {
-                return rows[0].total;
-            });
+
+    getUserWithLimitOffsetJobs(search = "", start = 0, limit = 10, where = "", column_name = "", sorting = "", column_index = "0") {
+
+        var result = knex('jobs')
+            .limit(limit)
+            .offset(start)
+        if (search || where) {
+            result.where(knex.raw(search));
         }
-    
-        /**
-         * Create Query for jobs list.
-         * @param {*} search 
-         * @param {*} start 
-         * @param {*} limit 
-         * @param {*} where 
-         * @returns 
-         */
-        getUserWithLimitOffsetJobs(search = "", start = 0, limit = 10, where = "", column_name = "", sorting="", column_index="0") {
-       
-            var result = knex('jobs')
-                .limit(limit)
-                .offset(start)
-            if (search || where) {
-                result.where(knex.raw(search));
-            }
-            if (column_index == 0) {
-                result.orderBy('id', 'desc')
-            } else {
-                result.orderBy(column_name, sorting)
-            }
-            return result.then(function (rows) {
-               
-                return rows;
-            });
+        if (column_index == 0) {
+            result.orderBy('id', 'desc')
+        } else {
+            result.orderBy(column_name, sorting)
         }
+        return result.then(function (rows) {
+
+            return rows;
+        });
+    }
+
+    fetchTotalProfit(tableName) {
+        let Query = knex(tableName)
+            .select(knex.raw('SUM(admin_brokerage_usd) as total'))
+        return Query = Query.then((res) => {
+            return res;
+        })
+    }
+
+    fetchCommodityProfit(tableName) {
+      let result =  knex(tableName)
+        .select('commodity_id', knex.raw('SUM(admin_brokerage_usd) as profit'))
+        .groupBy('commodity_id')
+        .whereNotNull('admin_brokerage_usd')
+        return result = result.then((res) => {
+            return res;
+        })
+    }
 }

@@ -39,7 +39,8 @@ const commonConstants = {
     "TRANSTYPE_COMMODITY_TO_CASH":7,
     "TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY":8,
     "TRANSTYPE_DELIVER_PHYSICAL_COMMODITY":9,
-    "ROUND_DIGIT_WEIGHT":4
+    "ROUND_DIGIT_WEIGHT":4,
+    "ROUND_DIGIT":2,
     
 };
 export default commonConstants;
