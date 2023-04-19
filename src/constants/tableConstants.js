@@ -18,6 +18,7 @@ const tableConstants = {
 "USER_COMMODITIES":"users_commodities",
 "COMMODITIES":"commodities",
 "ADMIN": "admin",
-"ADMIN_FEE_SETTING": "admin_fee_setting"
+"ADMIN_FEE_SETTING": "admin_fee_setting",
+"USER_TRANSACTIONS":"users_transactions"
 };
 export default tableConstants;

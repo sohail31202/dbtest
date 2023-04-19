@@ -150,6 +150,15 @@ const getTransactionMsg = (val, preparedTransMeta) => {
         trans_msg = eval('`'+parsedMeta.additional_msg+'`');
      }
 
+    if(val.transaction_commodity_amount != null){
+        val.transaction_commodity_amount = replace_currency_to_symbol(val.transaction_commodity_amount);
+    }
+
+    if(val.transaction_cash!=null){
+        val.transaction_cash = replace_currency_to_symbol(val.transaction_cash);
+    }
+    
+
      var transaction_ammount=0;
      switch (val.transaction_type) {
         case commonConstants.TRANSTYPE_ADD_COMMODITY:
@@ -185,6 +194,13 @@ const getTransactionMsg = (val, preparedTransMeta) => {
 
 }
 
+const replace_currency_to_symbol = (amount_str) => {
+    amount_str =amount_str.replace(/USD/gi, "$");
+    amount_str =amount_str.replace(/EUR/gi, "€");
+    amount_str =amount_str.replace(/CAD/gi, "C$");
+    return amount_str;
+}
+
 const formatAmount = (amount, roundDigit = commonConstants.ROUND_DIGIT_WEIGHT) => {
     return Number( amount ).toLocaleString("en-US", {minimumFractionDigits: roundDigit })
 }
@@ -200,7 +216,8 @@ const commonHelpers = {
     prepUserName,
     roundNumber,
     getTransactionMsg,
-    formatAmount
+    formatAmount,
+    replace_currency_to_symbol
 }
 
 export default commonHelpers
