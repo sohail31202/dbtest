@@ -55,7 +55,6 @@ export class adminService {
 
             const userLength = await AdminModelObj.fetchObj(where, tableConstants.USERS);
             const totalProfit = await AdminModelObj.fetchTotalProfit(tableConstants.USER_TRANSACTIONS);
-            console.log("totalProfit", totalProfit);
             const saleCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity(salePurchaseCol, [1, 8]);
             const purchaseCommodityQuantity = await AdminModelObj.getSaleAndPurchaseCommodity();
             const result = await AdminModelObj.fetchCommodityProfit(tableConstants.USER_TRANSACTIONS);
