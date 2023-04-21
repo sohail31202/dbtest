@@ -64,17 +64,28 @@ const shipmentDetail = async (req, res, next) => {
 
 }
 
-const shipmentCreate = async (req, res, next) => {
+const createShipment = async (req, res, next) => {
     
-    // shipmentServiceObj.shipmentCreate(req).then((userData) => {       
+    shipmentServiceObj.createShipment(req).then((shipmentDetail) => {       
             let data = {
                 'title': 'Shipment create',
                 'currentYear': currentYear,
-                // // "shipmentData": userData
+                 "shipmentDetail": shipmentDetail
             };
             res.render('shipmentCreate.ejs', data);
-    // })
+    })
 
+}
+
+const updateShipment = async (req, res, next) => {
+    console.log("you are in update shipment");
+    shipmentServiceObj.updateShipment(req).then((shipmentData) =>{
+        let data = {
+            'title': 'Update shipment',
+            'currentYear': currentYear
+        }
+        
+    })
 }
 
 // export all functions
@@ -82,7 +93,8 @@ const shipmentController = {
     getShipment,
     shipmentlist,
     shipmentDetail,
-    shipmentCreate
+    createShipment,
+    updateShipment
     // deleteUser,
     // statusChanged,
     // userTransectionlist

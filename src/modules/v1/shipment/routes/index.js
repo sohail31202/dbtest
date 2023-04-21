@@ -16,10 +16,10 @@ shipment.post('/shipment-list', sessionServices, shipmentController.shipmentlist
 shipment.get("/shipping-detail/:shipmentId", sessionServices, shipmentController.shipmentDetail);
 
 // Get user details
-shipment.get("/create-shipment", sessionServices, shipmentController.shipmentCreate);
+shipment.get("/create-shipment/:shipmentId", sessionServices, shipmentController.createShipment);
 
-// // Delete user
-// user.post('/delete-user', sessionServices, userController.deleteUser);
+// Delete user
+shipment.post('/update-shipment-detail/:shipmentId', sessionServices, shipmentController.updateShipment);
 
 // // change-user-status
 // user.post('/change-user-status', sessionServices, userController.statusChanged);

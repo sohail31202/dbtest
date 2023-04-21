@@ -101,7 +101,7 @@ export class shipmentService {
 
                 // when status 1 & shipment type 8
                 if (element.status == 1 && element.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY) {
-                    element.action = `<a href="create-shipment" class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>`
+                    element.action = `<a href="create-shipment/${encId}" class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>`
                 }
 
                 // when status 2 & shipment type 8 or when status 3 & shipment type 9
@@ -160,8 +160,8 @@ export class shipmentService {
 
     async shipmentDetail(req, res) {
         try {
-            req.params.shipmentId = commonHelpers.base64Decode(req.params.shipmentId);
-            const where = { "user_shipments.id": req.params.shipmentId };
+            const encIds = commonHelpers.base64Decode(req.params.shipmentId);
+            const where = { "user_shipments.id": encIds };
             const shipmentData = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
             if (shipmentData.shipment_charge != null) {
                 shipmentData.shipment_charge = commonHelpers.replace_currency_to_symbol(shipmentData.shipment_charge);
@@ -193,8 +193,137 @@ export class shipmentService {
 
             const changeFormat = DateTimeUtil.changeFormat(shipmentData.created_at, "DD/MM/YYYY");
             shipmentData.created_at = changeFormat;
-
+            
             return shipmentData;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
+    async createShipment(req, res){
+        try {
+
+            const encId = commonHelpers.base64Decode(req.params.shipmentId);
+            const where = { "user_shipments.id": encId };
+            const shipmentDetail = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
+            const addressData = JSON.parse(shipmentDetail.address_json);
+            shipmentDetail.address = (addressData.address_line1);
+            shipmentDetail.city = (addressData.city_locality);
+            shipmentDetail.state = (addressData.state_province);
+            shipmentDetail.pin_code = (addressData.postal_code);
+            shipmentDetail.id = req.params.shipmentId;
+            return shipmentDetail;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
+    async updateShipment(req, res){
+        try {
+            // req.params.id = req.params.id);
+            const bodyData = req.body,
+            rateId = commonHelpers.base64Decode( bodyData.rate_id ),
+            shipmentType = 8,
+            contentDescription = localeService.translate("COMMODITY_ADMIN_TO_USER"),
+            length = bodyData.p_length,
+            width = bodyData.p_width,
+            height = bodyData.p_height,
+            value = bodyData.p_weight,
+            packagedimension = {
+                "unit":"inch",
+                "length":length,
+                "width":width,
+                "height":height
+            },
+            gold_app_address = {
+                "company_name": "Gold App",
+                "name": "Gold Admin",
+                "phone": "111-111-1111",
+                "address_line1": "4009 Marathon Blvd",
+                "address_line2": "Suite 300",
+                "city_locality": "Austin",
+                "state_province": "TX",
+                "postal_code": "78756",
+                "country_code": "US",
+                "address_residential_indicator": "no"
+            },
+            where = { "id": rateId };
+            const userShipmentData = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
+            const commodityId = userShipmentData.commodity_id;
+            const commodityData = await shipmentModelObj.fetchShipmentDetail({"id": commodityId}, tableConstants.COMMODITIES);
+            const quantity = userShipmentData.quantity,
+                quantityUnit = userShipmentData.quantity_unit,
+                packageWeight = {
+                    "value":value,
+                    "unit":"gram"
+                };
+            // calculate amount according weight unit in usd.
+            if (quantityUnit == "grain") {
+                var commodityAmount = quantity * commodityData.rate_per_grain;
+
+                // Convert commodity weight grain to gram
+                quantity = await commonHelpers.weightUnitConversion(quantityUnit, quantity);
+                // Change commodity unit grain to gram
+                quantityUnit = "gram";
+            } else if (quantityUnit == "oz") {
+                var commodityAmount = quantity * commodityData.rate_per_ounce;
+            } else {
+                var commodityAmount = quantity * commodityData.rate_per_gram;
+            }
+
+            const shipment = {
+                "validate_address": "no_validation",
+                "ship_to": userShipmentData.address_json,
+                "ship_from": gold_app_address,
+                "customs": {
+                    "non_delivery": "return_to_sender",
+                    "contents": "merchandise",
+                    "customs_items": [
+                        {
+                            "description": commodityData.name,
+                            "quantity": 1,
+                            "value": {
+                                "amount": commodityAmount, // 580
+                                "currency": "USD" // "USD"
+                            },
+                            "weight": {
+                                "value": quantity, // 10
+                                "unit": quantityUnit == "oz" ? "ounce": quantityUnit // "gram"
+                            }
+                        }
+                    ]
+                },
+                "packages": [
+                    {
+                        "weight": packageWeight,
+                        "dimensions": packagedimension,
+                        "content_description": contentDescription,
+                        "external_package_id": commodityId
+                    }
+                ]
+            };
+            
+            const shippingRates = await ShipengineObj.fetchShippingRates(shipment);
+
+                // Check request data
+                if (shippingRates.status == false) {
+                    errorObj.status_code = StatusCodes.BAD_REQUEST;
+                    errorObj.message = shippingRates.data.response.data.errors[0].message;
+                    throw errorObj; 
+                }
+
+                if( shippingRates.data.rate_response.rates.length < 1 ) {
+                    errorObj.status_code = StatusCodes.BAD_REQUEST;
+                    errorObj.message = shippingRates.data.rate_response.errors[0].message;
+                    throw errorObj;
+                }
+                console.log("shippingRates---", shippingRates.data.rate_response.rates[0]);
+                const shipmentCharge = ( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount );
+
+            await shipmentModelObj.updateObj({"pkg_dimensions":JSON.stringify(packagedimension),"pkg_weight":JSON.stringify(packageWeight),"status":2}, where, tableConstants.USER_SHIPMENTS);
+            
         } catch (error) {
             console.log(error);
             return error;
