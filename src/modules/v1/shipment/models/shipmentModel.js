@@ -140,6 +140,7 @@ export default class shipmentModel extends BaseModel {
             "CONCAT(currency_unit, total_amount) as total_amount",
             "payment_method",
             "tracking_url",
+            "label_file_url",
             "pkg_weight",
             "pkg_dimensions"
         ];
@@ -148,7 +149,6 @@ export default class shipmentModel extends BaseModel {
 
             .select(knex.raw(sel))
             .where(whereQuery)
-            .orWhereNot('user_shipments.status', 0)
             .leftJoin('users', 'user_shipments.user_id', 'users.id')
             .leftJoin('commodities', 'user_shipments.commodity_id', 'commodities.id')
             .first()

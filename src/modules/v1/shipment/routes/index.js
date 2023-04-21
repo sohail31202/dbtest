@@ -15,6 +15,9 @@ shipment.post('/shipment-list', sessionServices, shipmentController.shipmentlist
 // Get user details
 shipment.get("/shipping-detail/:shipmentId", sessionServices, shipmentController.shipmentDetail);
 
+// Get user details
+shipment.get("/create-shipment", sessionServices, shipmentController.shipmentCreate);
+
 // // Delete user
 // user.post('/delete-user', sessionServices, userController.deleteUser);
 
