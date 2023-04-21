@@ -33,5 +33,6 @@
 	"STATUS_CHANGE_SUCCESS": "User status changed successfully.",
 	"CONTENT_UPDATED": "Content page updated successfully.",
 	"USER_STATUS_CHANGED": "User status has been updated.",
-	"FEE_UPDATED": "Fee has been updated successfully."
+	"FEE_UPDATED": "Fee has been updated successfully.",
+	"COMMODITY_ADMIN_TO_USER": "COMMODITY_ADMIN_TO_USER"
 }
