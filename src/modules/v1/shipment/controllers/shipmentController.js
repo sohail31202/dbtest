@@ -80,10 +80,7 @@ const createShipment = async (req, res, next) => {
 const updateShipment = async (req, res, next) => {
     console.log("you are in update shipment");
     shipmentServiceObj.updateShipment(req).then((shipmentData) =>{
-        let data = {
-            'title': 'Update shipment',
-            'currentYear': currentYear
-        }
+        res.json( shipmentData );
         
     })
 }

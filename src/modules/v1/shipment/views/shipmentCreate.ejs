@@ -229,11 +229,15 @@ console.log("id",id);
                 contentType: false,
                 processData: false,
                 success: function (response) {
+                    console.log("response", response);
                     if (response.status == "success") {
                         toastr.remove();
                         toastr.success(response.message);
                         window.setTimeout(function () {
-                            window.location.reload();
+                            
+                            // window.location.reload();
+                            window.location = `/shipping-detail/${response.id}`;
+                            
                         }, 1000);
                     }
                 },

@@ -131,6 +131,7 @@ export default class shipmentModel extends BaseModel {
             "shipment_type",
             "shipment_id",
             "user_shipments.status",
+            "user_shipments.commodity_id",
             "shipment_status",
             "CONCAT( currency_unit, shipment_charge) as shipment_charge",
             "address_json",

@@ -8,6 +8,9 @@ import {
 import commonHelpers from '~/helpers/commonHelpers'
 import DateTimeUtil from "~/utils/DateTimeUtil";
 
+import Shipengine from "~/libraries/Shipengine";
+const ShipengineObj = new Shipengine();
+
 const shipmentModelObj = new shipmentModel(),
     S3BasePath = process.env.S3_BASE_PATH,
     imgDirectory = commonConstants.IMAGE_FOLDER,
@@ -207,11 +210,19 @@ export class shipmentService {
             const encId = commonHelpers.base64Decode(req.params.shipmentId);
             const where = { "user_shipments.id": encId };
             const shipmentDetail = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
-            const addressData = JSON.parse(shipmentDetail.address_json);
-            shipmentDetail.address = (addressData.address_line1);
-            shipmentDetail.city = (addressData.city_locality);
-            shipmentDetail.state = (addressData.state_province);
-            shipmentDetail.pin_code = (addressData.postal_code);
+            if (!shipmentDetail.address_json) {
+                shipmentDetail.address = "N/A";
+                shipmentDetail.city = "N/A";
+                shipmentDetail.state = "N/A";
+                shipmentDetail.pin_code = "N/A";
+            }else {
+                const addressData = JSON.parse(shipmentDetail.address_json);
+                shipmentDetail.address = (addressData.address_line1);
+                shipmentDetail.city = (addressData.city_locality);
+                shipmentDetail.state = (addressData.state_province);
+                shipmentDetail.pin_code = (addressData.postal_code);
+            }
+            
             shipmentDetail.id = req.params.shipmentId;
             return shipmentDetail;
         } catch (error) {
@@ -222,11 +233,11 @@ export class shipmentService {
 
     async updateShipment(req, res){
         try {
+           
             // req.params.id = req.params.id);
             const bodyData = req.body,
             rateId = commonHelpers.base64Decode( bodyData.rate_id ),
-            shipmentType = 8,
-            contentDescription = localeService.translate("COMMODITY_ADMIN_TO_USER"),
+            contentDescription = "Receive commodity from GOLDAPP",
             length = bodyData.p_length,
             width = bodyData.p_width,
             height = bodyData.p_height,
@@ -250,15 +261,21 @@ export class shipmentService {
                 "address_residential_indicator": "no"
             },
             where = { "id": rateId };
-            const userShipmentData = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
+            const userShipmentData = await shipmentModelObj.fetchFirstObj(where, tableConstants.USER_SHIPMENTS);
+            console.log("userShipmentData", userShipmentData);
+            
             const commodityId = userShipmentData.commodity_id;
-            const commodityData = await shipmentModelObj.fetchShipmentDetail({"id": commodityId}, tableConstants.COMMODITIES);
+            const commodityData = await shipmentModelObj.fetchFirstObj({"id": commodityId}, tableConstants.COMMODITIES);
+            
+            console.log("commodityData", commodityData);
             const quantity = userShipmentData.quantity,
                 quantityUnit = userShipmentData.quantity_unit,
                 packageWeight = {
                     "value":value,
                     "unit":"gram"
                 };
+                console.log("quantity", quantity);
+            console.log("quantityUnit", quantityUnit);
             // calculate amount according weight unit in usd.
             if (quantityUnit == "grain") {
                 var commodityAmount = quantity * commodityData.rate_per_grain;
@@ -272,10 +289,10 @@ export class shipmentService {
             } else {
                 var commodityAmount = quantity * commodityData.rate_per_gram;
             }
-
+console.log("commodityAmount", commodityAmount);
             const shipment = {
                 "validate_address": "no_validation",
-                "ship_to": userShipmentData.address_json,
+                "ship_to": JSON.parse(userShipmentData.address_json),
                 "ship_from": gold_app_address,
                 "customs": {
                     "non_delivery": "return_to_sender",
@@ -322,8 +339,18 @@ export class shipmentService {
                 console.log("shippingRates---", shippingRates.data.rate_response.rates[0]);
                 const shipmentCharge = ( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount );
 
-            await shipmentModelObj.updateObj({"pkg_dimensions":JSON.stringify(packagedimension),"pkg_weight":JSON.stringify(packageWeight),"status":2}, where, tableConstants.USER_SHIPMENTS);
-            
+                const updateUserShipment = {
+                    "pkg_dimensions":JSON.stringify(packagedimension),
+                    "pkg_weight":JSON.stringify(packageWeight),
+                    "shipment_charge": shipmentCharge,
+                    "status":2
+                };
+            await shipmentModelObj.updateObj(updateUserShipment, where, tableConstants.USER_SHIPMENTS);
+            return {
+                "status": "success",
+                "message": "Rate fatched successfully",
+                "id": bodyData.rate_id
+            }
         } catch (error) {
             console.log(error);
             return error;
