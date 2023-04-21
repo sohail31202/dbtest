@@ -26,7 +26,7 @@ app.set("host", APP_HOST);
 app.use(fileUpload());
 
 global.avatar_placeholder = process.env.AVATAR_PLACEHOLDER;
-app.use( morgan( "tiny", { "stream": logStream } ) );
+app.use(morgan("tiny", { "stream": logStream }));
 
 // parse cookies
 // we need this because "cookie" is true in csrfProtection
@@ -57,9 +57,9 @@ app.use(session({
 app.set('view engine', 'ejs');
 
 // for multiple view
-app.set('views', [path.join(__dirname, "views"), path.join(__dirname, "modules/v1/auth/views"), 
+app.set('views', [path.join(__dirname, "views"), path.join(__dirname, "modules/v1/auth/views"),
 path.join(__dirname, "modules/v1/admin/views"), path.join(__dirname, "modules/v1/meta/views"),
-path.join(__dirname, "modules/v1/user/views"), path.join(__dirname, "modules/v1/setting/views")]);
+path.join(__dirname, "modules/v1/user/views"), path.join(__dirname, "modules/v1/setting/views"), path.join(__dirname, "modules/v1/shipment/views")]);
 
 // set path for public folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -82,12 +82,12 @@ app.listen(app.get("port"), () => {
     console.log(`Server listing at http://${app.get("host")}:${app.get("port")}`)
 })
 
-process.on( "uncaughtException", ( err ) => {
-    logger.error( err.message );
-} );
+process.on("uncaughtException", (err) => {
+    logger.error(err.message);
+});
 
-process.on( "unhandledRejection", ( reason ) => {
-    logger.error( reason );
-} );
+process.on("unhandledRejection", (reason) => {
+    logger.error(reason);
+});
 
 export default app;

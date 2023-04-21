@@ -42,6 +42,11 @@ const commonConstants = {
     "TRANSTYPE_PAY_FOR_SHIPMENT":10,
     "ROUND_DIGIT_WEIGHT":4,
     "ROUND_DIGIT":2,
+    "APP_RECEIVE_COMMODITY_MESSAGE": "Physical Delivery",
+    "APP_DELIVER_COMMODITY_MESSAGE": "Ship Commodity To Gold App",
+    "PENDING_ESTIMATE_STATUS_MESSAGE":"Pending Shipping Estimation",
+    "SHIPPING_ESTIMATE_STATUS_MESSAGE":"Shipping Estimated by Admin",
+    "SHIPPING_CREATED_STATUS_MESSAGE":"Shipment Created"
     
 };
 export default commonConstants;
