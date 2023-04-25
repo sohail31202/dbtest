@@ -90,11 +90,8 @@ export class shipmentService {
                 // prepare address data & contact detail
                 if (!addressData) {
                     element.address = "N/A";
-                    element.contact_detail = "N/A"
                 } else {
-                    element.address = (addressData.address_line1 + ' ' + addressData.city_locality + ' ' + addressData.state_province + ' ' + addressData.country_code + ' ' + addressData.postal_code);
-
-                    element.contact_detail = (addressData.name + ' ' + addressData.phone);
+                    element.address = (addressData.name+ '-' + addressData.phone+ '<br>'+ addressData.address_line1 + ' ' + addressData.city_locality + ' ' + addressData.state_province + ' ' + addressData.country_code + ' ' + addressData.postal_code );
                 }
 
                 // To replace currency name by currency symbol
@@ -117,12 +114,6 @@ export class shipmentService {
                     element.action = `<a href="shipping-detail/${encId}" class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>`
                 }
 
-                // when status 3 & shipment type 9
-                // if(element.status == 3 && element.shipment_type == commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY){
-                //     element.action = `<a href="shipping-detail/${encId}" class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>`
-                //     }
-
-
                 // prepare shipment type message
                 if (element.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY) {
                     element.shipment_type = commonConstants.APP_RECEIVE_COMMODITY_MESSAGE
@@ -132,18 +123,22 @@ export class shipmentService {
                 }
 
                 // prepare status messages
-                if (!element.shipment_status) {
-                    element.shipment_status = "N/A";
-                }
-                if (element.status == 1) {
-                    element.status = commonConstants.PENDING_ESTIMATE_STATUS_MESSAGE;
-                }
-                if (element.status == 2) {
-                    element.status = commonConstants.SHIPPING_ESTIMATE_STATUS_MESSAGE;
-                }
-                if (element.status == 3) {
-                    element.status = commonConstants.SHIPPING_CREATED_STATUS_MESSAGE;
-                }
+                if (element.status<=3) {
+                    
+                    if (element.status == 1) {
+                        element.status = commonConstants.PENDING_ESTIMATE_STATUS_MESSAGE;
+                    }
+                    if (element.status == 2) {
+                        element.status = commonConstants.SHIPPING_ESTIMATE_STATUS_MESSAGE;
+                    }
+                    if (element.status == 3) {
+                        element.status = commonConstants.SHIPPING_CREATED_STATUS_MESSAGE;
+                    }
+                    // if (!element.shipment_status) {
+                    //     element.shipment_status = "N/A";
+                    // }
+            }
+
 
             });
             var output = {
@@ -211,15 +206,12 @@ export class shipmentService {
             const shipmentDetail = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
             if (!shipmentDetail.address_json) {
                 shipmentDetail.address = "N/A";
-                shipmentDetail.city = "N/A";
-                shipmentDetail.state = "N/A";
-                shipmentDetail.pin_code = "N/A";
             }else {
                 const addressData = JSON.parse(shipmentDetail.address_json);
-                shipmentDetail.address = (addressData.address_line1);
-                shipmentDetail.city = (addressData.city_locality);
-                shipmentDetail.state = (addressData.state_province);
-                shipmentDetail.pin_code = (addressData.postal_code);
+                shipmentDetail.address = (addressData.address_line1 +','+ addressData.state_province +','+ addressData.city_locality +','+ addressData.postal_code );
+                // shipmentDetail.city = (addressData.city_locality);
+                // shipmentDetail.state = (addressData.state_province);
+                // shipmentDetail.pin_code = (addressData.postal_code);
             }
             
             shipmentDetail.id = req.params.shipmentId;
@@ -314,7 +306,6 @@ export class shipmentService {
             };
             
             const shippingRates = await ShipengineObj.fetchShippingRates(shipment);
-                console.log("shippingRates.data----------------->", shippingRates);
                 // Check request data
                 if (shippingRates.status == false) {
                     return {
@@ -333,11 +324,16 @@ export class shipmentService {
                 const shipmentCharge = await commonHelpers.roundNumber( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount, commonConstants.ROUND_DIGIT );
                 
                 const updateUserShipment = {
+                    "service_code": shippingRates.data.rate_response.rates[0].service_code,
+                    "shipment_id": shippingRates.data.rate_response.shipment_id,
+                    "rate_id": shippingRates.data.rate_response.rates[0].rate_id,
                     "pkg_dimensions":JSON.stringify(packagedimension),
                     "pkg_weight":JSON.stringify(packageWeight),
                     "shipment_charge": shipmentCharge,
-                    "status":2
+                    "status":2,
+                    "updated_at": DateTimeUtil.getCurrentTimeObjForDB()
                 };
+
             await shipmentModelObj.updateObj(updateUserShipment, where, tableConstants.USER_SHIPMENTS);
             
             const notificationData = {
@@ -349,7 +345,6 @@ export class shipmentService {
             };
 
             const notifyData = await commonHelpers.sendNotification( notificationData );
-            console.log("notifyData-", notifyData );
             
             return {
                 "status": "success",

@@ -166,11 +166,11 @@
                                         <div class="form-group col-md-4 col-xs-12">
                                             <label class="col-md-5 detail_label">Tracking URL:</label>
                                             <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                              <a href="<%= shipmentData.tracking_url %>" class = "text-secondary" target="_blank" rel="noopener noreferrer">Track Shipment</a>
+                                              <a href="<%= shipmentData.tracking_url %>" class = "text-info" target="_blank" rel="noopener noreferrer">Track Shipment</a>
                                             </label>
                                         </div>
 
-                                        <% if(shipmentData.status==3 && shipmentData.shipment_type==8) { %>
+                                        <% if(shipmentData.status == 3 && shipmentData.shipment_type==8) { %>
                                             <div class="form-group col-md-4 col-xs-12">
                                                 <label class="col-md-5 detail_label">Dawnload Label:</label>
 
