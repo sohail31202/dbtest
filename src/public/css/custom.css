@@ -59,7 +59,7 @@ i.note-icon-menu-check::before {
 
 /* loader shadow css */
 .loaderShow {
-  background: #473232c7;
+  background: #958383c7;
   width: 100%;
   height: 100%;
   position: fixed;
@@ -72,15 +72,14 @@ i.note-icon-menu-check::before {
 #processImg {
   position: fixed;
   margin: auto;
-  top: 40vh;
-  left: 25vw;
+  top: 40vh !important;
+  left: 50vw !important;
   z-index: 999;
   display: block;
-  text-align: center;
 }
 
 #processImg img {
-  width: 50%;
+  width: 30% !important;
 }
 
 .imageCroper .modal-header {

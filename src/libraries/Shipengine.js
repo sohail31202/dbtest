@@ -60,8 +60,7 @@ export default class Shipengine {
 
             return { "status": true, "data": result.data };
         }).catch( (error) => {
-            console.log("Error creating rates",`${error.response.data.errors[0].field_name}: ${error.response.data.errors[0].message}`);
-            logger.error(`${error.response.data.errors[0].field_name}: ${error.response.data.errors[0].message}`);
+            logger.error(error.response.data.errors);
             return { "status": false, "data": error };
         } );
     }

@@ -90,11 +90,8 @@ export class shipmentService {
                 // prepare address data & contact detail
                 if (!addressData) {
                     element.address = "N/A";
-                    element.contact_detail = "N/A"
                 } else {
-                    element.address = (addressData.address_line1 + addressData.city_locality + addressData.state_province + addressData.country_code + addressData.postal_code);
-
-                    element.contact_detail = (addressData.name + ' ' + addressData.phone);
+                    element.address = (addressData.name+ ' - ' + addressData.phone+ '<br>'+ addressData.address_line1 + ', ' + addressData.city_locality + ', ' + addressData.state_province + ', ' + addressData.country_code + ', ' + addressData.postal_code );
                 }
 
                 // To replace currency name by currency symbol
@@ -109,7 +106,6 @@ export class shipmentService {
 
                 // when status 2 & shipment type 8 or when status 3 & shipment type 9
                 if (element.status == 2 && element.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY || element.status == 3 && element.shipment_type == commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY) {
-                    console.log("now here");
                     element.action = `<a href="shipping-detail/${encId}" class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>`
                 }
 
@@ -117,12 +113,6 @@ export class shipmentService {
                 if (element.status == 3 && element.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY) {
                     element.action = `<a href="shipping-detail/${encId}" class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>`
                 }
-
-                // when status 3 & shipment type 9
-                // if(element.status == 3 && element.shipment_type == commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY){
-                //     element.action = `<a href="shipping-detail/${encId}" class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>`
-                //     }
-
 
                 // prepare shipment type message
                 if (element.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY) {
@@ -133,18 +123,22 @@ export class shipmentService {
                 }
 
                 // prepare status messages
-                if (!element.shipment_status) {
-                    element.shipment_status = "N/A";
-                }
-                if (element.status == 1) {
-                    element.status = commonConstants.PENDING_ESTIMATE_STATUS_MESSAGE;
-                }
-                if (element.status == 2) {
-                    element.status = commonConstants.SHIPPING_ESTIMATE_STATUS_MESSAGE;
-                }
-                if (element.status == 3) {
-                    element.status = commonConstants.SHIPPING_CREATED_STATUS_MESSAGE;
-                }
+                if (element.status<=3) {
+                    
+                    if (element.status == 1) {
+                        element.status = commonConstants.PENDING_ESTIMATE_STATUS_MESSAGE;
+                    }
+                    if (element.status == 2) {
+                        element.status = commonConstants.SHIPPING_ESTIMATE_STATUS_MESSAGE;
+                    }
+                    if (element.status == 3) {
+                        element.status = commonConstants.SHIPPING_CREATED_STATUS_MESSAGE;
+                    }
+                    // if (!element.shipment_status) {
+                    //     element.shipment_status = "N/A";
+                    // }
+            }
+
 
             });
             var output = {
@@ -212,15 +206,12 @@ export class shipmentService {
             const shipmentDetail = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
             if (!shipmentDetail.address_json) {
                 shipmentDetail.address = "N/A";
-                shipmentDetail.city = "N/A";
-                shipmentDetail.state = "N/A";
-                shipmentDetail.pin_code = "N/A";
             }else {
                 const addressData = JSON.parse(shipmentDetail.address_json);
-                shipmentDetail.address = (addressData.address_line1);
-                shipmentDetail.city = (addressData.city_locality);
-                shipmentDetail.state = (addressData.state_province);
-                shipmentDetail.pin_code = (addressData.postal_code);
+                shipmentDetail.address = (addressData.address_line1 +','+ addressData.state_province +','+ addressData.city_locality +','+ addressData.postal_code );
+                // shipmentDetail.city = (addressData.city_locality);
+                // shipmentDetail.state = (addressData.state_province);
+                // shipmentDetail.pin_code = (addressData.postal_code);
             }
             
             shipmentDetail.id = req.params.shipmentId;
@@ -266,14 +257,14 @@ export class shipmentService {
             const commodityId = userShipmentData.commodity_id;
             const commodityData = await shipmentModelObj.fetchFirstObj({"id": commodityId}, tableConstants.COMMODITIES);
             
-            let quantity = userShipmentData.quantity;
-            const quantityUnit = userShipmentData.quantity_unit,
-                commodityAmount = userShipmentData.commodity_amount,
+            let quantityUnit = userShipmentData.quantity_unit,
+                quantity = userShipmentData.quantity;
+            const commodityAmount = userShipmentData.commodity_amount,
                 packageWeight = {
                     "value":value,
                     "unit":"gram"
                 };
-                
+              
             // calculate amount according weight unit in usd.
             if (quantityUnit == "grain") {
                 // Convert commodity weight grain to gram
@@ -315,32 +306,34 @@ export class shipmentService {
             };
             
             const shippingRates = await ShipengineObj.fetchShippingRates(shipment);
-
                 // Check request data
                 if (shippingRates.status == false) {
-                    // errorObj.status_code = StatusCodes.BAD_REQUEST;
-                    // errorObj.message = shippingRates.data.response.data.errors[0].message;
-                    // throw errorObj; 
-                    console.log(shippingRates.data);
-                    return shippingRates.data;
+                    return {
+                        "status": "Failed",
+                        "message": shippingRates.data.response.data.errors[0].message
+                    }
                 }
 
                 if( shippingRates.data.rate_response.rates.length < 1 ) {
-                    // errorObj.status_code = StatusCodes.BAD_REQUEST;
-                    // errorObj.message = shippingRates.data.rate_response.errors[0].message;
-                    // throw errorObj;
-                    console.log(shippingRates.data);
-                    return shippingRates.data;
+                    return {
+                        "status": "Failed",
+                        "message": shippingRates.data.rate_response.errors[0].message
+                    }
                 }
-                console.log("shippingRates---", shippingRates.data.rate_response.rates[0]);
-                const shipmentCharge = ( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount );
-
+               
+                const shipmentCharge = await commonHelpers.roundNumber( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount, commonConstants.ROUND_DIGIT );
+                
                 const updateUserShipment = {
+                    "service_code": shippingRates.data.rate_response.rates[0].service_code,
+                    "shipment_id": shippingRates.data.rate_response.shipment_id,
+                    "rate_id": shippingRates.data.rate_response.rates[0].rate_id,
                     "pkg_dimensions":JSON.stringify(packagedimension),
                     "pkg_weight":JSON.stringify(packageWeight),
                     "shipment_charge": shipmentCharge,
-                    "status":2
+                    "status":2,
+                    "updated_at": DateTimeUtil.getCurrentTimeObjForDB()
                 };
+
             await shipmentModelObj.updateObj(updateUserShipment, where, tableConstants.USER_SHIPMENTS);
             
             const notificationData = {
@@ -352,7 +345,6 @@ export class shipmentService {
             };
 
             const notifyData = await commonHelpers.sendNotification( notificationData );
-            console.log("notifyData-", notifyData );
             
             return {
                 "status": "success",
