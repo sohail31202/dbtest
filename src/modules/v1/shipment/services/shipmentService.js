@@ -262,34 +262,26 @@ export class shipmentService {
             },
             where = { "id": rateId };
             const userShipmentData = await shipmentModelObj.fetchFirstObj(where, tableConstants.USER_SHIPMENTS);
-            console.log("userShipmentData", userShipmentData);
             
             const commodityId = userShipmentData.commodity_id;
             const commodityData = await shipmentModelObj.fetchFirstObj({"id": commodityId}, tableConstants.COMMODITIES);
             
-            console.log("commodityData", commodityData);
-            const quantity = userShipmentData.quantity,
-                quantityUnit = userShipmentData.quantity_unit,
+            let quantity = userShipmentData.quantity;
+            const quantityUnit = userShipmentData.quantity_unit,
+                commodityAmount = userShipmentData.commodity_amount,
                 packageWeight = {
                     "value":value,
                     "unit":"gram"
                 };
-                console.log("quantity", quantity);
-            console.log("quantityUnit", quantityUnit);
+                
             // calculate amount according weight unit in usd.
             if (quantityUnit == "grain") {
-                var commodityAmount = quantity * commodityData.rate_per_grain;
-
                 // Convert commodity weight grain to gram
                 quantity = await commonHelpers.weightUnitConversion(quantityUnit, quantity);
                 // Change commodity unit grain to gram
                 quantityUnit = "gram";
-            } else if (quantityUnit == "oz") {
-                var commodityAmount = quantity * commodityData.rate_per_ounce;
-            } else {
-                var commodityAmount = quantity * commodityData.rate_per_gram;
-            }
-console.log("commodityAmount", commodityAmount);
+            } 
+
             const shipment = {
                 "validate_address": "no_validation",
                 "ship_to": JSON.parse(userShipmentData.address_json),
@@ -326,15 +318,19 @@ console.log("commodityAmount", commodityAmount);
 
                 // Check request data
                 if (shippingRates.status == false) {
-                    errorObj.status_code = StatusCodes.BAD_REQUEST;
-                    errorObj.message = shippingRates.data.response.data.errors[0].message;
-                    throw errorObj; 
+                    // errorObj.status_code = StatusCodes.BAD_REQUEST;
+                    // errorObj.message = shippingRates.data.response.data.errors[0].message;
+                    // throw errorObj; 
+                    console.log(shippingRates.data);
+                    return shippingRates.data;
                 }
 
                 if( shippingRates.data.rate_response.rates.length < 1 ) {
-                    errorObj.status_code = StatusCodes.BAD_REQUEST;
-                    errorObj.message = shippingRates.data.rate_response.errors[0].message;
-                    throw errorObj;
+                    // errorObj.status_code = StatusCodes.BAD_REQUEST;
+                    // errorObj.message = shippingRates.data.rate_response.errors[0].message;
+                    // throw errorObj;
+                    console.log(shippingRates.data);
+                    return shippingRates.data;
                 }
                 console.log("shippingRates---", shippingRates.data.rate_response.rates[0]);
                 const shipmentCharge = ( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount );
@@ -346,6 +342,18 @@ console.log("commodityAmount", commodityAmount);
                     "status":2
                 };
             await shipmentModelObj.updateObj(updateUserShipment, where, tableConstants.USER_SHIPMENTS);
+            
+            const notificationData = {
+                "sender_id": req.session.adminId,
+                "rate_id": bodyData.rate_id,
+                "receiver_id": userShipmentData.user_id,
+                "notification_type": "shipment_estimated",
+                "additional_data": ""
+            };
+
+            const notifyData = await commonHelpers.sendNotification( notificationData );
+            console.log("notifyData-", notifyData );
+            
             return {
                 "status": "success",
                 "message": "Rate fatched successfully",
@@ -354,6 +362,7 @@ console.log("commodityAmount", commodityAmount);
         } catch (error) {
             console.log(error);
             return error;
+
         }
     }
 }

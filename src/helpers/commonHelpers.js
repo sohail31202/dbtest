@@ -2,6 +2,8 @@ import { random } from "lodash";
 import commonConstants from '~/constants/commonConstants';
 import DateTimeUtil from "~/utils/DateTimeUtil";
 import { Buffer } from 'buffer';
+import axios from 'axios';
+
 /*
  *@get random number between 1000 to 9999
  *@return 4 digit Number
@@ -205,7 +207,18 @@ const replace_currency_to_symbol = (amount_str) => {
 }
 
 const formatAmount = (amount, roundDigit = commonConstants.ROUND_DIGIT_WEIGHT) => {
-    return Number( amount ).toLocaleString("en-US", {minimumFractionDigits: roundDigit })
+    return Number( amount ).toLocaleString("en-US", {minimumFractionDigits: roundDigit, maximumFractionDigits: roundDigit })
+}
+
+const sendNotification = (dataParams) => {
+    return axios.post(`${process.env.API_URL}/notification/send`, dataParams).then( ( result ) => {
+
+        return { "status": true, "data": result.data };
+    }).catch( (error) => {
+        console.log("Error creating rates", error);
+        
+        return { "status": false, "data": error };
+    } );
 }
 
 const commonHelpers = {
@@ -220,7 +233,8 @@ const commonHelpers = {
     roundNumber,
     getTransactionMsg,
     formatAmount,
-    replace_currency_to_symbol
+    replace_currency_to_symbol,
+    sendNotification
 }
 
 export default commonHelpers
