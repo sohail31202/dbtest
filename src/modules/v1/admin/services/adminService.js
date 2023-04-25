@@ -82,7 +82,7 @@ export class adminService {
                 
             }
 
-           totalProfit.total = await commonHelpers.formatAmount(totalProfit.total, commonConstants.ROUND_DIGIT);
+           totalProfit[0].total = await commonHelpers.formatAmount(totalProfit[0].total, commonConstants.ROUND_DIGIT);
             // Return response.
 
             let returnData = {
