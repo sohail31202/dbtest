@@ -221,6 +221,34 @@ const sendNotification = (dataParams) => {
     } );
 }
 
+const weightUnitConversion = async function (quantityUnit, current_weight) {
+    let result;
+    const conversion_type = `${quantityUnit}_to_gram`;
+
+    switch (conversion_type) {
+        case "grain_to_gram":
+            result = current_weight * 0.06479891;
+            break;
+
+        case "gram_to_grain":
+            result = current_weight * 15.4323583529;
+            break;
+
+        case "gram_to_oz":
+            result = current_weight * 0.0352739619;
+            break;
+
+        case "oz_to_gram":
+            result = current_weight * 28.349523125;
+            break;
+            
+        default:
+            result = current_weight;
+            break;
+    }
+
+    return roundNumber(Number(result), commonConstants.ROUND_DIGIT_WEIGHT);
+}
 const commonHelpers = {
     getOtp,
     generateUUID,
@@ -234,7 +262,8 @@ const commonHelpers = {
     getTransactionMsg,
     formatAmount,
     replace_currency_to_symbol,
-    sendNotification
+    sendNotification,
+    weightUnitConversion
 }
 
 export default commonHelpers

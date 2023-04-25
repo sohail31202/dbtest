@@ -92,7 +92,7 @@ export class shipmentService {
                     element.address = "N/A";
                     element.contact_detail = "N/A"
                 } else {
-                    element.address = (addressData.address_line1 + addressData.city_locality + addressData.state_province + addressData.country_code + addressData.postal_code);
+                    element.address = (addressData.address_line1 + ' ' + addressData.city_locality + ' ' + addressData.state_province + ' ' + addressData.country_code + ' ' + addressData.postal_code);
 
                     element.contact_detail = (addressData.name + ' ' + addressData.phone);
                 }
@@ -109,7 +109,6 @@ export class shipmentService {
 
                 // when status 2 & shipment type 8 or when status 3 & shipment type 9
                 if (element.status == 2 && element.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY || element.status == 3 && element.shipment_type == commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY) {
-                    console.log("now here");
                     element.action = `<a href="shipping-detail/${encId}" class="btn btn-success btn-rounded btn-icon"><i class="ti-eye" title="Detail" aria-hidden="true"></i></a>`
                 }
 
@@ -266,14 +265,14 @@ export class shipmentService {
             const commodityId = userShipmentData.commodity_id;
             const commodityData = await shipmentModelObj.fetchFirstObj({"id": commodityId}, tableConstants.COMMODITIES);
             
-            let quantity = userShipmentData.quantity;
-            const quantityUnit = userShipmentData.quantity_unit,
-                commodityAmount = userShipmentData.commodity_amount,
+            let quantityUnit = userShipmentData.quantity_unit,
+                quantity = userShipmentData.quantity;
+            const commodityAmount = userShipmentData.commodity_amount,
                 packageWeight = {
                     "value":value,
                     "unit":"gram"
                 };
-                
+              
             // calculate amount according weight unit in usd.
             if (quantityUnit == "grain") {
                 // Convert commodity weight grain to gram
@@ -315,26 +314,24 @@ export class shipmentService {
             };
             
             const shippingRates = await ShipengineObj.fetchShippingRates(shipment);
-
+                console.log("shippingRates.data----------------->", shippingRates);
                 // Check request data
                 if (shippingRates.status == false) {
-                    // errorObj.status_code = StatusCodes.BAD_REQUEST;
-                    // errorObj.message = shippingRates.data.response.data.errors[0].message;
-                    // throw errorObj; 
-                    console.log(shippingRates.data);
-                    return shippingRates.data;
+                    return {
+                        "status": "Failed",
+                        "message": shippingRates.data.response.data.errors[0].message
+                    }
                 }
 
                 if( shippingRates.data.rate_response.rates.length < 1 ) {
-                    // errorObj.status_code = StatusCodes.BAD_REQUEST;
-                    // errorObj.message = shippingRates.data.rate_response.errors[0].message;
-                    // throw errorObj;
-                    console.log(shippingRates.data);
-                    return shippingRates.data;
+                    return {
+                        "status": "Failed",
+                        "message": shippingRates.data.rate_response.errors[0].message
+                    }
                 }
-                console.log("shippingRates---", shippingRates.data.rate_response.rates[0]);
-                const shipmentCharge = ( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount );
-
+               
+                const shipmentCharge = await commonHelpers.roundNumber( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount, commonConstants.ROUND_DIGIT );
+                
                 const updateUserShipment = {
                     "pkg_dimensions":JSON.stringify(packagedimension),
                     "pkg_weight":JSON.stringify(packageWeight),

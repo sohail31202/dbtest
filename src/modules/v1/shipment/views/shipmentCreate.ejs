@@ -66,7 +66,7 @@
 
                 <!-- Start -->
                 <div class="row">
-                    <div class="col-md-12 grid-margin stretch-card p-3">
+                    <div class="col-md-12 grid-margin stretch-card">
                         <div class="card position-relative p-3">
                             <div class="row">
                                 <div class="form-group col-md-4 col-xs-12">
@@ -127,28 +127,28 @@
                                 <input type="hidden" name="_csrf" id="csrf" value="">
                                 <input type="hidden" id="id" value="<%= shipmentDetail.id%>">
 
-                                    <div class="form-group col-sm-4">
-                                        <label for="packageDimension">Parcel length(in inch):</label>
-                                        <input type="text" class="form-control" id="pLength" name="parcelLength" placeholder="">
-                                    </div>
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="packageDimension">Parcel width(in inch):</label>
-                                        <input type="text" class="form-control " id="pWidth" name="parcelWidth" placeholder="">
-                                    </div>
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="packageDimension">Parcel height(in inch):</label>
-                                        <input type="text" class="form-control " id="pHeight" name="parcelHeight" placeholder="">
-                                    </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="pLength">Parcel length(in inch):</label>
+                                    <input type="text" class="form-control" id="pLength" name="pLength" placeholder="">
+                                </div>
 
                                 <div class="form-group col-sm-4">
-                                    <label for="packageDimension">Parcel Weight(in gram):</label>
-                                    <input type="text" class="form-control " id="pWeight" name="parcelHeight"
-                                        placeholder="">
+                                    <label for="pWidth">Parcel width(in inch):</label>
+                                    <input type="text" class="form-control " id="pWidth" name="pWidth" placeholder="">
+                                </div>
+
+                                <div class="form-group col-sm-4">
+                                    <label for="pHeight">Parcel height(in inch):</label>
+                                    <input type="text" class="form-control " id="pHeight" name="pHeight" placeholder="">
+                                </div>
+
+                                <div class="form-group col-sm-4">
+                                    <label for="pWeight">Parcel Weight(in gram):</label>
+                                    <input type="text" class="form-control " id="pWeight" name="pWeight" placeholder="">
                                 </div>
                                 <div class="mt-3 col-md-12 pb-3">
-                                    <button class="btn btn-success btn-block w-25 btn-xm m-auto" type="button" id="shipmentForm">Fetch
+                                    <button class="btn btn-success btn-block w-25 btn-xm m-auto" type="button"
+                                        id="shipmentForm">Fetch
                                         Rate</button>
                                 </div>
                             </form>
@@ -157,21 +157,101 @@
                 </div>
             </div>
         </div>
-
+        <!-- <div class="loaderShow">
+            <div id="processImg"><img src="/images/loader.gif" alt="progress"></div>
+        </div> -->
         <!-- footer section start -->
         <%- include('footer') %>
 
             <script>
+                $("#formData").validate({
+                    rules: {
+                        "pLength": {
 
-                // Delete intent by ajax. 
+                            required: true,
+                            minlength: 1,
+                            maxlength: 10,
+                            normalizer: function (value) {
+                                return $.trim(value);
+                            },
+                        //  float:true
+                        },
+                        "pWidth": {
+                            required: true,
+                            minlength: 1,
+                            maxlength: 10,
+                            normalizer: function (value) {
+                                return $.trim(value);
+                            },
+                            // float:true
+
+                        },
+                        "pHeight": {
+                            required: true,
+                            minlength: 1,
+                            maxlength: 10,
+                            normalizer: function (value) {
+                                return $.trim(value);
+                            },
+                            // float:true
+
+                        },
+                        "pWeight": {
+                            required: true,
+                            minlength: 1,
+                            maxlength: 5,
+                            normalizer: function (value) {
+                                return $.trim(value);
+                            },
+                            // float:true
+                        },
+                    },
+                    messages: {
+                        "pLength": {
+
+                            required: 'Please enter a number.',
+                            minlength: 'Please enter at least 1 digit.',
+                            maxlength: 'Please enter no more than 10 digits.',
+                            // float: 'Please enter a valid number.'
+
+                            // required: "This field is required.",
+                        },
+                        "pWidth": {
+                            required: 'Please enter a number.',
+                            minlength: 'Please enter at least 1 digit.',
+                            maxlength: 'Please enter no more than 10 digits.',
+                            // float: 'Please enter a valid number.'
+                        },
+                        "pHeight": {
+                            required: 'Please enter a number.',
+                            minlength: 'Please enter at least 1 digit.',
+                            maxlength: 'Please enter no more than 10 digits.',
+                            // float: 'Please enter a valid number.'
+                        },
+                        "pWeight": {
+                            required: 'Please enter a number.',
+                            minlength: 'Please enter at least 1 digit.',
+                            maxlength: 'Please enter no more than 10 digits.',
+                            // float: 'Please enter a valid number.'
+                        },
+                    },
+                });
+
+
                 $('#shipmentForm').click(function () {
+
+                    if ($('#formData').valid() === false) {
+                        console.log("Yes we are here")
+                        return false;
+                    }
+
                     const id = $('#id').val()
                     console.log("id", id);
                     const formData = new FormData();
-                    formData.append("p_length", $('#pLength').val())
-                    formData.append("p_width", $('#pWidth').val())
-                    formData.append("p_height", $('#pHeight').val())
-                    formData.append("p_weight", $('#pWeight').val())
+                    formData.append("p_length", $('#pLength').val().trim());
+                    formData.append("p_width", $('#pWidth').val().trim());
+                    formData.append("p_height", $('#pHeight').val().trim());
+                    formData.append("p_weight", $('#pWeight').val().trim());
                     formData.append("rate_id", id)
 
                     $.ajax({
@@ -182,16 +262,29 @@
                         //    cache : false,
                         contentType: false,
                         processData: false,
+                        beforeSend: function () {
+                                $("#processImg").show();
+                                $(".loaderShow").show();
+                            },
+                            complete: function () {
+                                $("#processImg").hide();
+                                $(".loaderShow").hide();
+                            },
                         success: function (response) {
-                            console.log("response", response);
+                            console.log("responsessssssssss", response);
                             if (response.status == "success") {
                                 toastr.remove();
                                 toastr.success(response.message);
                                 window.setTimeout(function () {
-
                                     // window.location.reload();
                                     window.location = `/shipping-detail/${response.id}`;
 
+                                }, 1000);
+                            }
+                            else {
+                                toastr.error(response.message);
+                                window.setTimeout(function () {
+                                    window.location.reload();
                                 }, 1000);
                             }
                         },
