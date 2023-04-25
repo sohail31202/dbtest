@@ -60,25 +60,31 @@ export class adminService {
             const result = await AdminModelObj.fetchCommodityProfit(tableConstants.USER_TRANSACTIONS);
 
             for (let i = 0; i < saleCommodityQuantity.length; i++) {
+
                 const element = saleCommodityQuantity[i];
 
-                const commodity_profit = await result.filter(function(result) {
+                const commodity_profit = await result.filter(function (result) {
                     return result.commodity_id == element.commodity_id;
                 })
 
-                saleCommodityQuantity[i].sale_commodity = await commonHelpers.formatAmount(saleCommodityQuantity[i].sale_commodity);
+                element.sale_commodity = await commonHelpers.formatAmount(element.sale_commodity, commonConstants.ROUND_DIGIT);
 
-                element.purchase_commodity = await commonHelpers.formatAmount(purchaseCommodityQuantity[i].purchase_commodity);
+                element.purchase_commodity = await commonHelpers.formatAmount(purchaseCommodityQuantity[i].purchase_commodity, commonConstants.ROUND_DIGIT);
+
                 let commodity_profit_amount = 0;
 
                 if(commodity_profit[0]!==undefined){
                     commodity_profit_amount= commodity_profit[0].profit;
                 }
                 
-                element.commodity_profit = commodity_profit_amount;
-                // element.profit = await commonHelpers.formatAmount(element.total);
+                element.commodity_profit = await commonHelpers.formatAmount(commodity_profit_amount, commonConstants.ROUND_DIGIT);
+
+                
             }
+
+           totalProfit[0].total = await commonHelpers.formatAmount(totalProfit[0].total, commonConstants.ROUND_DIGIT);
             // Return response.
+
             let returnData = {
                 "userLength": userLength.length,
                 "saleAndPurchaseCommodity": saleCommodityQuantity,

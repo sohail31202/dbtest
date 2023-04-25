@@ -64,188 +64,142 @@
                     </div>
                 </div>
 
-
                 <!-- Start -->
                 <div class="row">
-                    <form class="pt-3" id="formData">
-                        <input type="hidden" name="_csrf" id="csrf" value="">
-                        <input type="hidden" id="id" value="<%= shipmentDetail.id%>">
+                    <div class="col-md-12 grid-margin stretch-card p-3">
+                        <div class="card position-relative p-3">
+                            <div class="row">
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <label class="col-md-5 detail_label">Commodity Name:</label>
+                                    <label class="col-md-7 detail_value">
+                                        <%= shipmentDetail.commodity_name %>
+                                    </label>
+                                </div>
 
-                        <div class="form-group" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text">Commodity Name</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="cname" name="commodityName" value="<%= shipmentDetail.commodity_name %>" disabled>
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <label class="col-md-5 detail_label">Commodity Weight:</label>
+                                    <label class="col-md-7 detail_value">
+                                        <%= shipmentDetail.quantity %>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <label class="col-md-5 detail_label">Source Address:</label>
+                                    <label class="col-md-7 detail_value">
+                                        4009 Marathon Blvd, Suite 300 Austin US
+                                    </label>
+                                </div>
                             </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <label class="col-md-5 detail_label">Address line-1:</label>
+                                    <label class="col-md-7 detail_value">
+                                        <%= shipmentDetail.address %>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <label class="col-md-5 detail_label">City:</label>
+                                    <label class="col-md-7 detail_value">
+                                        <%= shipmentDetail.city %>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <label class="col-md-5 detail_label">State:</label>
+                                    <label class="col-md-7 detail_value">
+                                        <%= shipmentDetail.state %>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-4 col-xs-12">
+                                    <label class="col-md-5 detail_label">Postal Code:</label>
+                                    <label class="col-md-7 detail_value">
+                                        <%= shipmentDetail.pin_code %>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <form class="pt-3" id="formData">
+                                <input type="hidden" name="_csrf" id="csrf" value="">
+                                <input type="hidden" id="id" value="<%= shipmentDetail.id%>">
+
+                                    <div class="form-group col-sm-4">
+                                        <label for="packageDimension">Parcel length(in inch):</label>
+                                        <input type="text" class="form-control" id="pLength" name="parcelLength" placeholder="">
+                                    </div>
+
+                                    <div class="form-group col-sm-4">
+                                        <label for="packageDimension">Parcel width(in inch):</label>
+                                        <input type="text" class="form-control " id="pWidth" name="parcelWidth" placeholder="">
+                                    </div>
+
+                                    <div class="form-group col-sm-4">
+                                        <label for="packageDimension">Parcel height(in inch):</label>
+                                        <input type="text" class="form-control " id="pHeight" name="parcelHeight" placeholder="">
+                                    </div>
+
+                                <div class="form-group col-sm-4">
+                                    <label for="packageDimension">Parcel Weight(in gram):</label>
+                                    <input type="text" class="form-control " id="pWeight" name="parcelHeight"
+                                        placeholder="">
+                                </div>
+                                <div class="mt-3 col-md-12 pb-3">
+                                    <button class="btn btn-success btn-block w-25 btn-xm m-auto" type="button" id="shipmentForm">Fetch
+                                        Rate</button>
+                                </div>
+                            </form>
                         </div>
-
-                        <div class="form-group" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text">Commodity Weight</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="cweight" name="commodityWeight" value="<%= shipmentDetail.quantity %>" disabled>
-                            </div>
-                        </div>
-
-
-
-                        <div class="form-group" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text">Source Address</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="saddress" name="sourceAddress" placeholder="Source Address" value="4009 Marathon Blvd, Suite 300 Austin US" disabled>
-                            </div>
-                        </div>
-
-                        <div class="form-group" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text">Destination Address line-1</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="daddress" name="destinationAddress" placeholder="Destination Address" value="<%= shipmentDetail.address %>" disabled>
-                            </div>
-                        </div>
-
-                        <!-- <div class="form-group" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text"></i></span>
-                              </div>
-                                <input type="text" class="form-control " id="saddress" name="sourceAddress" placeholder="Address (optional)" >
-                            </div>
-                        </div> -->
-
-                        <div class="form-group col-md-4 col-xs-12" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text">City</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="saddress" name="sourceAddress" placeholder="City" value="<%= shipmentDetail.city %>" disabled>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-4 col-xs-12" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text">State</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="saddress" name="sourceAddress" placeholder="State" value="<%= shipmentDetail.state %>" disabled>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-4 col-xs-12" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text">Postal Code</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="saddress" name="sourceAddress" placeholder="Pin Code" value="<%= shipmentDetail.pin_code %>" disabled>
-                            </div>
-                        </div>
-
-                       
-
-
-                        <div class="form-group" id="mailErr">
-                            <div class="input-group col-md-4 col-xs-12">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text">Parcel length(in inch)</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="pLength" name="parcelLength" placeholder="" >
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-4 col-xs-12" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Parcel width(in inch)</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="pWidth" name="parcelWidth" placeholder="" >
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-4 col-xs-12" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Parcel height(in inch)</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="pHeight" name="parcelHeight" placeholder="" >
-                            </div>
-                        </div>
-
-                        <div class="form-group" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Parcel Weight(in gram)</i></span>
-                              </div>
-                                <input type="text" class="form-control " id="pWeight" name="parcelHeight" placeholder="" >
-                            </div>
-                        </div>
-
-                        <!-- <div class="form-group" id="mailErr">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                              <span class="input-group-text"></i></span>
-                              </div>
-                                <input type="text" class="form-control " id="pPrice" name="parcelPrice" placeholder="Parcel Price" >
-                            </div>
-                        </div> -->
-
-                        
-                        <div class="mt-3">
-                            <a class="btn btn-block btn-primary btn-lg
-                            font-weight-medium auth-form-btn loginBtn" type="button" id="shipmentForm"><b>Fetch Rate</b></a>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                <!-- End -->
             </div>
         </div>
 
         <!-- footer section start -->
         <%- include('footer') %>
 
-<script>
+            <script>
 
-        // Delete intent by ajax. 
-        $('#shipmentForm').click(function () {
-const id = $('#id').val()
-console.log("id",id);
-            const formData = new FormData();
-            formData.append("p_length",$('#pLength').val())
-            formData.append("p_width",$('#pWidth').val())
-            formData.append("p_height",$('#pHeight').val())
-            formData.append("p_weight",$('#pWeight').val())
-            formData.append("rate_id", id)
+                // Delete intent by ajax. 
+                $('#shipmentForm').click(function () {
+                    const id = $('#id').val()
+                    console.log("id", id);
+                    const formData = new FormData();
+                    formData.append("p_length", $('#pLength').val())
+                    formData.append("p_width", $('#pWidth').val())
+                    formData.append("p_height", $('#pHeight').val())
+                    formData.append("p_weight", $('#pWeight').val())
+                    formData.append("rate_id", id)
 
-            $.ajax({
-                type: "post",
-                url: `/update-shipment-detail/${id}`,
-                data: formData,
-                dataType: 'JSON',
-                //    cache : false,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    console.log("response", response);
-                    if (response.status == "success") {
-                        toastr.remove();
-                        toastr.success(response.message);
-                        window.setTimeout(function () {
-                            
-                            // window.location.reload();
-                            window.location = `/shipping-detail/${response.id}`;
-                            
-                        }, 1000);
-                    }
-                },
-                error: function (response) {
-                    let errorResponse = JSON.parse(response.responseText)
-                    toastr.remove();
-                    toastr.error(errorResponse.message);
-                }
-            });
-        });
-    </script>
+                    $.ajax({
+                        type: "post",
+                        url: `/update-shipment-detail/${id}`,
+                        data: formData,
+                        dataType: 'JSON',
+                        //    cache : false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            console.log("response", response);
+                            if (response.status == "success") {
+                                toastr.remove();
+                                toastr.success(response.message);
+                                window.setTimeout(function () {
+
+                                    // window.location.reload();
+                                    window.location = `/shipping-detail/${response.id}`;
+
+                                }, 1000);
+                            }
+                        },
+                        error: function (response) {
+                            let errorResponse = JSON.parse(response.responseText)
+                            toastr.remove();
+                            toastr.error(errorResponse.message);
+                        }
+                    });
+                });
+            </script>

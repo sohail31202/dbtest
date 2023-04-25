@@ -6,7 +6,6 @@ import shipmentController from "../controllers/shipmentController";
 const shipment = new Router();
 
 // Create route for get dashboard page in shipmentControllers.
-// shipment.get('/shipment', sessionServices, shipmentController.shipment );
 shipment.get('/shipment', sessionServices, shipmentController.getShipment)
 
 // Get users
@@ -21,12 +20,6 @@ shipment.get("/create-shipment/:shipmentId", sessionServices, shipmentController
 // Delete user
 shipment.post('/update-shipment-detail/:shipmentId', sessionServices, shipmentController.updateShipment);
 
-// // change-user-status
-// user.post('/change-user-status', sessionServices, userController.statusChanged);
-
-
-// // Get user transaction list
-// user.post('/user-transection-list', sessionServices, userController.userTransectionlist);
 
 export {
     shipment
