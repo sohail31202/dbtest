@@ -66,7 +66,7 @@ export default class shipmentModel extends BaseModel {
         const sel = [
             "user_shipments.id",
             "users.fullname as user_name",
-            "CONCAT( quantity, ' ', quantity_unit, ' ', commodities.name) as commodity",
+            "CONCAT(commodities.name, '(', quantity, quantity_unit, ')') as commodity",
             "shipment_type",
             "shipment_id",
             "user_shipments.status",

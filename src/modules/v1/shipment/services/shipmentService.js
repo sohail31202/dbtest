@@ -91,7 +91,7 @@ export class shipmentService {
                 if (!addressData) {
                     element.address = "N/A";
                 } else {
-                    element.address = (addressData.name+ '-' + addressData.phone+ '<br>'+ addressData.address_line1 + ' ' + addressData.city_locality + ' ' + addressData.state_province + ' ' + addressData.country_code + ' ' + addressData.postal_code );
+                    element.address = (addressData.name+ ' - ' + addressData.phone+ '<br>'+ addressData.address_line1 + ', ' + addressData.city_locality + ', ' + addressData.state_province + ', ' + addressData.country_code + ', ' + addressData.postal_code );
                 }
 
                 // To replace currency name by currency symbol
