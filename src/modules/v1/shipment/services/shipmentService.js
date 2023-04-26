@@ -74,7 +74,7 @@ export class shipmentService {
             var total_records_with_filter = records.length;
             const shipmentData = await shipmentModelObj.getShipmentData(search_query, start, length, order_data, order);
 
-            shipmentData.forEach(async (element, index) => {
+          await Promise.all(shipmentData.map(async (element, index) => {
                 shipmentData[index].s_no = index + 1 + Number(start);
 
                 // Here we are encoding id
@@ -91,7 +91,7 @@ export class shipmentService {
                 if (!addressData) {
                     element.address = "N/A";
                 } else {
-                    element.address = (addressData.name+ ' - ' + addressData.phone+ '<br>'+ addressData.address_line1 + ', ' + addressData.city_locality + ', ' + addressData.state_province + ', ' + addressData.country_code + ', ' + addressData.postal_code );
+                    element.address = (addressData.name + ' - ' + addressData.phone + '<br>' + addressData.address_line1 + ', ' + addressData.city_locality + ', ' + addressData.state_province + ', ' + addressData.country_code + ', ' + addressData.postal_code);
                 }
 
                 // To replace currency name by currency symbol
@@ -123,24 +123,10 @@ export class shipmentService {
                 }
 
                 // prepare status messages
-                if (element.status<=3 && !element.shipment_status) {
-                    
-                    if (element.status == 1) {
-                        element.status = commonConstants.PENDING_ESTIMATE_STATUS_MESSAGE;
-                    }
-                    if (element.status == 2) {
-                        element.status = commonConstants.SHIPPING_ESTIMATE_STATUS_MESSAGE;
-                    }
-                    if (element.status == 3) {
-                        element.status = commonConstants.SHIPPING_CREATED_STATUS_MESSAGE;
-                    }
-                }else if (element.shipment_status) {
-             
-                    element.status = "N/A";
-               
-                }
+                element.status = await commonHelpers.statusMessages(element);
+                  
+            }));
 
-            });
             var output = {
                 'draw': draw,
                 'iTotalRecords': total_records,
@@ -165,7 +151,7 @@ export class shipmentService {
             }
             if (shipmentData.admin_brokerage != null) {
                 const brokerage = commonHelpers.replace_currency_to_symbol(shipmentData.admin_brokerage);
-                 shipmentData.admin_brokerage = formatAmount(brokerage, commonConstants.ROUND_DIGIT)
+                shipmentData.admin_brokerage = formatAmount(brokerage, commonConstants.ROUND_DIGIT)
             }
             if (shipmentData.processing_fee != null) {
                 shipmentData.processing_fee = commonHelpers.replace_currency_to_symbol(shipmentData.processing_fee);
@@ -191,8 +177,8 @@ export class shipmentService {
 
             const changeFormat = DateTimeUtil.changeFormat(shipmentData.created_at, "DD/MM/YYYY");
             shipmentData.created_at = changeFormat;
-           
-            
+
+
             return shipmentData;
         } catch (error) {
             console.log(error);
@@ -200,7 +186,7 @@ export class shipmentService {
         }
     }
 
-    async createShipment(req, res){
+    async createShipment(req, res) {
         try {
 
             const encId = commonHelpers.base64Decode(req.params.shipmentId);
@@ -208,14 +194,14 @@ export class shipmentService {
             const shipmentDetail = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
             if (!shipmentDetail.address_json) {
                 shipmentDetail.address = "N/A";
-            }else {
+            } else {
                 const addressData = JSON.parse(shipmentDetail.address_json);
-                shipmentDetail.address = (addressData.address_line1 +','+ addressData.state_province +','+ addressData.city_locality +','+ addressData.postal_code );
+                shipmentDetail.address = (addressData.address_line1 + ',' + addressData.state_province + ',' + addressData.city_locality + ',' + addressData.postal_code);
                 // shipmentDetail.city = (addressData.city_locality);
                 // shipmentDetail.state = (addressData.state_province);
                 // shipmentDetail.pin_code = (addressData.postal_code);
             }
-            
+
             shipmentDetail.id = req.params.shipmentId;
             return shipmentDetail;
         } catch (error) {
@@ -224,56 +210,56 @@ export class shipmentService {
         }
     }
 
-    async updateShipment(req, res){
+    async updateShipment(req, res) {
         try {
-           
+
             // req.params.id = req.params.id);
             const bodyData = req.body,
-            rateId = commonHelpers.base64Decode( bodyData.rate_id ),
-            contentDescription = "Receive commodity from GOLDAPP",
-            length = bodyData.p_length,
-            width = bodyData.p_width,
-            height = bodyData.p_height,
-            value = bodyData.p_weight,
-            packagedimension = {
-                "unit":"inch",
-                "length":length,
-                "width":width,
-                "height":height
-            },
-            gold_app_address = {
-                "company_name": "Gold App",
-                "name": "Gold Admin",
-                "phone": "111-111-1111",
-                "address_line1": "4009 Marathon Blvd",
-                "address_line2": "Suite 300",
-                "city_locality": "Austin",
-                "state_province": "TX",
-                "postal_code": "78756",
-                "country_code": "US",
-                "address_residential_indicator": "no"
-            },
-            where = { "id": rateId };
+                rateId = commonHelpers.base64Decode(bodyData.rate_id),
+                contentDescription = "Receive commodity from GOLDAPP",
+                length = bodyData.p_length,
+                width = bodyData.p_width,
+                height = bodyData.p_height,
+                value = bodyData.p_weight,
+                packagedimension = {
+                    "unit": "inch",
+                    "length": length,
+                    "width": width,
+                    "height": height
+                },
+                gold_app_address = {
+                    "company_name": "Gold App",
+                    "name": "Gold Admin",
+                    "phone": "111-111-1111",
+                    "address_line1": "4009 Marathon Blvd",
+                    "address_line2": "Suite 300",
+                    "city_locality": "Austin",
+                    "state_province": "TX",
+                    "postal_code": "78756",
+                    "country_code": "US",
+                    "address_residential_indicator": "no"
+                },
+                where = { "id": rateId };
             const userShipmentData = await shipmentModelObj.fetchFirstObj(where, tableConstants.USER_SHIPMENTS);
-            
+
             const commodityId = userShipmentData.commodity_id;
-            const commodityData = await shipmentModelObj.fetchFirstObj({"id": commodityId}, tableConstants.COMMODITIES);
-            
+            const commodityData = await shipmentModelObj.fetchFirstObj({ "id": commodityId }, tableConstants.COMMODITIES);
+
             let quantityUnit = userShipmentData.quantity_unit,
                 quantity = userShipmentData.quantity;
             const commodityAmount = userShipmentData.commodity_amount,
                 packageWeight = {
-                    "value":value,
-                    "unit":"gram"
+                    "value": value,
+                    "unit": "gram"
                 };
-              
+
             // calculate amount according weight unit in usd.
             if (quantityUnit == "grain") {
                 // Convert commodity weight grain to gram
                 quantity = await commonHelpers.weightUnitConversion(quantityUnit, quantity);
                 // Change commodity unit grain to gram
                 quantityUnit = "gram";
-            } 
+            }
 
             const shipment = {
                 "validate_address": "no_validation",
@@ -292,7 +278,7 @@ export class shipmentService {
                             },
                             "weight": {
                                 "value": quantity, // 10
-                                "unit": quantityUnit == "oz" ? "ounce": quantityUnit // "gram"
+                                "unit": quantityUnit == "oz" ? "ounce" : quantityUnit // "gram"
                             }
                         }
                     ]
@@ -306,38 +292,38 @@ export class shipmentService {
                     }
                 ]
             };
-            
-            const shippingRates = await ShipengineObj.fetchShippingRates(shipment);
-                // Check request data
-                if (shippingRates.status == false) {
-                    return {
-                        "status": "Failed",
-                        "message": shippingRates.data.response.data.errors[0].message
-                    }
-                }
 
-                if( shippingRates.data.rate_response.rates.length < 1 ) {
-                    return {
-                        "status": "Failed",
-                        "message": shippingRates.data.rate_response.errors[0].message
-                    }
+            const shippingRates = await ShipengineObj.fetchShippingRates(shipment);
+            // Check request data
+            if (shippingRates.status == false) {
+                return {
+                    "status": "Failed",
+                    "message": shippingRates.data.response.data.errors[0].message
                 }
-               
-                const shipmentCharge = await commonHelpers.roundNumber( shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount, commonConstants.ROUND_DIGIT );
-                
-                const updateUserShipment = {
-                    "service_code": shippingRates.data.rate_response.rates[0].service_code,
-                    "shipment_id": shippingRates.data.rate_response.shipment_id,
-                    "rate_id": shippingRates.data.rate_response.rates[0].rate_id,
-                    "pkg_dimensions":JSON.stringify(packagedimension),
-                    "pkg_weight":JSON.stringify(packageWeight),
-                    "shipment_charge": shipmentCharge,
-                    "status":2,
-                    "updated_at": DateTimeUtil.getCurrentTimeObjForDB()
-                };
+            }
+
+            if (shippingRates.data.rate_response.rates.length < 1) {
+                return {
+                    "status": "Failed",
+                    "message": shippingRates.data.rate_response.errors[0].message
+                }
+            }
+
+            const shipmentCharge = await commonHelpers.roundNumber(shippingRates.data.rate_response.rates[0].shipping_amount.amount + shippingRates.data.rate_response.rates[0].insurance_amount.amount + shippingRates.data.rate_response.rates[0].confirmation_amount.amount + shippingRates.data.rate_response.rates[0].other_amount.amount, commonConstants.ROUND_DIGIT);
+
+            const updateUserShipment = {
+                "service_code": shippingRates.data.rate_response.rates[0].service_code,
+                "shipment_id": shippingRates.data.rate_response.shipment_id,
+                "rate_id": shippingRates.data.rate_response.rates[0].rate_id,
+                "pkg_dimensions": JSON.stringify(packagedimension),
+                "pkg_weight": JSON.stringify(packageWeight),
+                "shipment_charge": shipmentCharge,
+                "status": 2,
+                "updated_at": DateTimeUtil.getCurrentTimeObjForDB()
+            };
 
             await shipmentModelObj.updateObj(updateUserShipment, where, tableConstants.USER_SHIPMENTS);
-            
+
             const notificationData = {
                 "sender_id": req.session.adminId,
                 "rate_id": bodyData.rate_id,
@@ -346,8 +332,8 @@ export class shipmentService {
                 "additional_data": ""
             };
 
-            const notifyData = await commonHelpers.sendNotification( notificationData );
-            
+            const notifyData = await commonHelpers.sendNotification(notificationData);
+
             return {
                 "status": "success",
                 "message": "Rate fatched successfully",
