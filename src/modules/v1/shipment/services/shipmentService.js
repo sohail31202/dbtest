@@ -14,7 +14,19 @@ const ShipengineObj = new Shipengine();
 const shipmentModelObj = new shipmentModel(),
     S3BasePath = process.env.S3_BASE_PATH,
     imgDirectory = commonConstants.IMAGE_FOLDER,
-    s3CommoityImgPath = `${S3BasePath}${imgDirectory}/`;
+    s3CommoityImgPath = `${S3BasePath}${imgDirectory}/`,
+    gold_app_address = {
+        "company_name": "Gold App",
+        "name": "Gold Admin",
+        "phone": "111-111-1111",
+        "address_line1": "4009 Marathon Blvd",
+        "address_line2": "Suite 300",
+        "city_locality": "Austin",
+        "state_province": "TX",
+        "postal_code": "78756",
+        "country_code": "US",
+        "address_residential_indicator": "no"
+    };
 
 /**
  * creating shipmentModel object for access the database 
@@ -160,23 +172,26 @@ export class shipmentService {
             const encIds = commonHelpers.base64Decode(req.params.shipmentId);
             const where = { "user_shipments.id": encIds };
             const shipmentData = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
+            
             if (shipmentData.shipment_charge != null) {
                 shipmentData.shipment_charge = commonHelpers.replace_currency_to_symbol(shipmentData.shipment_charge);
             }
+            
             if (shipmentData.admin_brokerage != null) {
-                const brokerage = commonHelpers.replace_currency_to_symbol(shipmentData.admin_brokerage);
-                 shipmentData.admin_brokerage = formatAmount(brokerage, commonConstants.ROUND_DIGIT)
+                shipmentData.admin_brokerage = commonHelpers.replace_currency_to_symbol(shipmentData.admin_brokerage);
             }
+            
             if (shipmentData.processing_fee != null) {
                 shipmentData.processing_fee = commonHelpers.replace_currency_to_symbol(shipmentData.processing_fee);
             }
+            
             if (shipmentData.total_amount != null) {
                 shipmentData.total_amount = commonHelpers.replace_currency_to_symbol(shipmentData.total_amount);
             }
+            
             if (shipmentData.payment_method == 1) {
                 shipmentData.payment_method = "Card"
-            }
-            if (shipmentData.payment_method == 2) {
+            }else if (shipmentData.payment_method == 2) {
                 shipmentData.payment_method = "Vault"
             }
 
@@ -191,6 +206,13 @@ export class shipmentService {
 
             const changeFormat = DateTimeUtil.changeFormat(shipmentData.created_at, "DD/MM/YYYY");
             shipmentData.created_at = changeFormat;
+
+            // prepare shipment type message
+            if (shipmentData.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY) {
+                shipmentData.shipment_type = commonConstants.APP_RECEIVE_COMMODITY_MESSAGE
+            }else if (shipmentData.shipment_type == commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY) {
+                shipmentData.shipment_type = commonConstants.APP_DELIVER_COMMODITY_MESSAGE
+            }
            
             
             return shipmentData;
@@ -210,13 +232,24 @@ export class shipmentService {
                 shipmentDetail.address = "N/A";
             }else {
                 const addressData = JSON.parse(shipmentDetail.address_json);
-                shipmentDetail.address = (addressData.address_line1 +','+ addressData.state_province +','+ addressData.city_locality +','+ addressData.postal_code );
-                // shipmentDetail.city = (addressData.city_locality);
-                // shipmentDetail.state = (addressData.state_province);
-                // shipmentDetail.pin_code = (addressData.postal_code);
+                shipmentDetail.address = (addressData.address_line1 +', '+ addressData.city_locality +', '+ addressData.state_province+', '+ addressData.country_code +', '+ addressData.postal_code );
             }
             
             shipmentDetail.id = req.params.shipmentId;
+
+            const admin_address = gold_app_address.address_line1+' '+gold_app_address.address_line2 +', '+ gold_app_address.city_locality +', '+ gold_app_address.state_province +', '+ gold_app_address.country_code+', '+ gold_app_address.postal_code
+
+            shipmentDetail.admin_address = admin_address;
+
+            if (shipmentDetail.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY) {
+                shipmentDetail.shipment_type = commonConstants.APP_RECEIVE_COMMODITY_MESSAGE
+            }else if (shipmentDetail.shipment_type == commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY) {
+                shipmentDetail.shipment_type = commonConstants.APP_DELIVER_COMMODITY_MESSAGE
+            }
+
+            shipmentDetail.created_at = DateTimeUtil.changeFormat(shipmentDetail.created_at, "DD/MM/YYYY");
+
+
             return shipmentDetail;
         } catch (error) {
             console.log(error);
@@ -240,18 +273,6 @@ export class shipmentService {
                 "length":length,
                 "width":width,
                 "height":height
-            },
-            gold_app_address = {
-                "company_name": "Gold App",
-                "name": "Gold Admin",
-                "phone": "111-111-1111",
-                "address_line1": "4009 Marathon Blvd",
-                "address_line2": "Suite 300",
-                "city_locality": "Austin",
-                "state_province": "TX",
-                "postal_code": "78756",
-                "country_code": "US",
-                "address_residential_indicator": "no"
             },
             where = { "id": rateId };
             const userShipmentData = await shipmentModelObj.fetchFirstObj(where, tableConstants.USER_SHIPMENTS);
