@@ -62,7 +62,7 @@ export default class shipmentModel extends BaseModel {
         });
     }
 
-    async getShipmentData(search = "", start = 0, limit = 10, order_data, order, where = "", filter = '') {
+    async getShipmentData(search = "", start = 0, limit = 10, order_data, order, where = "", filter = '', commodity = [], shipmentType= '') {
         const sel = [
             "user_shipments.id",
             "users.fullname as user_name",
@@ -90,8 +90,6 @@ export default class shipmentModel extends BaseModel {
         if (search || where) {
             if (where && where != '') {
                 result.andWhere(knex.raw(search));
-                // result.andWhere('email', where);
-                // result.andWhere('phone_number', where);
             } else {
                 result.andWhere(knex.raw(search));
             }
@@ -102,20 +100,31 @@ export default class shipmentModel extends BaseModel {
                 result.orderBy('id', 'asc');
             }
         }
-        if (order_data == 1) {
-            // result.orderBy('users.fullname', order)
-        }
+        console.log("commodity", commodity.length);
 
-        if (order_data == 2) {
-            // result.orderBy('users.email', order)
+        if (commodity.length > 0) {
+            console.log("Am i here");
+            result.whereIn('commodities.id', commodity)
         }
-        if (order_data == 3) {
-            // result.orderBy('users.phone_number', order)
+        if (shipmentType != '') {
+            result.andWhere("user_shipments.shipment_type", shipmentType);
+            
         }
-        if (order_data == 4) {
-            // result.orderBy('users.status', order)
-        }
-        // console.log("result", result.toString());
+        // if (order_data == 1) {
+        //     // result.orderBy('users.fullname', order)
+        // }
+
+        // if (order_data == 2) {
+        //     // result.orderBy('users.email', order)
+        // }
+        // if (order_data == 3) {
+        //     // result.orderBy('users.phone_number', order)
+        // }
+        // if (order_data == 4) {
+        //     // result.orderBy('users.status', order)
+        // }
+        // // console.log("result", result.toString());
+        console.log("query of shipmemt", result.toString());
         return result.then(function (rows) {
             return rows;
         });
@@ -159,4 +168,11 @@ export default class shipmentModel extends BaseModel {
         });
     }
 
+    async fetchCommodity(tableName = tableConstants.COMMODITIES) {
+        return knex(tableName)
+            .select("name","id")
+            .then((res) => {
+                return res;
+            });
+        }
 }

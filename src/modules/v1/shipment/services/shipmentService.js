@@ -51,8 +51,9 @@ export class shipmentService {
             var length = req.body.length;
 
             var order_data = req.body['order[0][column]'];
-            var order = req.body['order[0][dir]']
-
+            var order = req.body['order[0][dir]'];
+            var commodity = req.body.commodity;
+            var shipmentType = req.body.shipmentType;
             // search data
             var search = req.body.search;
 
@@ -72,7 +73,7 @@ export class shipmentService {
             //Total number of records with filtering
             const records = await shipmentModelObj.getShipmentTotalCount(search_query, start, length);
             var total_records_with_filter = records.length;
-            const shipmentData = await shipmentModelObj.getShipmentData(search_query, start, length, order_data, order);
+            const shipmentData = await shipmentModelObj.getShipmentData(search_query, start, length, order_data, order,'','', commodity, shipmentType);
 
           await Promise.all(shipmentData.map(async (element, index) => {
                 shipmentData[index].s_no = index + 1 + Number(start);

@@ -22,29 +22,51 @@
                             </div>
                         </div>
                     </div> -->
-                    
-                </div>
-
-
-                <div class="row">
                     <div class="form-group col-md-4">
-                        <label for="skill">Commodity</label>
+                        <label for="commodity">Commodity</label>
                         <select class="select2 form-control" data-placeholder="Select Commodity" id="filterCommodity"
                             multiple name="commodity">
-
-                            <option value="yagatha">
-                                hnnh
-                            </option>
-                            <option value="yagatha">
-                                kuch acche se
-                            </option>
+                            <% if(commodity.length> 0){
+                                commodity.forEach((element) => { %>
+                                <option value="<%= element.id %>">
+                                    <%= element.name %>
+                                </option>
+                                <% }) } %>
                         </select>
                     </div>
+                    <div class="form-group col-md-4">
+                        <label for="commodity">Shipment Type</label>
+                        <select class="form-control" placeholder="Select shipment Type" id="shipmentType"
+                            name="shipmentType">
+                            <% if(shipmentType.length>0){
+                                shipmentType.forEach((element)=> { %>
+                                <option value="<%= element.type%>">
+                                    <%= element.message%>
+                                </option>
+
+                                <% }) } %>
+                        </select>
+                    </div>
+
+
+                    <!-- <div class="form-group col-md-4">
+                        <label for="status">Status</label>
+                        <select class="form-control" placeholder="Select status" id="status" name="status">
+
+                        </select>
+                    </div> -->
+
+
+
+
                     <div class="col-md-2">
                         <label>&nbsp;</label>
                         <button class="btn btn-sm btn-dark btn-block" id="filterData">Filter</button>
                     </div>
-                    
+                </div>
+
+
+                <div class="row">
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card position-relative">
                             <div class="card-body">
@@ -87,8 +109,9 @@
         <%- include('footer') %>
 
             <%- include('userModels') %>
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+                <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+                    rel="stylesheet" />
+                <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
                 <script>
                     $(document).ready(function () {
                         var oTable = $('table').DataTable({
@@ -100,6 +123,9 @@
                             'ajax': {
                                 'url': '/shipment-list',
                                 'data': function (data) {
+                                    data.commodity = $("#filterCommodity").val(),
+                                        data.shipmentType = $("#shipmentType").val(),
+                                        data.status = $("#status").val()
                                 }
                             },
                             'serverSide': true,
@@ -157,15 +183,7 @@
                         $.ajax({
                             type: "post",
                             url: `/delete-user`,
-                            // data: { 'id': deletedId },
-
-                            "data": function (d) {
-                                return $.extend({}, d, {
-                                    "commodity": $("#filterCommodity").val(),
-                                    'id': deletedId
-                                });
-                            },
-
+                            data: { 'id': deletedId },
 
                             dataType: 'JSON',
                             beforeSend: function () {
