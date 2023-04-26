@@ -56,6 +56,7 @@
     "nodemailer-express-handlebars": "^4.0.0",
     "nodemon": "^2.0.20",
     "restify": "^8.6.1",
+    "select2": "^4.1.0-rc.0",
     "sequelize-cli": "^6.4.1",
     "sharp": "^0.31.0",
     "streamifier": "^0.1.1",

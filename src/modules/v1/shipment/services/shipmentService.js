@@ -123,7 +123,7 @@ export class shipmentService {
                 }
 
                 // prepare status messages
-                if (element.status<=3) {
+                if (element.status<=3 && !element.shipment_status) {
                     
                     if (element.status == 1) {
                         element.status = commonConstants.PENDING_ESTIMATE_STATUS_MESSAGE;
@@ -134,11 +134,11 @@ export class shipmentService {
                     if (element.status == 3) {
                         element.status = commonConstants.SHIPPING_CREATED_STATUS_MESSAGE;
                     }
-                    // if (!element.shipment_status) {
-                    //     element.shipment_status = "N/A";
-                    // }
-            }
-
+                }else if (element.shipment_status) {
+             
+                    element.status = "N/A";
+               
+                }
 
             });
             var output = {
@@ -164,7 +164,8 @@ export class shipmentService {
                 shipmentData.shipment_charge = commonHelpers.replace_currency_to_symbol(shipmentData.shipment_charge);
             }
             if (shipmentData.admin_brokerage != null) {
-                shipmentData.admin_brokerage = commonHelpers.replace_currency_to_symbol(shipmentData.admin_brokerage);
+                const brokerage = commonHelpers.replace_currency_to_symbol(shipmentData.admin_brokerage);
+                 shipmentData.admin_brokerage = formatAmount(brokerage, commonConstants.ROUND_DIGIT)
             }
             if (shipmentData.processing_fee != null) {
                 shipmentData.processing_fee = commonHelpers.replace_currency_to_symbol(shipmentData.processing_fee);
@@ -190,6 +191,7 @@ export class shipmentService {
 
             const changeFormat = DateTimeUtil.changeFormat(shipmentData.created_at, "DD/MM/YYYY");
             shipmentData.created_at = changeFormat;
+           
             
             return shipmentData;
         } catch (error) {
