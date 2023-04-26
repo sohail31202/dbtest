@@ -8,7 +8,7 @@
                     <div class="col-md-10">
                         <div class="d-flex">
                             <div class="tableheading ">
-                                <h3>Shipment Detail</h3>
+                                <h3>Shipment Detail <small class="text-primary">(<%= shipmentData.shipment_id %>)</small></h3>
                             </div>
                         </div>
                     </div>
@@ -47,6 +47,13 @@
                                             </label>
                                         </div>
 
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Shipment Status:</label>
+                                            <label class="col-md-7 detail_value font-weight-bold">
+                                                <%= shipmentData.status_text %>
+                                            </label>
+                                        </div>
+
 
                                         <div class="form-group col-md-12">
                                             <label class="col-md-5 detail_label">Commodity:</label>
@@ -55,13 +62,7 @@
                                             </label>
                                         </div>
 
-                                        <div class="form-group col-md-12">
-                                            <label class="col-md-5 detail_label">Shipment Id:</label>
-                                            <label class="col-md-7 detail_value">
-                                                <%= shipmentData.shipment_id %>
-                                            </label>
-                                        </div>
-
+                                        
                                         <div class="form-group col-md-12">
                                             <label class="col-md-5 detail_label">Created At:</label>
                                             <label class="col-md-7 detail_value">

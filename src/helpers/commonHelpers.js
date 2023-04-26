@@ -249,6 +249,27 @@ const weightUnitConversion = async function (quantityUnit, current_weight) {
 
     return roundNumber(Number(result), commonConstants.ROUND_DIGIT_WEIGHT);
 }
+
+const statusMessages = async function(element){
+     if (element.status<=3 && !element.shipment_status) {
+
+                    if (element.status == 1) {
+                        element.status = commonConstants.PENDING_ESTIMATE_STATUS_MESSAGE;
+                    }
+                    if (element.status == 2) {
+                        element.status = commonConstants.SHIPPING_ESTIMATE_STATUS_MESSAGE;
+                    }
+                    if (element.status == 3) {
+                        element.status = commonConstants.SHIPPING_CREATED_STATUS_MESSAGE;
+                    }
+                }else if (element.shipment_status) {
+
+                    element.status = "N/A";
+
+                } 
+                 return element.status;
+    }
+
 const commonHelpers = {
     getOtp,
     generateUUID,
@@ -263,7 +284,8 @@ const commonHelpers = {
     formatAmount,
     replace_currency_to_symbol,
     sendNotification,
-    weightUnitConversion
+    weightUnitConversion,
+    statusMessages
 }
 
 export default commonHelpers
