@@ -221,7 +221,7 @@ const sendNotification = (dataParams) => {
     } );
 }
 
-const weightUnitConversion = async function (element) {
+const weightUnitConversion = async function (quantityUnit, current_weight) {
     let result;
     const conversion_type = `${quantityUnit}_to_gram`;
 

@@ -1,47 +1,5 @@
 <%- include('header') %>
 
-    <style>
-        .proImgList img {
-            height: 122px;
-            object-fit: cover;
-        }
-
-        .commodity_div {
-            background: #efefef;
-            border-radius: 20px;
-        }
-
-        .image_div {
-            background: #fff;
-            width: 90px;
-            height: 90px;
-            margin: 10px auto;
-            border-radius: 60%;
-            text-align: center;
-        }
-
-        .image_div img {
-            margin-top: 18px;
-            width: 70px;
-        }
-
-        .commodity_name {
-            font-weight: 600;
-            text-align: center;
-            font-size: 16px;
-            color: #3a3a3a;
-        }
-
-        .commodity_price_div {
-            text-align: center;
-            color: #5a5a5a;
-        }
-
-        .commodity_quantity {
-            color: #ff8d00;
-        }
-    </style>
-
     <!-- mid-part start -->
     <div class="main-panel">
         <div class="contentright w-auto">
@@ -50,7 +8,7 @@
                     <div class="col-md-10">
                         <div class="d-flex">
                             <div class="tableheading ">
-                                <h3>Shipment Detail</h3>
+                                <h3>Shipment Detail <small class="text-primary">(<%= shipmentData.shipment_id %>)</small></h3>
                             </div>
                         </div>
                     </div>
@@ -70,120 +28,155 @@
                         <div class="card position-relative p-3">
                             <div class="card-body">
                                 <!-- Start -->
-                                <div class="col-md-12 col-xs-12 p-0">
-                                    <div class="form-inline-custom">
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Commodity Name:</label>
-                                            <label class="col-md-7 detail_value">
-                                                <%= shipmentData.commodity_name %>
-                                            </label>
-                                        </div>
 
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Package Unit:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.packageUnit %>
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Processing Fee:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.processing_fee %>
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Payment Method:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.payment_method %>
-                                            </label>
-                                        </div>
+                                <div class="row form-inline-custom">
+                                    <div class="col-md-4">
                                         
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Package Height:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.packageHeight %>
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Shipment Charge:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.shipment_charge %>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">User Name:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= shipmentData.user_name %>
                                             </label>
                                         </div>
 
 
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Shipment Id:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.shipment_id %>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Shipment Type:</label>
+                                            <label class="col-md-7 detail_value font-weight-bold">
+                                                <%= shipmentData.shipment_type %>
                                             </label>
                                         </div>
 
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Package Length:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.packageLength %>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Shipment Status:</label>
+                                            <label class="col-md-7 detail_value font-weight-bold">
+                                                <%= shipmentData.status_text %>
                                             </label>
                                         </div>
 
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Admin Brokerage:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.admin_brokerage %>
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Commodity:</label>
+                                            <label class="col-md-7 detail_value font-weight-bold">
+                                                <%= `${shipmentData.commodity_name}(${shipmentData.quantity})` %>
                                             </label>
                                         </div>
 
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Tracking URL:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                              <a href="<%= shipmentData.tracking_url %>" class = "text-info" target="_blank" rel="noopener noreferrer">Track Shipment</a>
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Package Width:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.packageWidth %>
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Total Amount:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
-                                                <%= shipmentData.total_amount %>
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group col-md-4 col-xs-12">
+                                        
+                                        <div class="form-group col-md-12">
                                             <label class="col-md-5 detail_label">Created At:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
+                                            <label class="col-md-7 detail_value">
                                                 <%= shipmentData.created_at %>
                                             </label>
                                         </div>
 
-                                        <div class="form-group col-md-4 col-xs-12">
-                                            <label class="col-md-5 detail_label">Package weight:</label>
-                                            <label class="col-md-7 detail_value" style="font-weight: 600;">
+                                        <% if(shipmentData.status==3 && shipmentData.shipment_type==8) { %>
+                                            <div class="form-group col-md-12">
+                                                <label class="col-md-5 detail_label">Download Label:</label>
+                                                <% if(shipmentData.label_file_url){ %>
+                                                    <a href="<%= shipmentData.label_file_url %>" target="_blank"
+                                                        rel="noopener noreferrer"><label
+                                                            class="col-md-7 detail_value fa fa-download"
+                                                            style="font-weight: 600;"></label></a>
+                                                    <% }else{ %>
+                                                        N/A
+                                                        <% } %>
+                                            </div>
+                                            <% } %>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Package Length:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= `${shipmentData.packageLength} ${shipmentData.packageUnit}` %>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Package Width:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= `${shipmentData.packageWidth} ${shipmentData.packageUnit}` %>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Package Height:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= `${shipmentData.packageHeight} ${shipmentData.packageUnit}` %>
+                                            </label>
+                                        </div>
+
+
+
+
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Package Weight:</label>
+                                            <label class="col-md-7 detail_value">
                                                 <%= shipmentData.pkg_weight %>
                                             </label>
                                         </div>
 
-                                        <% if(shipmentData.status == 3 && shipmentData.shipment_type==8) { %>
-                                            <div class="form-group col-md-4 col-xs-12">
-                                                <label class="col-md-5 detail_label">Download Label:</label>
 
-                                                <a href="<%= shipmentData.label_file_url %>" target="_blank"
-                                                    rel="noopener noreferrer"><label
-                                                        class="col-md-7 detail_value fa fa-download"
-                                                        style="font-weight: 600;"></label></a>
 
-                                            </div>
-                                            <% } %>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Tracking URL:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <% if(shipmentData.tracking_url){ %>
+                                                    <a href="<%= shipmentData.tracking_url %>" class="text-info"
+                                                        target="_blank" rel="noopener noreferrer">Track Shipment</a>
+                                                    <% }else{ %> N/A <% } %>
+                                            </label>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-md-4">
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Payment Method:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= shipmentData.payment_method %>
+                                            </label>
+                                        </div>
+
+
+
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Shipment Charge:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= shipmentData.shipment_charge %>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Processing Fee:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= shipmentData.processing_fee %>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Admin Brokerage:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= shipmentData.admin_brokerage %>
+                                            </label>
+                                        </div>
+
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-5 detail_label">Total Amount:</label>
+                                            <label class="col-md-7 detail_value">
+                                                <%= shipmentData.total_amount %>
+                                            </label>
+                                        </div>
+
+
                                     </div>
                                 </div>
+
                                 <!-- End -->
 
                             </div>
