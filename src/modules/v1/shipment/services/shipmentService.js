@@ -54,6 +54,8 @@ export class shipmentService {
             var order = req.body['order[0][dir]'];
             var commodity = req.body.commodity;
             var shipmentType = req.body.shipmentType;
+            var status = req.body.status;
+            
             // search data
             var search = req.body.search;
 
@@ -61,21 +63,22 @@ export class shipmentService {
 
                 var search_value = search.value.trim();
 
-                var search_query = `
-                    ( shipment_type LIKE '%${search_value}%')
-                    `;
+                var search_query = `( shipment_type LIKE '%${search_value}%')`;
             }
             else {
                 var search_query = '';
             }
             //Total number of records without filtering
             var total_records = await shipmentModelObj.getTotalCount();
+
             //Total number of records with filtering
             const records = await shipmentModelObj.getShipmentTotalCount(search_query, start, length);
-            var total_records_with_filter = records.length;
-            const shipmentData = await shipmentModelObj.getShipmentData(search_query, start, length, order_data, order,'','', commodity, shipmentType);
 
-          await Promise.all(shipmentData.map(async (element, index) => {
+            var total_records_with_filter = await shipmentModelObj.filterShipmentCount(search_query, '', commodity, shipmentType, status);
+
+            const shipmentData = await shipmentModelObj.getShipmentData(search_query, start, length, order_data, order,'','', commodity, shipmentType, status);
+
+            await Promise.all(shipmentData.map(async (element, index) => {
                 shipmentData[index].s_no = index + 1 + Number(start);
 
                 // Here we are encoding id

@@ -22,7 +22,7 @@ export default class shipmentModel extends BaseModel {
     async getTotalCount(search = "") {
         var result = knex('user_shipments')
             .count('id as total')
-            .orderBy("id", "desc")
+            // .orderBy("id", "desc")
         if (search) {
             result.where(knex.raw(search));
         }
@@ -61,8 +61,9 @@ export default class shipmentModel extends BaseModel {
             return rows;
         });
     }
-
-    async getShipmentData(search = "", start = 0, limit = 10, order_data, order, where = "", filter = '', commodity = [], shipmentType= '') {
+    
+      
+    async getShipmentData(search = "", start = 0, limit = 10, order_data, order, where = "", filter = '', commodity = [], shipmentType= '', status = '') {
         const sel = [
             "user_shipments.id",
             "users.fullname as user_name",
@@ -100,36 +101,55 @@ export default class shipmentModel extends BaseModel {
                 result.orderBy('id', 'asc');
             }
         }
-        console.log("commodity", commodity.length);
 
         if (commodity.length > 0) {
-            console.log("Am i here");
             result.whereIn('commodities.id', commodity)
         }
         if (shipmentType != '') {
             result.andWhere("user_shipments.shipment_type", shipmentType);
             
         }
-        // if (order_data == 1) {
-        //     // result.orderBy('users.fullname', order)
-        // }
-
-        // if (order_data == 2) {
-        //     // result.orderBy('users.email', order)
-        // }
-        // if (order_data == 3) {
-        //     // result.orderBy('users.phone_number', order)
-        // }
-        // if (order_data == 4) {
-        //     // result.orderBy('users.status', order)
-        // }
-        // // console.log("result", result.toString());
-        console.log("query of shipmemt", result.toString());
+        if (status != '') {
+            result.andWhere("user_shipments.status", status);
+        }
         return result.then(function (rows) {
             return rows;
         });
     }
 
+    async filterShipmentCount(search = "", where = "", commodity = [], shipmentType= '', status = '') {
+        const result = knex('user_shipments')
+            .select(knex.raw('COUNT(*) as count'))
+            .groupBy('user_shipments.id')
+            .orWhereNot('user_shipments.status', 0)
+            .leftJoin('users', 'user_shipments.user_id', 'users.id')
+            .leftJoin('commodities', 'user_shipments.commodity_id', 'commodities.id')
+
+        if (search || where) {
+            if (where && where != '') {
+                result.andWhere(knex.raw(search));
+            } else {
+                result.andWhere(knex.raw(search));
+            }
+        }
+
+        if (commodity.length > 0) {
+            result.whereIn('commodities.id', commodity)
+        }
+        if (shipmentType != '') {
+            result.andWhere("user_shipments.shipment_type", shipmentType);
+            
+        }
+        if (status != '') {
+            result.andWhere("user_shipments.status", status);
+        }
+        
+        const rows = await result;
+        return rows.length;
+}
+
+
+    
     async fetchShipmentDetail(whereQuery, tableName) {
         const sel = [
             "user_shipments.id",

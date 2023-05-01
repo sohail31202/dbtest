@@ -41,19 +41,32 @@ const getShipment = async (req, res, next) => {
             'message': commonConstants.APP_RECEIVE_COMMODITY_MESSAGE
         },
         {
-            'type': commonConstants .TRANSTYPE_DELIVER_PHYSICAL_COMMODITY,
+            'type': commonConstants.TRANSTYPE_DELIVER_PHYSICAL_COMMODITY,
             'message': commonConstants.APP_DELIVER_COMMODITY_MESSAGE
         }];
+        const shipmntStatus = [{
+            'status': 1,
+            'message': commonConstants.PENDING_ESTIMATE_STATUS_MESSAGE
+        },
+        {
+            'status': 2,
+            'message': commonConstants.SHIPPING_ESTIMATE_STATUS_MESSAGE
+        },
+        {
+            'status': 3,
+            'message': commonConstants.SHIPPING_CREATED_STATUS_MESSAGE
+        }]
         //For getting shipment page
         let data = {
             'title': 'Shipment',
             'currentYear': currentYear,
             "fetchData": returnData,
             "shipmentType": shipmentType,
+            "shipmntStatus":shipmntStatus,
             "commodity": commodity
         };
         res.render('shipment.ejs', data);
-    }).catch((err)=> {
+    }).catch((err) => {
         console.log(err)
     })
 }
