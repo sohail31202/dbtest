@@ -27554,7 +27554,7 @@ table.dataTable tbody td.select-checkbox:after {
 }
 
 /* Select2 */
-.select2-container--default .select2-results__option--highlighted[aria-selected] {
+/*.select2-container--default .select2-results__option--highlighted[aria-selected] {
   background: #f5464a;
 }
 
@@ -27600,9 +27600,9 @@ table.dataTable tbody td.select-checkbox:after {
   color: #ffffff;
 }
 
-.select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+1) {
+ .select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+1) {
   background: #f5464a;
-}
+} 
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+2) {
   background: #57B657;
@@ -27618,7 +27618,7 @@ table.dataTable tbody td.select-checkbox:after {
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+5) {
   background: #FFC100;
-}
+}*/
 
 /* Summernote Editor */
 .note-editor.note-frame {

@@ -3,6 +3,11 @@ import commonConstants from '~/constants/commonConstants';
 import DateTimeUtil from "~/utils/DateTimeUtil";
 import { Buffer } from 'buffer';
 import axios from 'axios';
+import tableConstants from '~/constants/tableConstants';
+import shipmentModel from "../modules/v1/shipment/models/shipmentModel";
+
+
+const shipmentModelObj = new shipmentModel();
 
 /*
  *@get random number between 1000 to 9999
@@ -270,6 +275,14 @@ const statusMessages = async function(element){
                  return element.status;
     }
 
+    const getAdminAddress = async (totalCash, cashUnit) => {
+        //fetch admin address 
+        const adminCommission = await shipmentModelObj.fetchFirstObj({}, tableConstants.ADMIN),
+            gold_app_address = await JSON.parse( adminCommission.address_json );
+    
+        return gold_app_address;
+    }
+
 const commonHelpers = {
     getOtp,
     generateUUID,
@@ -285,7 +298,8 @@ const commonHelpers = {
     replace_currency_to_symbol,
     sendNotification,
     weightUnitConversion,
-    statusMessages
+    statusMessages,
+    getAdminAddress
 }
 
 export default commonHelpers
