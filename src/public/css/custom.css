@@ -500,5 +500,15 @@ span.badge.badge-danger:hover {
     line-height: 26px;
 }
 .filterBox{
-  height: 54%;
+  height: 35px;
+}
+.filter_div{
+  border-radius: 6px;
+  background: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 18px;
+}
+.fbutton{
+  flex: 0 0 100%;
+  max-width: 100%;
 }

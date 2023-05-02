@@ -22,7 +22,7 @@ export default class shipmentModel extends BaseModel {
     async getTotalCount(search = "") {
         var result = knex('user_shipments')
             .count('id as total')
-            // .orderBy("id", "desc")
+        // .orderBy("id", "desc")
         if (search) {
             result.where(knex.raw(search));
         }
@@ -61,9 +61,9 @@ export default class shipmentModel extends BaseModel {
             return rows;
         });
     }
-    
-      
-    async getShipmentData(search = "", start = 0, limit = 10, order_data, order, where = "", filter = '', commodity = [], shipmentType= '', status = '') {
+
+
+    async getShipmentData(search = "", start = 0, limit = 10, order_data, order, where = "", filter = '', commodity = [], shipmentType = '', status = []) {
         const sel = [
             "user_shipments.id",
             "users.fullname as user_name",
@@ -105,19 +105,23 @@ export default class shipmentModel extends BaseModel {
         if (commodity.length > 0) {
             result.whereIn('commodities.id', commodity)
         }
+
+        if (status.length > 0) {
+            result.where(function () {
+                this.whereIn('user_shipments.status', status).orWhereIn('user_shipments.shipment_status', status)
+            })
+        }
+
         if (shipmentType != '') {
             result.andWhere("user_shipments.shipment_type", shipmentType);
-            
         }
-        if (status != '') {
-            result.andWhere("user_shipments.status", status);
-        }
+
         return result.then(function (rows) {
             return rows;
         });
     }
 
-    async filterShipmentCount(search = "", where = "", commodity = [], shipmentType= '', status = '') {
+    async filterShipmentCount(search = "", where = "", commodity = [], shipmentType = '', status = []) {
         const result = knex('user_shipments')
             .select(knex.raw('COUNT(*) as count'))
             .groupBy('user_shipments.id')
@@ -136,20 +140,23 @@ export default class shipmentModel extends BaseModel {
         if (commodity.length > 0) {
             result.whereIn('commodities.id', commodity)
         }
+      
+        if (status.length > 0) {
+            result.where(function () {
+                this.whereIn('user_shipments.status', status).orWhereIn('user_shipments.shipment_status', status)
+            })
+        }
+
         if (shipmentType != '') {
             result.andWhere("user_shipments.shipment_type", shipmentType);
-            
+
         }
-        if (status != '') {
-            result.andWhere("user_shipments.status", status);
-        }
-        
         const rows = await result;
         return rows.length;
-}
+    }
 
 
-    
+
     async fetchShipmentDetail(whereQuery, tableName) {
         const sel = [
             "user_shipments.id",
@@ -171,7 +178,8 @@ export default class shipmentModel extends BaseModel {
             "tracking_url",
             "label_file_url",
             "pkg_weight",
-            "pkg_dimensions"
+            "pkg_dimensions",
+            "admin_address_json"
         ];
 
         var result = knex(tableName)
@@ -190,9 +198,21 @@ export default class shipmentModel extends BaseModel {
 
     async fetchCommodity(tableName = tableConstants.COMMODITIES) {
         return knex(tableName)
-            .select("name","id")
+            .select("name", "id")
             .then((res) => {
                 return res;
             });
-        }
+    }
+
+
+    async fetchShipmentStatus(tableName = tableConstants.USER_SHIPMENTS) {
+        return knex(tableName)
+            .distinct('shipment_status')
+            .whereNotNull('shipment_status')
+            .select()
+            .then((res) => {
+                return res;
+            });
+    }
+
 }

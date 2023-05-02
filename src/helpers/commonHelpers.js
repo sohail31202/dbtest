@@ -269,13 +269,13 @@ const statusMessages = async function(element){
                     }
                 }else if (element.shipment_status) {
 
-                    element.status = "N/A";
+                    element.status = element.shipment_status;
 
                 } 
                  return element.status;
     }
 
-    const getAdminAddress = async (totalCash, cashUnit) => {
+    const getAdminAddress = async () => {
         //fetch admin address 
         const adminCommission = await shipmentModelObj.fetchFirstObj({}, tableConstants.ADMIN),
             gold_app_address = await JSON.parse( adminCommission.address_json );
