@@ -499,3 +499,6 @@ span.badge.badge-danger:hover {
   word-break: break-all;
     line-height: 26px;
 }
+.filterBox{
+  height: 54%;
+}

@@ -4,7 +4,7 @@
     <div class="main-panel">
         <div class="contentright w-auto">
             <div class="container-fluid mt-3">
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-12">
                         <div class="d-flex">
                             <div class="tableheading ">
@@ -22,29 +22,58 @@
                             </div>
                         </div>
                     </div> -->
-                    
-                </div>
-
-
-                <div class="row">
-                    <!-- <div class="form-group col-md-4">
-                        <label for="skill">Commodity</label>
+                    <div class="form-group col-md-4">
+                        <label for="commodity">Commodity</label>
                         <select class="select2 form-control" data-placeholder="Select Commodity" id="filterCommodity"
                             multiple name="commodity">
-
-                            <option value="yagatha">
-                                hnnh
-                            </option>
-                            <option value="yagatha">
-                                kuch acche se
-                            </option>
+                            <% if(commodity.length> 0){
+                                commodity.forEach((element) => { %>
+                                <option value="<%= element.id %>">
+                                    <%= element.name %>
+                                </option>
+                                <% }) } %>
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        <label>&nbsp;</label>
-                        <button class="btn btn-sm btn-dark btn-block" id="filterData">Filter</button>
-                    </div> -->
+                    <div class="form-group col-md-4">
+                        <label for="commodity">Shipment Type</label>
+                        <select class="form-control filterBox" placeholder="Select shipment Type" id="shipmentType" name="shipmentType">
+                            <option value="">--Select shipment type--</option>
+                            <% if (shipmentType.length > 0) {
+                                shipmentType.forEach((element) => { %>
+                                    <option value="<%= element.type %>" <%= element.type == '' ? 'selected disabled hidden' : '' %>>
+                                        <%= element.message %>
+                                    </option>
+                                <% });
+                            } %>
+                        </select>  
+                    </div>
+
                     
+                    <div class="form-group col-md-4">
+                        <label for="status">Status</label>
+                        <select class="form-control filterBox" placeholder="Select status" id="status" name="status">
+                            <option value="">--Select shipment status--</option>
+                            <% if (shipmntStatus.length > 0) {
+                                shipmntStatus.forEach((element) => { %>
+                                    <option value="<%= element.status %>" <%= element.type == '' ? 'selected disabled hidden' : '' %>>
+                                        <%= element.message %>
+                                    </option>
+                                <% });
+                            } %>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <!-- <label>&nbsp;</label> -->
+                        <button class="btn btn-sm btn-dark btn-block" id="filterData">Filter</button>
+                    </div>
+                    <div class="col-md-2">
+                        <!-- <label>&nbsp;</label> -->
+                        <button class="btn btn-sm btn-dark btn-block" id="clearFilter">Clear</button>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card position-relative">
                             <div class="card-body">
@@ -87,8 +116,7 @@
         <%- include('footer') %>
 
             <%- include('userModels') %>
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+               
                 <script>
                     $(document).ready(function () {
                         var oTable = $('table').DataTable({
@@ -100,6 +128,9 @@
                             'ajax': {
                                 'url': '/shipment-list',
                                 'data': function (data) {
+                                    data.commodity = $("#filterCommodity").val(),
+                                        data.shipmentType = $("#shipmentType").val(),
+                                        data.status = $("#status").val()
                                 }
                             },
                             'serverSide': true,
@@ -123,8 +154,17 @@
                         });
 
                         $('.select2#filterCommodity').select2({ width: "100%" });
+                        
 
                         $(document).on("click", "#filterData", function () {
+                            oTable.draw();
+                        });
+
+                        $(document).on("click", "#clearFilter", function () {
+                           
+                            $("#filterCommodity").val(null).trigger('change');
+                            $("#shipmentType").val("");
+                            $("#status").val("");
                             oTable.draw();
                         });
 
@@ -157,15 +197,7 @@
                         $.ajax({
                             type: "post",
                             url: `/delete-user`,
-                            // data: { 'id': deletedId },
-
-                            "data": function (d) {
-                                return $.extend({}, d, {
-                                    "commodity": $("#filterCommodity").val(),
-                                    'id': deletedId
-                                });
-                            },
-
+                            data: { 'id': deletedId },
 
                             dataType: 'JSON',
                             beforeSend: function () {

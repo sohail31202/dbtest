@@ -8,6 +8,7 @@
  */
 const tableConstants = {
 "USERS": "users",
+"ADMIN":"admin",
 "METADATA": "app_metadata",
 "MEDIA": "user_media",
 "USER_LIKED_TRACKING": "user_liked_tracking",

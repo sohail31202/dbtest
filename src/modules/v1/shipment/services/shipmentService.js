@@ -14,19 +14,7 @@ const ShipengineObj = new Shipengine();
 const shipmentModelObj = new shipmentModel(),
     S3BasePath = process.env.S3_BASE_PATH,
     imgDirectory = commonConstants.IMAGE_FOLDER,
-    s3CommoityImgPath = `${S3BasePath}${imgDirectory}/`,
-    gold_app_address = {
-        "company_name": "Gold App",
-        "name": "Gold Admin",
-        "phone": "111-111-1111",
-        "address_line1": "4009 Marathon Blvd",
-        "address_line2": "Suite 300",
-        "city_locality": "Austin",
-        "state_province": "TX",
-        "postal_code": "78756",
-        "country_code": "US",
-        "address_residential_indicator": "no"
-    };
+    s3CommoityImgPath = `${S3BasePath}${imgDirectory}/`;
 
 /**
  * creating shipmentModel object for access the database 
@@ -63,8 +51,11 @@ export class shipmentService {
             var length = req.body.length;
 
             var order_data = req.body['order[0][column]'];
-            var order = req.body['order[0][dir]']
-
+            var order = req.body['order[0][dir]'];
+            var commodity = req.body.commodity;
+            var shipmentType = req.body.shipmentType;
+            var status = req.body.status;
+            
             // search data
             var search = req.body.search;
 
@@ -72,19 +63,20 @@ export class shipmentService {
 
                 var search_value = search.value.trim();
 
-                var search_query = `
-                    ( shipment_type LIKE '%${search_value}%')
-                    `;
+                var search_query = `( shipment_type LIKE '%${search_value}%')`;
             }
             else {
                 var search_query = '';
             }
             //Total number of records without filtering
             var total_records = await shipmentModelObj.getTotalCount();
+
             //Total number of records with filtering
             const records = await shipmentModelObj.getShipmentTotalCount(search_query, start, length);
-            var total_records_with_filter = records.length;
-            const shipmentData = await shipmentModelObj.getShipmentData(search_query, start, length, order_data, order);
+
+            var total_records_with_filter = await shipmentModelObj.filterShipmentCount(search_query, '', commodity, shipmentType, status);
+
+            const shipmentData = await shipmentModelObj.getShipmentData(search_query, start, length, order_data, order,'','', commodity, shipmentType, status);
 
             await Promise.all(shipmentData.map(async (element, index) => {
                 shipmentData[index].s_no = index + 1 + Number(start);
@@ -158,7 +150,7 @@ export class shipmentService {
             const encIds = commonHelpers.base64Decode(req.params.shipmentId);
             const where = { "user_shipments.id": encIds };
             const shipmentData = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
-            
+            console.log("shipmentData===", shipmentData);
             if (shipmentData.shipment_charge != null) {
                 shipmentData.shipment_charge = commonHelpers.replace_currency_to_symbol(shipmentData.shipment_charge);
             }
@@ -225,7 +217,8 @@ export class shipmentService {
 
             shipmentDetail.id = req.params.shipmentId;
 
-            const admin_address = gold_app_address.address_line1+' '+gold_app_address.address_line2 +', '+ gold_app_address.city_locality +', '+ gold_app_address.state_province +', '+ gold_app_address.country_code+', '+ gold_app_address.postal_code
+            const gold_app_address = await commonHelpers.getAdminAddress(),
+                admin_address = gold_app_address.address_line1+' '+gold_app_address.address_line2 +', '+ gold_app_address.city_locality +', '+ gold_app_address.state_province +', '+ gold_app_address.country_code+', '+ gold_app_address.postal_code;
 
             shipmentDetail.admin_address = admin_address;
 
@@ -273,6 +266,7 @@ export class shipmentService {
             let quantityUnit = userShipmentData.quantity_unit,
                 quantity = userShipmentData.quantity;
             const commodityAmount = userShipmentData.commodity_amount,
+                gold_app_address = await commonHelpers.getAdminAddress(),
                 packageWeight = {
                     "value": value,
                     "unit": "gram"
