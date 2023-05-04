@@ -22,6 +22,7 @@ export default class shipmentModel extends BaseModel {
     async getTotalCount(search = "") {
         var result = knex('user_shipments')
             .count('id as total')
+            .orWhereNot('user_shipments.status', 0)
         // .orderBy("id", "desc")
         if (search) {
             result.where(knex.raw(search));
@@ -126,7 +127,6 @@ export default class shipmentModel extends BaseModel {
             .select(knex.raw('COUNT(*) as count'))
             .groupBy('user_shipments.id')
             .orWhereNot('user_shipments.status', 0)
-            .leftJoin('users', 'user_shipments.user_id', 'users.id')
             .leftJoin('commodities', 'user_shipments.commodity_id', 'commodities.id')
 
         if (search || where) {
