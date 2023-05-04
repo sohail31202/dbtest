@@ -56,6 +56,19 @@ const getShipment = async (req, res, next) => {
             'status': 3,
             'message': commonConstants.SHIPPING_CREATED_STATUS_MESSAGE
         }]
+
+        const sStatus = await shipmentModelObj.fetchShipmentStatus();
+        for (let index = 0; index < sStatus.length; index++) {
+            const element = sStatus[index];
+            
+            let status = {
+                'status': element.shipment_status,
+                'message': element.shipment_status
+            }
+            shipmntStatus.push(status);
+            console.log("status",status);
+        }
+
         //For getting shipment page
         let data = {
             'title': 'Shipment',

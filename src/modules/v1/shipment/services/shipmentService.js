@@ -208,6 +208,7 @@ export class shipmentService {
             const encId = commonHelpers.base64Decode(req.params.shipmentId);
             const where = { "user_shipments.id": encId };
             const shipmentDetail = await shipmentModelObj.fetchShipmentDetail(where, tableConstants.USER_SHIPMENTS);
+            console.log("shipmentDetail", shipmentDetail);
             if (!shipmentDetail.address_json) {
                 shipmentDetail.address = "N/A";
             } else {
@@ -216,11 +217,13 @@ export class shipmentService {
             }
 
             shipmentDetail.id = req.params.shipmentId;
+            if (!shipmentDetail.admin_address_json) {
+                shipmentDetail.admin_address = "N/A";
+            } else {
+            const adminAddressData = JSON.parse(shipmentDetail.admin_address_json);
+            shipmentDetail.admin_address = adminAddressData.address_line1+' '+adminAddressData.address_line2 +', '+ adminAddressData.city_locality +', '+ adminAddressData.state_province +', '+ adminAddressData.country_code+', '+ adminAddressData.postal_code;
 
-            const gold_app_address = await commonHelpers.getAdminAddress(),
-                admin_address = gold_app_address.address_line1+' '+gold_app_address.address_line2 +', '+ gold_app_address.city_locality +', '+ gold_app_address.state_province +', '+ gold_app_address.country_code+', '+ gold_app_address.postal_code;
-
-            shipmentDetail.admin_address = admin_address;
+            }
 
             if (shipmentDetail.shipment_type == commonConstants.TRANSTYPE_RECEIVE_PHYSICAL_COMMODITY) {
                 shipmentDetail.shipment_type = commonConstants.APP_RECEIVE_COMMODITY_MESSAGE
