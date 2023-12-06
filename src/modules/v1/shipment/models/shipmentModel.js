@@ -195,7 +195,17 @@ export default class shipmentModel extends BaseModel {
             return rows;
         });
     }
+    async fetchShipmentDetails(whereQuery, tableName) {
+       
 
+        var result = knex(tableName)
+            .where(whereQuery)
+
+
+        return result.then(function (rows) {
+            return rows;
+        });
+    }
     async fetchCommodity(tableName = tableConstants.COMMODITIES) {
         return knex(tableName)
             .select("name", "id")

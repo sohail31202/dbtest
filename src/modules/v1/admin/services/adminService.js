@@ -50,7 +50,8 @@ export class adminService {
                     "commodities.name",
                     `CONCAT('${s3BasePath}${imageFolder}/', commodities.icon_image ) AS icon_image`,
                     "COALESCE(SUM(users_transactions.commodity_in_gram), 0) as sale_commodity",
-                    "commodities.id as commodity_id"
+                    "commodities.id as commodity_id",
+                    "commodities.rate_per_gram as rate_per_gram",
                 ];
 
             const userLength = await AdminModelObj.fetchObj(where, tableConstants.USERS);
