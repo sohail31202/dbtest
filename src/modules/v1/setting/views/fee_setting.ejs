@@ -27,22 +27,22 @@
                                 <div class="col-md-12 p-0">
                                 <div class="form-group col-sm-6">
                                     <label for="stripeFeeUsd">Fee USD(Percentage):</label>
-                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeUsd" name="stripeFeeUsd" type="text" placeholder="Enter Fee" value="<%= fee.usd.fee_percent %>">
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeUsd" name="stripeFeeUsd" type="text" placeholder="Enter Fee" value="<%= fee.usd?.fee_percent %>">
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="stripeFeeUsdFlat">Fee USD(flat):</label>
-                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeUsdFlat" name="stripeFeeUsdFlat" type="text" placeholder="Enter Fee" value="<%= fee.usd.fee_flat %>">
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeUsdFlat" name="stripeFeeUsdFlat" type="text" placeholder="Enter Fee" value="<%= fee.usd?.fee_flat %>">
                                 </div>
                                 </div>
                                 <!-- For EURO -->
                                 <div class="col-md-12 p-0">
                                 <div class="form-group col-sm-6">
                                     <label for="stripeFeeEur">Fee EURO(Percentage):</label>
-                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeEur" name="stripeFeeEur" type="text" placeholder="Enter Fee" value="<%= fee.eur.fee_percent %>">
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeEur" name="stripeFeeEur" type="text" placeholder="Enter Fee" value="<%= fee.eur?.fee_percent %>">
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="stripeFeeEurFlat">Fee EURO(flat):</label>
-                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeEurFlat" name="stripeFeeEurFlat" type="text" placeholder="Enter Fee" value="<%= fee.eur.fee_flat %>">
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeEurFlat" name="stripeFeeEurFlat" type="text" placeholder="Enter Fee" value="<%= fee.eur?.fee_flat %>">
                                 </div>
                                 </div>
 
@@ -50,11 +50,11 @@
                                 <div class="col-md-12 p-0">
                                 <div class="form-group col-sm-6">
                                     <label for="stripeFeeCad">Fee CAD(Percentage):</label>
-                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeCad" name="stripeFeeCad" type="text" placeholder="Enter Fee" value="<%= fee.cad.fee_percent %>">
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeCad" name="stripeFeeCad" type="text" placeholder="Enter Fee" value="<%= fee.cad?.fee_percent %>">
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="stripeFeeCadFlat">Fee CAD(flat):</label>
-                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeCadFlat" name="stripeFeeCadFlat" type="text" placeholder="Enter Fee" value="<%= fee.cad.fee_flat %>">
+                                    <input class="form-control" onkeypress="acceptNumericOnly( event, this )" id="stripeFeeCadFlat" name="stripeFeeCadFlat" type="text" placeholder="Enter Fee" value="<%= fee.cad?.fee_flat %>">
                                 </div>
                                 </div>
 
