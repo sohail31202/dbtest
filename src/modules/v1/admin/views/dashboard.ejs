@@ -1,63 +1,170 @@
 <%- include ( "header" ) %>
 
-  <div class="main-panel">
-    <div class="content-wrapper">
-      <div class="row">
-        
-        <div class="col-md-3 mb-4 stretch-card transparent">
-          <div class="card card-tale">
-            <div class="card-light-blue">
-              <div class="card-body"> <a href="/users">
-                  <p class="mb-4">Users</p>
-                  <p class="fs-30 mb-2">
-                    <%= userLength%>
-                  </p>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <% for( let i = 0; i < saleAndPurchaseCommodities.length; i++ ) { %>
-          <div class="col-md-3 mb-4 stretch-card transparent">
-            <div class="card <%= colorArr[i] %>">
-              <div class="">
-                <div class="card-body"> <a href="javascript:void(0)">
-                    <p class="mb-4"><%= saleAndPurchaseCommodities[i].name %></p>
-                    <p class="fs-20 mb-2">
-                      Sold:- <%= saleAndPurchaseCommodities[i].sale_commodity %> Gram
-                    </p>
-                    <p class="fs-20 mb-2">
-                      Bought:- <%= saleAndPurchaseCommodities[i].purchase_commodity %> Gram
-                    </p>
-                    <p class="fs-20 mb-2">
-                      Profit:- <%= saleAndPurchaseCommodities[i].commodity_profit %> USD
-                    </p>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% } %>
-     
-        <div class="col-md-3 mb-4 stretch-card transparent">
-          <div class="card card-tale">
-            <div class="card-light-blue">
-              <div class="card-body"> <a href="javascript:void(0)">
-                  <p class="mb-4">Total Profit</p>
-                  <p class="fs-30 mb-2">
-                    <%= totalProfit[0].total == null ? 0 : totalProfit[0].total %> USD
-                  </p>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-      
-    </div>
+<div class="main-panel">
+	<div class="content-wrapper">
+		<div class="row">
+			<div class="col-md-6 mb-4 stretch-card transparent flex-column">
+				<div class="card <%= colorArr[1] %>">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead></thead>
+							<tbody>
+								<tr>
+									<th scope="col">Number of Users</th>
+									<th scope="col"><%= userLength%></th>
+								</tr>
+								<tr>
+									<th scope="col">Total Profit</th>
+									<th scope="col">
+										<%= totalProfit[0].total == null ? 0 :
+										totalProfit[0].total %> USD
+									</th>
+								</tr>
+								<tr>
+									<th scope="col">Gold app vault</th>
+									<th scope="col">0.00 USD</th>
+								</tr>
+								<tr>
+									<th scope="col">User vault</th>
+									<th scope="col">0.00 USD</th>
+								</tr>
+									<!-- <tr>
+									<td>Total stripe collected/paid out</td>
+									<td></td>
+								</tr> -->
+								<tr>
+									<th scope="col">Total vault fees collected</td>
+									<th scope="col">
+										<%= totalProfit[0].total == null ? 0 :
+										totalProfit[0].total %> USD
+									</td>
+								</tr>
+								<tr>
+									<th scope="col">Total gold app fees collected</td>
+									<th scope="col">
+										<%= totalProfit[0].total == null ? 0 :
+										totalProfit[0].total %> USD
+									</td>
+								</tr>
+								<tr>
+									<th scope="col">&nbsp;</td>
+									<th scope="col">&nbsp;</td>
+								</tr>
+								<tr>
+									<th scope="col">&nbsp;</td>
+									<th scope="col">&nbsp;</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<% for( let i = 0; i < saleAndPurchaseCommodities.length; i++ ) { %>
+			<div class="col-md-6 mb-4 stretch-card transparent">
+				<div class="card <%= colorArr[i] %>">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<th
+									scope="row"
+									style="text-align: center"
+									colspan="3"
+								>
+									<%= saleAndPurchaseCommodities[i].name %>
+								</th>
 
-  <!-- content-wrapper ends -->
+								<tr>
+									<td></td>
+									<td>Total cash</td>
+									<td>Total weight</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										Total <%=
+										saleAndPurchaseCommodities[i].name %>
+										bought by users
+									</td>
+									<td>
+										<%=
+										saleAndPurchaseCommodities[i].purchase_commodity
+										%>
+									</td>
+									<td>
+										<%=
+										(saleAndPurchaseCommodities[i].purchase_commodity/
+										saleAndPurchaseCommodities[i].rate_per_gram).toFixed(3)
+										%> grams
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Total <%=
+										saleAndPurchaseCommodities[i].name %>
+										sold by users
+									</td>
+									<td>
+										<%=
+										saleAndPurchaseCommodities[i].sale_commodity
+										%>
+									</td>
+									<td>
+										<%=
+										(saleAndPurchaseCommodities[i].sale_commodity/
+										saleAndPurchaseCommodities[i].rate_per_gram).toFixed(3)
+										%> grams
+									</td>
+								</tr>
+								<tr>
+									<td>Buy|Sell difference (spread)</td>
+									<td>
+										<%=
+										saleAndPurchaseCommodities[i].purchase_commodity
+										-
+										saleAndPurchaseCommodities[i].sale_commodity
+										%>
+									</td>
+									<td>
+										<%=
+										((saleAndPurchaseCommodities[i].purchase_commodity
+										-
+										saleAndPurchaseCommodities[i].sale_commodity)/
+										saleAndPurchaseCommodities[i].rate_per_gram).toFixed(3)
+										%> grams
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<%= saleAndPurchaseCommodities[i].name
+										%> to be shipped
+									</td>
+									<td><%= (shippingData[i].quantityToBeShipped*saleAndPurchaseCommodities[i].rate_per_gram).toFixed(3) %></td>
+                  <td><%= shippingData[i].quantityToBeShipped %></td>
+								</tr>
+								<tr>
+									<td>
+										<%= saleAndPurchaseCommodities[i].name
+										%> received
+									</td>
+									<td><%= (shippingData[i].quantityReceived*saleAndPurchaseCommodities[i].rate_per_gram).toFixed(3) %></td>
+									<td><%= shippingData[i].quantityReceived %></td>
+								</tr>
+								<tr>
+                  <td>Total shipping collected</td>
+                  <td><%= (shippingData[i].quantityToBeShipped*saleAndPurchaseCommodities[i].rate_per_gram + shippingData[i].quantityReceived*saleAndPurchaseCommodities[i].rate_per_gram).toFixed(3) %></td>
+                  <td><%= shippingData[i].quantityToBeShipped+shippingData[i].quantityReceived %></td>
+								</tr>
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<% } %>
+		</div>
+	</div>
+	<!-- content-wrapper ends -->
 
-  <%- include ( "footer" ) %>
+	<%- include ( "footer" ) %>
+</div>

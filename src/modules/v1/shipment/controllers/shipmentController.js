@@ -60,13 +60,13 @@ const getShipment = async (req, res, next) => {
         const sStatus = await shipmentModelObj.fetchShipmentStatus();
         for (let index = 0; index < sStatus.length; index++) {
             const element = sStatus[index];
-            
+
             let status = {
                 'status': element.shipment_status,
                 'message': element.shipment_status
             }
             shipmntStatus.push(status);
-            console.log("status",status);
+            console.log("status", status);
         }
 
         //For getting shipment page
@@ -75,9 +75,11 @@ const getShipment = async (req, res, next) => {
             'currentYear': currentYear,
             "fetchData": returnData,
             "shipmentType": shipmentType,
-            "shipmntStatus":shipmntStatus,
+            "shipmntStatus": shipmntStatus,
             "commodity": commodity
         };
+
+        console.log('shipmentpage===', data)
         res.render('shipment.ejs', data);
     }).catch((err) => {
         console.log(err)
